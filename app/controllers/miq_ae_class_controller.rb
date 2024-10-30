@@ -12,6 +12,8 @@ class MiqAeClassController < ApplicationController
 
   MIQ_AE_COPY_ACTIONS = %w[miq_ae_class_copy miq_ae_instance_copy miq_ae_method_copy].freeze
 
+  require 'byebug'
+
   # GET /automation_classes
   # GET /automation_classes.xml
   def index
@@ -459,6 +461,8 @@ class MiqAeClassController < ApplicationController
       @ae_class = find_record_with_rbac(MiqAeClass, params[:id])
     end
     set_form_vars
+    @hide_bottom_bar = true
+
     # have to get name and set node info, to load multiple tabs correctly
     # rec_name = get_rec_name(@ae_class)
     # get_node_info("aec-#{@ae_class.id}")
@@ -466,6 +470,26 @@ class MiqAeClassController < ApplicationController
     @in_a_form_props = true
     session[:changed] = @changed = false
     replace_right_cell
+  end
+
+  def edit_class_record
+    assert_privileges("miq_ae_class_edit")
+    unless params[:id]
+      obj = find_checked_items
+      @_params[:id] = obj[0]
+    end
+    @hide_bottom_bar = true
+
+    class_rec = MiqAeClass.find(params[:id])
+    # if class_rec.default
+    #   add_flash(_("Default Class \"%{name}\" can not be edited") % {:name => class_rec.name}, :error)
+    # end
+    render :json => {
+      :fqname        => class_rec.fqname,
+      :name        => class_rec.name,
+      :display_name => class_rec.display_name,
+      :description => class_rec.description
+    }
   end
 
   def edit_fields
@@ -1073,7 +1097,7 @@ class MiqAeClassController < ApplicationController
   def update
     assert_privileges("miq_ae_class_edit")
     return unless load_edit("aeclass_edit__#{params[:id]}", "replace_cell__explorer")
-
+    
     get_form_vars
     @changed = (@edit[:new] != @edit[:current])
     case params[:button]
@@ -1291,6 +1315,8 @@ class MiqAeClassController < ApplicationController
     assert_privileges("miq_ae_class_new")
     @ae_class = MiqAeClass.new
     set_form_vars
+    @hide_bottom_bar = true
+
     @in_a_form = true
     replace_right_cell
   end
@@ -1841,7 +1867,75 @@ class MiqAeClassController < ApplicationController
     end
   end
 
+  def class_update
+    assert_privileges(params[:id].present? ? 'miq_ae_class_edit' : 'miq_ae_class_new')
+    @hide_bottom_bar = true
+    id = params[:id] ? params[:id] : "new"
+    class_update_create
+  end
+
   private
+
+  def class_update_create
+    case params[:button]
+    when "add", "save"
+      class_rec = params[:id].blank? ? MiqAeClass.new : MiqAeClass.find(params[:id]) # Get new or existing record
+      
+      # add_flash(_("Fully Qualified Name"), :error) if params[:fqname].blank?
+      add_flash(_("Name is required"), :error) if params[:name].blank?
+      # add_flash(_("Display Name is required"), :error) if params[:display_name].blank?
+
+      # if @flash_array
+      #   javascript_flash
+      #   return
+      # end
+      # class_rec.relative_path = params[:fqname]
+      class_rec.name = params[:name]
+      class_rec.display_name = params[:display_name]
+      class_rec.description = params[:description]
+      class_rec.namespace_id = x_node.split('-')[1] if params[:id].blank?
+      begin
+        class_rec.save!
+      rescue StandardError
+        class_rec.errors.each do |error|
+          add_flash("#{error.attribute.to_s.capitalize} #{error.message}", :error)
+        end
+        @changed = true
+        javascript_flash
+      else
+        edit_hash = {}
+        # edit_hash[:new] = {:relative_path => params[:fqname], :name => params[:name],
+        #                    :display_name => params[:display_name], :description => params[:description]}
+
+        edit_hash[:new] = {:name => params[:name],
+                           :display_name => params[:display_name], :description => params[:description]}
+
+        if params[:old_data]
+          # edit_hash[:current] = {:relative_path => params[:old_data][:fqname], :name => params[:old_data][:name],
+          #                        :display_name => params[:old_data][:display_name], 
+          #                        :description => params[:old_data][:description]}
+
+          edit_hash[:current] = {:name => params[:old_data][:name],
+                                 :display_name => params[:old_data][:display_name], 
+                                 :description => params[:old_data][:description]}
+        else
+          # edit_hash[:current] = {:relative_path => nil, :name => nil, :display_name => nil, :description => nil}
+          edit_hash[:current] = {:name => nil, :display_name => nil, :description => nil}
+        end
+        AuditEvent.success(build_saved_audit(class_rec, edit_hash))
+        @edit = session[:edit] = nil # clean out the saved info
+        # if editing from list view then change active_node to be same as updated image_type folder node
+        # if x_node.split('-')[0] == "xx"
+        #   self.x_node = "xx-MiqDialog_#{dialog.dialog_type}"
+        # elsif params[:button] == "add"
+        #   d = MiqDialog.find_by(:name => dialog.name, :dialog_type => dialog.dialog_type)
+        #   self.x_node = "odg-#{d.id}"
+        # end
+        # get_node_info
+        replace_right_cell(:nodetype => x_node, :replace_trees => [:ae])
+      end
+    end
+  end
 
   def get_template_class(location)
     if location == "ansible_workflow_template"
