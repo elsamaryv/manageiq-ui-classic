@@ -343,6 +343,9 @@ class MiqAeClassController < ApplicationController
           :serialize    => @sb[:active_tab] == 'methods',
         }
       ])
+      if @hide_bottom_bar
+        presenter.hide(:paging_div, :form_buttons_div)
+      end
     else
       # incase it was hidden for summary screen, and incase there were no records on show_list
       presenter.hide(:paging_div, :form_buttons_div)
