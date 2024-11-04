@@ -15,7 +15,6 @@ const MiqAeClass = ({ classRecord, fqname }) => {
   const isEdit = !!(classRecord && classRecord.id);
 
   useEffect(() => {
-    debugger
     if (isEdit) {
       http.get(`/miq_ae_class/edit_class_record/${classRecord.id}/`).then((recordValues) => {
         if (recordValues) {
@@ -38,7 +37,6 @@ const MiqAeClass = ({ classRecord, fqname }) => {
 
     const params = {
       action: isEdit ? 'edit' : 'create',
-      // fqname: fqname,
       name: values.name,
       display_name: values.display_name,
       description: values.description,
@@ -147,7 +145,6 @@ const FormTemplate = ({
 MiqAeClass.propTypes = {
   classRecord: PropTypes.shape({
     id: PropTypes.number,
-    // fqname: PropTypes.string,
     name: PropTypes.string,
     display_name: PropTypes.string,
     description: PropTypes.string,
@@ -161,7 +158,6 @@ MiqAeClass.defaultProps = {
 FormTemplate.propTypes = {
   formFields: PropTypes.arrayOf(
     PropTypes.shape({ id: PropTypes.number }),
-    // PropTypes.shape({ fqname: PropTypes.string }),
     PropTypes.shape({ name: PropTypes.string }),
     PropTypes.shape({ display_name: PropTypes.string }),
     PropTypes.shape({ description: PropTypes.string }),

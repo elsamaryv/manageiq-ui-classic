@@ -9,7 +9,7 @@ describe('Automation > Embedded Automate > Explorer', () => {
   });
 
   afterEach(() => {
-    // Remove Domain
+    // Remove Domain after each tests
     cy.get('[title="Datastore"]').click({force: true});
     cy.get('[title="Automate Domain: TestDomain"]').click({force: true});
     cy.get('[title="Configuration"]').click({force: true});
@@ -20,285 +20,107 @@ describe('Automation > Embedded Automate > Explorer', () => {
 
   describe('Class Form', () => {
 
-    it('Creates a Domain', () => {
-      // creates Domain
+    it('Creates and edits an automate class', () => {
+      // Creates a Domain
       cy.get('[title="Datastore"]').click({force: true});
       cy.get('[title="Configuration"]').click({force: true});
       cy.get('[title="Add a New Domain"]').click({force: true});
       cy.get('[name="name"]').type('TestDomain');
       cy.get('[name="description"]').type('This is a test domain');
       cy.get('#enabled').check();
-      cy.get('[class="bx--btn bx--btn--primary"]').contains('Add').click({force: true});
+      cy.get('[class="bx--btn bx--btn--primary"]').contains('Add').click(); // submits Domain
+      // checks for the success message
+      cy.get('div.alert.alert-success.alert-dismissable')
+        .should('exist')
+        .and('contain', 'Automate Domain "TestDomain" was added')
+        .find('button.close').should('exist');
 
-      // // check correct data is displaying
-      // cy.get('.bx--data-table-content tbody tr')
-      // .last()
-      // .should('contain', 'Automate Domain: TestDomain');
-      // // .and('contain', 'This is a test domain');
-
-      // creates Namespace
+      // Creates a Namespace
       cy.get('[title="Datastore"]').click({force: true});
-      cy.get('[title="Automate Domain: TestDomain"]').click({force: true});
+      cy.get('[title="Automate Domain: TestDomain"]').click({force: true}); // clicks on Domain
       cy.get('[title="Configuration"]').click({force: true});
       cy.get('[title="Add a New Namespace"]').click({force: true});
       cy.get('[name="name"]').type('TestNS');
       cy.get('[name="description"]').type('This is a test NS');
-      cy.get('.bx--btn--primary')
-        .contains('Add')
-        // .should('be.visible')
-        .click();
+      cy.get('.bx--btn--primary').contains('Add').click(); // submits Namespace
       
-      // // check correct data is displaying
-      // cy.get('.bx--data-table-content tbody tr')
-      //   .last()
-      //   .should('contain', 'Automate Namespace: TestNS');
-      //   // .and('contain', 'This is a test NS');
-
-      // creates Class
+      // Creates a Class
       cy.get('[title="Datastore"]').click({force: true});
-      cy.get('[title="Automate Domain: TestDomain"]').click({force: true});
-      cy.get('[title="Automate Namespace: TestNS"]').click({force: true});
+      cy.get('[title="Automate Domain: TestDomain"]').click({force: true}); // clicks on Domain
+      cy.get('[title="Automate Namespace: TestNS"]').click({force: true}); // clicks on Namespace
       cy.get('[title="Configuration"]').click({force: true});
       cy.get('[title="Add a New Class"]').click({force: true});
       cy.get('[name="name"]').type('TestClass');
       cy.get('[name="display_name"]').type('TC');
       cy.get('[name="description"').type('This is a test class desc');
-      cy.get('.bx--btn--primary')
-        .contains('Add')
-        // .should('be.visible')
-        .click();
+      cy.get('.bx--btn--primary').contains('Add').click(); // submits class
+      // checks for the success message
+      cy.get('#flash_msg_div .alert.alert-success').should('exist')
+        .and('be.visible').and('contain', 'Class "TestClass" was added');
       
-      // // check correct data is displaying
-      // cy.get('.bx--data-table-content tbody tr')
-      // .last()
-      // .should('contain', 'TestClass')
-      // .and('contain', 'TC')
-      // .and('contain', 'This is a test class desc');
-
-      // edits a class
-      cy.get('[title="Automate Class: TC (TestClass)"]').click({force: true});
+      // Edits a class
+      cy.get('[title="Automate Class: TC (TestClass)"]').click({force: true}); // clicks on the class
       cy.get('[title="Configuration"]').click({force: true});
       cy.get('[title="Edit this Class"]').click({force: true});
       cy.get('[name="display_name"]').clear({force: true});
-      // cy.get('[name="display_name"]').clear({force: true}); // need to clear twice
       cy.get('[name="display_name"]').type('Edited TC', {force: true});
       cy.get('[name="description"').clear({force: true});
       cy.get('[name="description"').type('Edited Test Class Description');
       cy.get('[class="btnRight bx--btn bx--btn--primary"]').contains('Save').click({force: true});
+      // Checks if class data was updated
+      cy.get('#props_tab a').click(); // Navigate to the Properties tab
+      cy.get('div.label_header:contains("Name")').siblings('.content_value')
+        .should('contain', 'TestClass');
+      cy.get('div.label_header:contains("Display Name")').siblings('.content_value')
+        .should('contain', 'Edited TC');
+      cy.get('div.label_header:contains("Description")').siblings('.content_value')
+        .should('contain', 'Edited Test Class Description');
 
-      // check it updated
-      // Navigate to the Properties tab
-      cy.get('#props_tab a').click();
-
-      cy.get('div.label_header:contains("Name")')
-            .siblings('.content_value')
-            .should('contain', 'TestClass');
-      cy.get('div.label_header:contains("Display Name")')
-          .siblings('.content_value')
-          .should('contain', 'Edited TC');
-      cy.get('div.label_header:contains("Description")')
-          .siblings('.content_value')
-          .should('contain', 'Edited Test Class Description');
-
-      // Clicks the cancel button during class create
+      // Clicks the Cancel button during class creation
       cy.get('[title="Datastore"]').click({force: true});
       cy.get('[title="Automate Domain: TestDomain"]').click({force: true});
       cy.get('[title="Automate Namespace: TestNS"]').click({force: true});
       cy.get('[title="Configuration"]').click({force: true});
       cy.get('[title="Add a New Class"]').click({force: true});
-
-      cy.get('[class="bx--btn bx--btn--secondary"]').contains('Cancel').click({force: true});
+      cy.get('[class="bx--btn bx--btn--secondary"]')
+        .contains('Cancel').click({force: true}); // clicks Cancel button
       cy.get('[id="explorer_title_text"]').contains('Automate Namespace "TestNS"');
 
-      // // Remove class
-      // cy.get('[title="Datastore"]').click({force: true});
-      // cy.get('[title="Automate Domain: TestDomain"]').click({force: true});
-      // cy.get('[title="Configuration"]').click({force: true});
-      // cy.get('[title="Remove this Domain"]').click({force: true});
+      // Clicks the Cancel button during class update
+      cy.get('[title="Automate Class: Edited TC (TestClass)"]').click({force: true}); // clicks on the class
+      cy.get('[title="Configuration"]').click({force: true});
+      cy.get('[title="Edit this Class"]').click({force: true});
+      cy.get('[name="description"]').clear({force: true});
+      cy.get('[name="description"]').type('New description for class', {force: true});
+      cy.get('[class="bx--btn bx--btn--secondary"]').contains('Cancel').click({force: true});
+      // Checks if class data was updated
+      cy.get('#props_tab a').click(); // Navigate to the Properties tab
+      cy.get('div.label_header:contains("Description")').siblings('.content_value')
+        .should('not.contain', 'New description for class')
+        .should('contain', 'Edited Test Class Description');
 
-      // cy.get('.bx--data-table-content tbody tr').should('not.contain', 'Automate Domain: TestDomain');
+      // Clicks the Reset button during class update
+      cy.get('[title="Automate Class: Edited TC (TestClass)"]').click({force: true}); // clicks on the class
+      cy.get('[title="Configuration"]').click({force: true});
+      cy.get('[title="Edit this Class"]').click({force: true});
+      cy.get('[name="description"]').clear({force: true});
+      cy.get('[name="description"]').type('New description for class', {force: true});
+      cy.get('[class="btnRight bx--btn bx--btn--secondary"]').contains('Reset').click({force: true});
+      // Check for the flash message div
+      cy.get('#flash_msg_div .alert.alert-warning').should('exist')
+        .and('be.visible').and('contain', 'All changes have been reset');
+      // Checks if class data was updated
+      cy.get('[name="description"]').should('have.value', 'Edited Test Class Description');
+      cy.get('[class="bx--btn bx--btn--secondary"]').contains('Cancel').click({force: true});
+
+      // Removes class
+      cy.get('[title="Automate Class: Edited TC (TestClass)"]').click({force: true}); // clicks on the class
+      cy.get('[title="Configuration"]').click({force: true});
+      cy.get('[title="Remove this Class"]').click({force: true});
+      // checks for the success message
+      cy.get('div.alert.alert-success.alert-dismissable')
+        .should('exist')
+        .and('contain', 'Automate Class "TestClass": Delete successful');
     });
-
-    // creates Namespace
-    // it('Creates a Namespace', () => {
-      
-    // });
-
-    // it('Clicks the cancel button', () => {
-    //   cy.get('[title="TestNS"]').click({force: true});
-    //   cy.get('[title="Configuration"]').click({force: true});
-    //   cy.get('[title="Add a New Class"]').click({force: true});
-    //   cy.get('[class="bx--btn bx--btn--secondary"]').contains('Cancel').click({force: true});
-    //   cy.get('[id="explorer_title_text"]').contains('Automate Namespace "TestNS"');
-    // });
-
-    // creates Class
-    // it('Creates a Class', () => {
-      
-      
-    // });
-
-    // // edits a class
-    // cy.get('[title="Automate Class: Test class (C1)"]').click({force: true});
-    // cy.get('[title="Configuration"]').click({force: true});
-    // cy.get('[title="Edit this Class"]').click({force: true});
-    // cy.get('[name="display_name"]').clear({force: true});
-    // // cy.get('[name="display_name"]').clear({force: true}); // need to clear twice
-    // cy.get('[name="display_name"]').type('Edited Test Class', {force: true});
-    // cy.get('[name="description"').clear({force: true});
-    // cy.get('[name="description"').type('Edited Test Description');
-    // cy.get('[class="btnRight bx--btn bx--btn--secondary"]').contains('Reset').click({force: true});
-
-    // // check it was reset
-    // cy.get('[name="name"]').should('have.value', 'C2');
-    // cy.get('[name="display_name"]').should('have.value', 'Test Class');
-    // cy.get('[name="description"]').should('have.value', 'Test Description');
-    // cy.get('[class="bx--btn bx--btn--secondary"]').contains('Cancel').click({force: true});
-
-    // it('Clicks on a sample Class', () => {
-    //   cy.get('[title="Automate Class: Test class (C1)"]').click({force: true});
-    //   cy.get('[id="props_tab"]').click({force: true});
-    //   cy.get('.content_value object_item bx--structured-list-td').contains('/ ZiraatTeknoloji / DropDowns / VMware / C1');
-    // });
-
-    // it('Resets a class being edited', () => {
-    //   // creates a class
-    //   cy.get('[title="Automate Namespace: VMware"]').click({force: true});
-    //   cy.get('[title="Configuration"]').click({force: true});
-    //   cy.get('[title="Add a New Class"]').click({force: true});
-    //   cy.get('[name="name"]').type('C2');
-    //   cy.get('[name="display_name"]').type('Test Class');
-    //   cy.get('[name="description"').type('Test Description');
-    //   cy.get('[class="btnRight bx--btn bx--btn--primary"]').click({force: true});
-
-    //   // check correct data is displaying
-    //   cy.get('.bx--data-table-content tbody tr')
-    //   .last()
-    //   .should('contain', 'C2')
-    //   .and('contain', 'Test Class')
-    //   .and('contain', 'Test Description');
-
-    //   // edits a class
-    //   cy.get('[title="Automate Class: Test class (C1)"]').click({force: true});
-    //   cy.get('[title="Configuration"]').click({force: true});
-    //   cy.get('[title="Edit this Class"]').click({force: true});
-    //   cy.get('[name="display_name"]').clear({force: true});
-    //   // cy.get('[name="display_name"]').clear({force: true}); // need to clear twice
-    //   cy.get('[name="display_name"]').type('Edited Test Class', {force: true});
-    //   cy.get('[name="description"').clear({force: true});
-    //   cy.get('[name="description"').type('Edited Test Description');
-    //   cy.get('[class="btnRight bx--btn bx--btn--secondary"]').contains('Reset').click({force: true});
-
-    //   // check it was reset
-    //   cy.get('[name="name"]').should('have.value', 'C2');
-    //   cy.get('[name="display_name"]').should('have.value', 'Test Class');
-    //   cy.get('[name="description"]').should('have.value', 'Test Description');
-    //   cy.get('[class="bx--btn bx--btn--secondary"]').contains('Cancel').click({force: true});
-
-    //   // Remove class
-    //   cy.get('[title="Configuration"]').click({force: true});
-    //   cy.get('[title="Remove this Class"]').click({force: true});
-    //   cy.get('.bx--data-table-content tbody tr')
-    //   .last()
-    //   .should('not.contain', 'C2')
-    //   .and('not.contain', 'Test Class')
-    //   .and('not.contain', 'Test Description');
-    // });
-
-    // it('Creates, edits, deletes a dialog', () => {
-    //   // creates a dialog
-    //   cy.get('[title="Configuration"]').click({force: true});
-    //   cy.get('[title="Add a new Dialog"]').click({force: true});
-    //   cy.get('[name="name"]').type('Test User');
-    //   cy.get('[name="description"').type('Test Description');
-    //   cy.get('[name="dialog_type"]').select('Configured System Provision');
-    //   cy.get('[class="CodeMirror-lines"]').type(':Buttons:');
-    //   cy.get('[class="btnRight bx--btn bx--btn--primary"]').click({force: true});
-
-    //   // check correct data is displaying
-    //   // cy.get('[id="main_div"]').contains('Test Description');
-    //   cy.contains('Test Description').click({force: true});
-    //   cy.get('.miq_ae_customization_summary').contains('Test User');
-    //   cy.get('.miq_ae_customization_summary').contains('Test Description');
-    //   cy.get('[class="CodeMirror-code"]').contains('---');
-    //   cy.get('[class="CodeMirror-code"]').contains(':Buttons:');
-
-    //   // edits a dialog
-    //   cy.get('[title="Configuration"]').click({force: true});
-    //   cy.get('[title="Edit this Dialog"]').click({force: true});
-    //   cy.get('[name="name"]').clear({force: true});
-    //   cy.get('[name="name"]').clear({force: true}); // need to clear twice
-    //   cy.get('[name="name"]').type('Edited Test User', {force: true});
-    //   cy.get('[name="description"').clear({force: true});
-    //   cy.get('[name="description"').type('Edited Test Description');
-    //   cy.get('[name="dialog_type"]').select('Physical Server Provision');
-    //   cy.get('[class="CodeMirror-lines"]').type('\n :submit:\n:cancel:');
-    //   cy.get('[class="btnRight bx--btn bx--btn--primary"]').click({force: true});
-    //   cy.get('[class="col-md-12"]').contains('Edited Test Description');
-
-    //   // check correct data after editing
-    //   cy.contains('Edited Test Description').click({force: true});
-    //   cy.get('.miq_ae_customization_summary').contains('Edited Test User');
-    //   cy.get('.miq_ae_customization_summary').contains('Edited Test Description');
-    //   cy.get('[class="CodeMirror-code"]').contains('---');
-    //   cy.get('[class="CodeMirror-code"]').contains(':Buttons:');
-    //   cy.get('[class="CodeMirror-code"]').contains(':submit:');
-    //   cy.get('[class="CodeMirror-code"]').contains(':cancel:');
-
-    //   // check correct data after copying
-    //   cy.contains('Edited Test Description').click({force: true});
-    //   cy.get('.miq_ae_customization_summary').contains('Edited Test Description');
-    //   cy.get('[class="CodeMirror-code"]').contains('---');
-    //   cy.get('[class="CodeMirror-code"]').contains(':Buttons:');
-    //   cy.get('[class="CodeMirror-code"]').contains(':submit:');
-    //   cy.get('[class="CodeMirror-code"]').contains(':cancel:');
-
-    //   cy.contains('Edited Test Description').click({force: true});
-    //   cy.get('[title="Configuration"]').click({force: true});
-    //   cy.get('[title="Remove this Dialog"]').click({force: true});
-
-    //   cy.get('[class="list-group"]').should('not.contain', 'Test Description');
-    // });
-
-    // it('Creates, copies, and deletes a dialog', () => {
-    //   // creates a dialog
-    //   cy.get('[title="Configuration"]').click({force: true});
-    //   cy.get('[title="Add a new Dialog"]').click({force: true});
-    //   cy.get('[name="name"]').type('Test User');
-    //   cy.get('[name="description"').type('Test Description');
-    //   cy.get('[name="dialog_type"]').select('Configured System Provision');
-    //   cy.get('[class="CodeMirror-lines"]').type(':Buttons:');
-    //   cy.get('[class="btnRight bx--btn bx--btn--primary"]').click({force: true});
-    //   cy.get('[class="col-md-12"]').contains('Test Description');
-
-    //   // check correct data is displaying
-    //   cy.contains('Test Description').click({force: true});
-    //   cy.get('.miq_ae_customization_summary').contains('Test User');
-    //   cy.get('.miq_ae_customization_summary').contains('Test Description');
-    //   cy.get('[class="CodeMirror-code"]').contains('---');
-    //   cy.get('[class="CodeMirror-code"]').contains(':Buttons:');
-
-    //   // copies a dialog
-    //   cy.get('[title="Configuration"]').click({force: true});
-    //   cy.get('[title="Copy this Dialog"]').click({force: true});
-    //   cy.get('[class="btnRight bx--btn bx--btn--primary"]').click({force: true});
-    //   cy.get('[class="col-md-12"]').contains('Test Description');
-
-    //   cy.contains('Test Description').click({force: true});
-
-    //   // clean up
-    //   cy.get('[title="Configuration"]').click({force: true});
-    //   cy.get('[title="Remove this Dialog"]').click({force: true});
-
-    //   cy.get('[id="explorer_title_text"]').contains('Configured System Provision Dialogs');
-    //   cy.get('[class="list-group"]').contains('Test Description').should('be.visible').click({force: true});
-    //   cy.get('[id="main_div"]').contains('Copy of Test User');
-    //   cy.get('[id="main_div"]').contains('Test Description');
-    //   cy.get('[class="CodeMirror-code"]').contains('---');
-    //   cy.get('[title="Configuration"]').click({force: true});
-    //   cy.get('[title="Remove this Dialog"]').click({force: true});
-
-    //   cy.get('[class="list-group"]').should('not.contain', 'Test Description');
-    // });
   });
 });

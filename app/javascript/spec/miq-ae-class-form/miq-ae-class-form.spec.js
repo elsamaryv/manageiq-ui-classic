@@ -20,12 +20,6 @@ describe('MiqAeClass Form Component', () => {
     description: 'test description',
   };
 
-  // const MiqAeClassCopyData = {
-  //   name: 'test copy',
-  //   display_name: 'test display name',
-  //   description: 'test copy description',
-  // };
-
   const fqName = 'Sample FQ Name';
 
   afterEach(() => {
@@ -65,20 +59,4 @@ describe('MiqAeClass Form Component', () => {
       });
     });
   });
-
-  // it('should render copy class form correctly', async() => {
-  //   const wrapper = shallow(<MiqAeClass
-  //     classRecord={MiqAeClassCopyData}
-  //     fqname={fqName}
-  //   />);
-  //   fetchMock.get(`/miq_ae_customization/old_dialogs_copy?&expand=resources`, customizationMockData);
-
-  //   await new Promise((resolve) => {
-  //     setImmediate(() => {
-  //       wrapper.update();
-  //       expect(toJson(wrapper)).toMatchSnapshot();
-  //       resolve();
-  //     });
-  //   });
-  // });
 });
