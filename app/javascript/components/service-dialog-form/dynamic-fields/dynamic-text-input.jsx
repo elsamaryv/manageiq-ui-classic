@@ -15,24 +15,24 @@ const DynamicTextInput = ({ dynamicFieldData: { section, field, fieldPosition },
     type,
   });
 
-  const dynamicTextBoxOptions = () => ([
-    dynamicFields.entryPoint,
-    dynamicFields.showRefresh,
-    dynamicFields.loadOnInit,
-    dynamicFields.required,
-    dynamicFields.protected,
-    dynamicFields.valueType,
-    dynamicFields.validation,
-    dynamicFields.validator,
-    dynamicFields.fieldsToRefresh,
-  ]);
-
   const ordinaryTextBoxOptions = () => ([
     dynamicFields.defaultValue,
     dynamicFields.required,
     dynamicFields.protected,
     dynamicFields.readOnly,
     dynamicFields.visible,
+    dynamicFields.valueType,
+    dynamicFields.validation,
+    dynamicFields.validator,
+    dynamicFields.fieldsToRefresh,
+  ]);
+
+  const dynamicTextBoxOptions = () => ([
+    dynamicFields.entryPoint,
+    dynamicFields.showRefresh,
+    dynamicFields.loadOnInit,
+    dynamicFields.required,
+    dynamicFields.protected,
     dynamicFields.valueType,
     dynamicFields.validation,
     dynamicFields.validator,
