@@ -17,25 +17,20 @@ const DynamicCheckbox = ({ dynamicFieldData: { section, field, fieldPosition }, 
     type,
   });
 
+  const ordinaryCheckboxOptions = () => ([
+    dynamicFields.defaultCheckboxValue,
+    dynamicFields.required,
+    dynamicFields.readOnly,
+    dynamicFields.visible,
+    dynamicFields.fieldsToRefresh,
+  ]);
+  
   const dynamicCheckboxOptions = () => ([
     dynamicFields.entryPoint,
     dynamicFields.showRefresh,
     dynamicFields.loadOnInit,
     dynamicFields.required,
     dynamicFields.protected,
-    dynamicFields.valueType,
-    dynamicFields.validation,
-    dynamicFields.validator,
-    dynamicFields.fieldsToRefresh,
-    dynamicFields.multiselect,
-  ]);
-
-  const ordinaryCheckboxOptions = () => ([
-    dynamicFields.defaultValue,
-    dynamicFields.required,
-    dynamicFields.protected,
-    dynamicFields.readOnly,
-    dynamicFields.visible,
     dynamicFields.valueType,
     dynamicFields.validation,
     dynamicFields.validator,
