@@ -17,12 +17,11 @@ const DynamicDatePicker = ({ dynamicFieldData: { section, field, fieldPosition }
   });
 
   const ordinaryDatePickerOptions = () => ([
-    dynamicFields.defaultValue,
     dynamicFields.required,
+    dynamicFields.defaultValue,
     dynamicFields.readOnly,
     dynamicFields.visible,
-    dynamicFields.validation,
-    dynamicFields.validator,
+    dynamicFields.showPastDates,
     dynamicFields.fieldsToRefresh,
   ]);
 
