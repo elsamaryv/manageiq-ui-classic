@@ -2,6 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import DynamicTextInput from './dynamic-fields/dynamic-text-input';
 import DynamicTextArea from './dynamic-fields/dynamic-text-area';
+import DynamicCheckbox from './dynamic-fields/dynamic-checkbox';
+import DynamicDropdown from './dynamic-fields/dynamic-dropdown';
+import DynamicRadioButton from './dynamic-fields/dynamic-radio-button';
+import DynamicDatepicker from './dynamic-fields/dynamic-date-picker';
 import { dynamicFieldDataProps } from './helper';
 /** Component to render a Field. */
 const DynamicField = ({ fieldData, onFieldAction }) => {
@@ -12,13 +16,13 @@ const DynamicField = ({ fieldData, onFieldAction }) => {
       case 2:
         return <DynamicTextArea dynamicFieldData={fieldData} onFieldAction={(newFieldData) => onFieldAction(newFieldData)} />;
       case 3:
-        return fieldData.field.componentId;
+        return <DynamicCheckbox dynamicFieldData={fieldData} onFieldAction={(newFieldData) => onFieldAction(newFieldData)} />;
       case 4:
-        return fieldData.field.componentId;
+        return <DynamicDropdown dynamicFieldData={fieldData} onFieldAction={(newFieldData) => onFieldAction(newFieldData)} />;
       case 5:
-        return fieldData.field.componentId;
+        return <DynamicRadioButton dynamicFieldData={fieldData} onFieldAction={(newFieldData) => onFieldAction(newFieldData)} />;
       case 6:
-        return fieldData.field.componentId;
+        return <DynamicDatepicker dynamicFieldData={fieldData} onFieldAction={(newFieldData) => onFieldAction(newFieldData)} />;
       case 7:
         return fieldData.field.componentId;
       case 8:
