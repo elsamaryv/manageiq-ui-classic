@@ -17,12 +17,14 @@ const DynamicRadioButton = ({ dynamicFieldData: { section, field, fieldPosition 
   });
 
   const ordinaryRadioButtonOptions = () => ([
-    dynamicFields.defaultValue,
-    dynamicFields.required,
     dynamicFields.readOnly,
     dynamicFields.visible,
-    dynamicFields.validation,
-    dynamicFields.validator,
+    dynamicFields.required,
+    dynamicFields.defaultValue,
+    dynamicFields.valueType,
+    dynamicFields.sortBy,
+    dynamicFields.sortOrder,
+    dynamicFields.entries,
     dynamicFields.fieldsToRefresh,
   ]);
 

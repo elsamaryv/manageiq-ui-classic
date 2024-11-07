@@ -16,25 +16,25 @@ const DynamicDropdown = ({ dynamicFieldData: { section, field, fieldPosition }, 
     type,
   });
 
+  const ordinaryDropdownOptions = () => ([
+    dynamicFields.readOnly,
+    dynamicFields.visible,
+    dynamicFields.required,
+    dynamicFields.defaultValue,
+    dynamicFields.valueType,
+    dynamicFields.sortBy,
+    dynamicFields.sortOrder,
+    dynamicFields.multiselect,
+    dynamicFields.entries,
+    dynamicFields.fieldsToRefresh,
+  ]);
+  
   const dynamicDropdownOptions = () => ([
     dynamicFields.entryPoint,
     dynamicFields.showRefresh,
     dynamicFields.loadOnInit,
     dynamicFields.required,
     dynamicFields.protected,
-    dynamicFields.valueType,
-    dynamicFields.validation,
-    dynamicFields.validator,
-    dynamicFields.fieldsToRefresh,
-    dynamicFields.multiselect,
-  ]);
-
-  const ordinaryDropdownOptions = () => ([
-    dynamicFields.defaultValue,
-    dynamicFields.required,
-    dynamicFields.protected,
-    dynamicFields.readOnly,
-    dynamicFields.visible,
     dynamicFields.valueType,
     dynamicFields.validation,
     dynamicFields.validator,
