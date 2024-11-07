@@ -186,6 +186,14 @@ const ServiceDialogForm = () => {
         return console.log('textAreaOnchange');
       case SD_ACTIONS.textInputOnchange:
         return console.log('textInputOnchange');
+      case SD_ACTIONS.checkboxOnchange:
+        return console.log('checkboxOnchange');
+      case SD_ACTIONS.radioButtonOnchange:
+        return console.log('radioButtonOnchange');
+      case SD_ACTIONS.datePickerOnChange:
+        return console.log('datePickerOnChange');
+      case SD_ACTIONS.dropdownOnChange:
+        return console.log('dropdownOnChange');
       default:
         return undefined;
     }
