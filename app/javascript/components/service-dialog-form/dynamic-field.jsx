@@ -6,6 +6,8 @@ import DynamicCheckbox from './dynamic-fields/dynamic-checkbox';
 import DynamicDropdown from './dynamic-fields/dynamic-dropdown';
 import DynamicRadioButton from './dynamic-fields/dynamic-radio-button';
 import DynamicDatepicker from './dynamic-fields/dynamic-date-picker';
+import DynamicTimepicker from './dynamic-fields/dynamic-time-picker';
+import DynamicTagControl from './dynamic-fields/dynamic-tag-control';
 import { dynamicFieldDataProps } from './helper';
 /** Component to render a Field. */
 const DynamicField = ({ fieldData, onFieldAction }) => {
@@ -24,11 +26,9 @@ const DynamicField = ({ fieldData, onFieldAction }) => {
       case 6:
         return <DynamicDatepicker dynamicFieldData={fieldData} onFieldAction={(newFieldData) => onFieldAction(newFieldData)} />;
       case 7:
-        return fieldData.field.componentId;
+        return <DynamicTimepicker dynamicFieldData={fieldData} onFieldAction={(newFieldData) => onFieldAction(newFieldData)} />;
       case 8:
-        return fieldData.field.componentId;
-      case 9:
-        return fieldData.field.componentId;
+        return <DynamicTagControl dynamicFieldData={fieldData} onFieldAction={(newFieldData) => onFieldAction(newFieldData)} />;
       default:
         return <DynamicTextInput dynamicFieldData={fieldData} onFieldAction={(newFieldData) => onFieldAction(newFieldData)} />;
     }
