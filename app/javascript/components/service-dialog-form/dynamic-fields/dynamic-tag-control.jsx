@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Checkbox, FormLabel } from 'carbon-components-react';
+import { Select, SelectItem, FormLabel } from 'carbon-components-react';
 import { dynamicFieldDataProps, SD_ACTIONS } from '../helper';
 import DynamicFieldActions from '../dynamic-field-actions';
 import {
@@ -8,7 +8,7 @@ import {
 } from './dynamic-field-configuration';
 
 /** Component to render a Field. */
-const DynamicCheckbox = ({ dynamicFieldData: { section, field, fieldPosition }, onFieldAction }) => {
+const DynamicTagControl = ({ dynamicFieldData: { section, field, fieldPosition }, onFieldAction }) => {
   const { tabId, sectionId } = section;
   const fieldActions = (event, type) => onFieldAction({
     event,
@@ -16,15 +16,20 @@ const DynamicCheckbox = ({ dynamicFieldData: { section, field, fieldPosition }, 
     type,
   });
 
-  const ordinaryCheckboxOptions = () => ([
-    dynamicFields.defaultCheckboxValue,
+  const ordinaryTagControlOptions = () => ([
     dynamicFields.required,
     dynamicFields.readOnly,
     dynamicFields.visible,
+    dynamicFields.category,
+    dynamicFields.singleValue,
+    dynamicFields.valueType,
+    dynamicFields.sortBy,
+    dynamicFields.sortOrder,
+    dynamicFields.entries,
     dynamicFields.fieldsToRefresh,
   ]);
-  
-  const dynamicCheckboxOptions = () => ([
+
+  const dynamicTagControlOptions = () => ([
     dynamicFields.entryPoint,
     dynamicFields.showRefresh,
     dynamicFields.loadOnInit,
@@ -37,15 +42,15 @@ const DynamicCheckbox = ({ dynamicFieldData: { section, field, fieldPosition }, 
     dynamicFields.multiselect,
   ]);
 
-  const checkboxOptions = (dynamic) => ({
+  const TagControlOptions = (dynamic) => ({
     name: fieldTab.options,
-    fields: dynamic ? dynamicCheckboxOptions() : ordinaryCheckboxOptions(),
+    fields: dynamic ? dynamicTagControlOptions() : ordinaryTagControlOptions(),
   });
 
-  const checkboxEditFields = (dynamic) => {
+  const TagControlEditFields = (dynamic) => {
     const tabs = [
       fieldInformation(),
-      checkboxOptions(dynamic),
+      TagControlOptions(dynamic),
       advanced(),
     ];
     if (dynamic) {
@@ -58,28 +63,30 @@ const DynamicCheckbox = ({ dynamicFieldData: { section, field, fieldPosition }, 
     <div className="dynamic-form-field">
       <div className="dynamic-form-field-item">
         <FormLabel>
-          Checkbox
+          Tag Control
         </FormLabel>
-        <Checkbox
-          id={`tab-${tabId}-section-${sectionId}-field-${fieldPosition}-checkbox`}
-          name={`tab-${tabId}-section-${sectionId}-field-${fieldPosition}-checkbox`}
-          labelText={__('Checkbox')}
-          // orientation='horizontal'
-          onChange={(event) => fieldActions(event, SD_ACTIONS.checkboxOnchange)}
-        />
+        <Select
+          id={`tab-${tabId}-section-${sectionId}-field-${fieldPosition}-tag-control`}
+          labelText="Select an option"
+          helperText="Optional helper text"
+        >
+          <SelectItem value="" text="" />
+          <SelectItem value="option-1" text="Option 1" />
+          <SelectItem value="option-2" text="Option 2" />
+        </Select>
       </div>
       <DynamicFieldActions
         componentId={field.componentId}
         dynamicFieldAction={(action) => console.log(action, field)}
-        fieldConfiguration={checkboxEditFields(false)}
+        fieldConfiguration={TagControlEditFields(false)}
       />
     </div>
   );
 };
 
-DynamicCheckbox.propTypes = {
+DynamicTagControl.propTypes = {
   dynamicFieldData: dynamicFieldDataProps.isRequired,
   onFieldAction: PropTypes.func.isRequired,
 };
 
-export default DynamicCheckbox;
+export default DynamicTagControl;

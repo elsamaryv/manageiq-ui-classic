@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { DatePicker, DatePickerInput, FormLabel } from 'carbon-components-react';
+import {
+	DatePicker, DatePickerInput, TimePicker, TimePickerSelect, SelectItem, FormLabel
+} from 'carbon-components-react';
 import { dynamicFieldDataProps, SD_ACTIONS } from '../helper';
 import DynamicFieldActions from '../dynamic-field-actions';
 import {
@@ -8,7 +10,7 @@ import {
 } from './dynamic-field-configuration';
 
 /** Component to render a Field. */
-const DynamicDatePicker = ({ dynamicFieldData: { section, field, fieldPosition }, onFieldAction }) => {
+const DynamicTimePicker = ({ dynamicFieldData: { section, field, fieldPosition }, onFieldAction }) => {
   const { tabId, sectionId } = section;
   const fieldActions = (event, type) => onFieldAction({
     event,
@@ -16,7 +18,7 @@ const DynamicDatePicker = ({ dynamicFieldData: { section, field, fieldPosition }
     type,
   });
 
-  const ordinaryDatePickerOptions = () => ([
+  const ordinaryTimePickerOptions = () => ([
     dynamicFields.required,
     dynamicFields.defaultValue,
     dynamicFields.readOnly,
@@ -25,7 +27,7 @@ const DynamicDatePicker = ({ dynamicFieldData: { section, field, fieldPosition }
     dynamicFields.fieldsToRefresh,
   ]);
 
-  const dynamicDatePickerOptions = () => ([
+  const dynamicTimePickerOptions = () => ([
     dynamicFields.entryPoint,
     dynamicFields.showRefresh,
     dynamicFields.loadOnInit,
@@ -35,15 +37,15 @@ const DynamicDatePicker = ({ dynamicFieldData: { section, field, fieldPosition }
     dynamicFields.fieldsToRefresh,
   ]);
 
-  const datePickerOptions = (dynamic) => ({
+  const timePickerOptions = (dynamic) => ({
     name: fieldTab.options,
-    fields: dynamic ? dynamicDatePickerOptions() : ordinaryDatePickerOptions(),
+    fields: dynamic ? dynamicTimePickerOptions() : ordinaryTimePickerOptions(),
   });
 
-  const datePickerEditFields = (dynamic) => {
+  const timePickerEditFields = (dynamic) => {
     const tabs = [
       fieldInformation(),
-      datePickerOptions(dynamic),
+      timePickerOptions(dynamic),
       advanced(),
     ];
     if (dynamic) {
@@ -58,14 +60,6 @@ const DynamicDatePicker = ({ dynamicFieldData: { section, field, fieldPosition }
         {/* <FormLabel>
           Date Picker
         </FormLabel> */}
-        {/* <DatePicker
-          id={`tab-${tabId}-section-${sectionId}-field-${fieldPosition}-date-picker`}
-          name={`tab-${tabId}-section-${sectionId}-field-${fieldPosition}-date-picker`}
-          datePickerType="single"
-          value="default date picker value"
-          title={__('Date Picker')}
-          onChange={(event) => fieldActions(event, SD_ACTIONS.datePickerOnChange)}
-        /> */}
         <DatePicker
           datePickerType="single"
           onChange={() => {}}
@@ -81,19 +75,25 @@ const DynamicDatePicker = ({ dynamicFieldData: { section, field, fieldPosition }
             placeholder="mm/dd/yyyy"
           />
         </DatePicker>
+        <TimePicker id="time-picker" labelText="Select a time">
+          <TimePickerSelect id="time-picker-select-1">
+            <SelectItem value="AM" text="AM" />
+            <SelectItem value="PM" text="PM" />
+          </TimePickerSelect>
+        </TimePicker>
       </div>
       <DynamicFieldActions
         componentId={field.componentId}
         dynamicFieldAction={(action) => console.log(action)}
-        fieldConfiguration={datePickerEditFields(false)}
+        fieldConfiguration={timePickerEditFields(false)}
       />
     </div>
   );
 };
 
-DynamicDatePicker.propTypes = {
+DynamicTimePicker.propTypes = {
   dynamicFieldData: dynamicFieldDataProps.isRequired,
   onFieldAction: PropTypes.func.isRequired,
 };
 
-export default DynamicDatePicker;
+export default DynamicTimePicker;
