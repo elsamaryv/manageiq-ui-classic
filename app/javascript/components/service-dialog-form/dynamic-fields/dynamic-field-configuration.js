@@ -1,10 +1,11 @@
 import { componentTypes } from '@data-driven-forms/react-form-renderer';
 
 export const dynamicFields = {
+  category: { label: __('Category'), field: componentTypes.SELECT },
   defaultValue: { label: __('Default value'), field: componentTypes.TEXT_FIELD },
   defaultCheckboxValue: { label: __('Default value'), field: componentTypes.SWITCH },
   dynamic: { label: __('Dynamic'), field: componentTypes.SWITCH },
-  entries: { label: __('Entries'), field: 'component', component: componentTypes.SELECT },
+  entries: { label: __('Entries'), field: componentTypes.SELECT },
   entryPoint: { label: __('Entry point'), field: componentTypes.SELECT },
   fieldsToRefresh: { label: __('Fields to refresh'), field: componentTypes.SELECT },
   help: { label: __('Help'), field: componentTypes.TEXTAREA },

@@ -28,7 +28,7 @@ const DynamicDropdown = ({ dynamicFieldData: { section, field, fieldPosition }, 
     dynamicFields.entries,
     dynamicFields.fieldsToRefresh,
   ]);
-  
+
   const dynamicDropdownOptions = () => ([
     dynamicFields.entryPoint,
     dynamicFields.showRefresh,
@@ -65,13 +65,14 @@ const DynamicDropdown = ({ dynamicFieldData: { section, field, fieldPosition }, 
         <FormLabel>
           Dropdown
         </FormLabel>
-          {/* <Dropdown
-            id={`tab-${tabId}-section-${sectionId}-field-${fieldPosition}-dropdown`}
-            name={`tab-${tabId}-section-${sectionId}-field-${fieldPosition}-dropdown`}
-            titleText={__('Dropdown')}
-            label=""
-            onChange={(event) => fieldActions(event, SD_ACTIONS.dropdownOnChange)}
-          /> */}
+        <Dropdown
+          id={`tab-${tabId}-section-${sectionId}-field-${fieldPosition}-dropdown`}
+          name={`tab-${tabId}-section-${sectionId}-field-${fieldPosition}-dropdown`}
+          // titleText={__('Dropdown')}
+          label=""
+          items={['Option 0', 'Option 1', 'Option 2']}
+          onChange={(event) => fieldActions(event, SD_ACTIONS.dropdownOnChange)}
+        />
       </div>
       <DynamicFieldActions
         componentId={field.componentId}
