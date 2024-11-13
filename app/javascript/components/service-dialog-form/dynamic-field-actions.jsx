@@ -7,11 +7,14 @@ import EditFieldModal from './edit-field-modal';
 
 /** Component to render a Field. */
 const DynamicFieldActions = ({ componentId, dynamicFieldAction, fieldConfiguration }) => {
-  const [{ showModal }, setState] = useState({ showModal: false });
+  const [{ showModal, ...editedFields }, setState] = useState({ showModal: false });
 
   const onModalHide = () => setState((state) => ({ ...state, showModal: false }));
   const onModalShow = () => setState((state) => ({ ...state, showModal: true }));
-  const onModalApply = () => setState((state) => ({ ...state, showModal: false }));
+  // const onModalApply = () => setState((state) => ({ ...state, showModal: false }));
+  const onModalApply = (formValues) => {
+    setState((prevState) => ({ ...prevState, showModal: false, ...formValues }));
+  };
 
   const renderEditButton = () => (
     <Button
@@ -43,6 +46,7 @@ const DynamicFieldActions = ({ componentId, dynamicFieldAction, fieldConfigurati
         showModal={showModal}
         onModalHide={onModalHide}
         onModalApply={onModalApply}
+        initialData={editedFields}
       />
     )
   );
