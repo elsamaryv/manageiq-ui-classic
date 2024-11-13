@@ -4,22 +4,22 @@ export const textFieldComponent = (field) => ({
   component: componentTypes.TEXT_FIELD,
   label: field.label,
   maxLength: 128,
-  id: field.label,
-  name: field.label,
+  id: field.name,
+  name: field.name,
 });
 
 export const textAreaComponent = (field) => ({
   component: componentTypes.TEXTAREA,
-  id: field.label,
-  name: field.label,
+  id: field.name,
+  name: field.name,
   label: field.label,
   rows: 10,
 });
 
 export const switchComponent = (field) => ({
   component: componentTypes.SWITCH,
-  id: field.label,
-  name: field.label,
+  id: field.name,
+  name: field.name,
   label: field.label,
   maxLength: 50,
 });
@@ -34,8 +34,8 @@ const assignProfiles = [
 
 export const selectComponent = (field) => ({
   component: componentTypes.SELECT,
-  id: field.label,
-  name: field.label,
+  id: field.name,
+  name: field.name,
   label: field.label,
   placeholder: __('<Choose>'),
   includeEmpty: true,
