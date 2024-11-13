@@ -10,15 +10,22 @@ import { dynamicComponents } from '../data';
 import { createSchema } from './edit-field-modal.schema';
 
 const EditFieldModal = ({
-  componentId, fieldConfiguration, showModal, onModalHide, onModalApply,
+  componentId, fieldConfiguration, showModal, onModalHide, onModalApply, initialData
 }) => {
   const [data, setData] = useState({
-    initialValues: {},
+    initialValues: initialData,
   });
+  // const [initialValues, setInitialValues] = useState({});
+
 
   const component = dynamicComponents.find((item) => item.id === componentId);
-  const onSubmit = () => console.log('on Submit');
-  const onCancel = () => console.log('on Cancel');
+
+  const onSubmit = (formValues) => {
+    onModalApply(formValues);
+  };
+
+  const onCancel = () => onModalHide();
+
   return (
     <Modal
       open={showModal}
@@ -32,7 +39,7 @@ const EditFieldModal = ({
       <ModalBody className="edit-field-modal-body">
         <MiqFormRenderer
           schema={createSchema(fieldConfiguration)}
-          initialValues={data.initialValues}
+          initialValues={initialData}
           onSubmit={onSubmit}
           onCancel={onCancel}
         />
@@ -50,6 +57,7 @@ EditFieldModal.propTypes = {
   showModal: PropTypes.bool.isRequired,
   onModalHide: PropTypes.func.isRequired,
   onModalApply: PropTypes.func.isRequired,
+  initialData: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
 export default EditFieldModal;
