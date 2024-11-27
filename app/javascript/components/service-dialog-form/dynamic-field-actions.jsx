@@ -12,8 +12,9 @@ const DynamicFieldActions = ({ componentId, dynamicFieldAction, fieldConfigurati
   const onModalHide = () => setState((state) => ({ ...state, showModal: false }));
   const onModalShow = () => setState((state) => ({ ...state, showModal: true }));
   // const onModalApply = () => setState((state) => ({ ...state, showModal: false }));
-  const onModalApply = (formValues) => {
+  const onModalApply = (formValues, event) => {
     setState((prevState) => ({ ...prevState, showModal: false, ...formValues }));
+    dynamicFieldAction(event, formValues);
   };
 
   const renderEditButton = () => (
