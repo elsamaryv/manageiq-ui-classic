@@ -10,7 +10,7 @@ import { dynamicComponents } from '../data';
 import { createSchema } from './edit-field-modal.schema';
 
 const EditFieldModal = ({
-  componentId, fieldConfiguration, showModal, onModalHide, onModalApply, initialData
+  componentId, fieldConfiguration, showModal, onModalHide, onModalApply, initialData, onSave,
 }) => {
   const [data, setData] = useState({
     initialValues: initialData,
@@ -26,13 +26,17 @@ const EditFieldModal = ({
 
   const onCancel = () => onModalHide();
 
+  const handleSubmit = (formValues) => {
+    onSave(formValues);
+  };
+
   return (
     <Modal
       open={showModal}
       modalHeading={__(`Edit this ${component.title}`)}
-      primaryButtonText={__('Save')}
-      secondaryButtonText={__('Cancel')}
-      onRequestSubmit={onModalApply}
+      // primaryButtonText={__('Save')}
+      // secondaryButtonText={__('Cancel')}
+      // onRequestSubmit={onModalApply}
       onRequestClose={onModalHide}
       passiveModal // Required to hide the save and cancel buttons on the Modal
       className="edit-field-modal"
@@ -43,7 +47,8 @@ const EditFieldModal = ({
           initialValues={initialData}
           // canSubmit={false}
           // canCancel={false}
-          onSubmit={onSubmit}
+          // onSubmit={onSubmit}
+          onSubmit={handleSubmit}
           onCancel={onCancel}
         />
       </ModalBody>
@@ -61,6 +66,7 @@ EditFieldModal.propTypes = {
   onModalHide: PropTypes.func.isRequired,
   onModalApply: PropTypes.func.isRequired,
   initialData: PropTypes.objectOf(PropTypes.any).isRequired,
+  onSave: PropTypes.func.isRequired,
 };
 
 export default EditFieldModal;
