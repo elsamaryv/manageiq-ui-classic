@@ -13,6 +13,23 @@ const DynamicTextArea = ({ dynamicFieldData: { section, field, fieldPosition }, 
 
   const [inputValues, setInputValues] = useState({});
 
+  const inputId = `tab-${tabId}-section-${sectionId}-field-${fieldPosition}-text-area`;
+
+  const [fieldState, setFieldState] = useState({
+    label: field.label || __('Text Box'),
+    placeholder: field.placeholder || '',
+    required: field.required || false,
+    name: field.name || inputId,
+    visible: field.visible || true,
+    value: field.value || '',
+  });
+
+  const handleFieldUpdate = (updatedFields) => {
+    debugger
+    setFieldState((prevState) => ({ ...prevState, ...updatedFields }));
+    // onFieldAction({ ...dynamicFieldData, field: { ...dynamicFieldData.field, ...updatedFields } });
+  };
+
   const fieldActions = (event, inputProps, type = SD_ACTIONS.textAreaOnChange) => {
     setInputValues({
       ...inputValues,
@@ -26,14 +43,6 @@ const DynamicTextArea = ({ dynamicFieldData: { section, field, fieldPosition }, 
       inputProps,
     });
   };
-  
-  // const handleInputProps = (formValues) => {
-  //   // setInputProps(formValues);
-  //   setInputProps({
-  //     ...inputProps,
-  //     ...formValues,
-  //   });
-  // };
 
   
 
@@ -80,21 +89,38 @@ const DynamicTextArea = ({ dynamicFieldData: { section, field, fieldPosition }, 
         {/* <FormLabel>
           Text Area
         </FormLabel> */}
-        <TextArea
-          id={`tab-${tabId}-section-${sectionId}-field-${fieldPosition}-text-area`}
+        {/* <TextArea
+          id={inputId}
           labelText={__('Text Area')}
           // hideLabel
           // placeholder={__('Text Area')}
           placeholder={__('Default value')}
-          name={`tab-${tabId}-section-${sectionId}-field-${fieldPosition}-text-area`}
+          name={inputId}
           // value="default text area value"
           // title={__('Text Area')}
           {...inputValues}
           // onChange={(event) => fieldActions(event, SD_ACTIONS.textAreaOnChange)}
+        /> */}
+        <TextArea
+          id={inputId}
+          name={fieldState.name}
+          labelText={fieldState.label}
+          placeholder={fieldState.placeholder}
+          required={fieldState.required}
+          visible={fieldState.visible}
+          value={fieldState.value}
+          onChange={(e) => handleFieldUpdate({ value: e.target.value })}
         />
       </div>
+      {/* <DynamicFieldActions
+        componentId={field.componentId}
+        dynamicFieldAction={(event, inputProps) => fieldActions(event, inputProps)}
+        fieldConfiguration={textAreaEditFields(false)}
+      /> */}
       <DynamicFieldActions
         componentId={field.componentId}
+        fieldProps={fieldState}
+        updateFieldProps={handleFieldUpdate}
         dynamicFieldAction={(event, inputProps) => fieldActions(event, inputProps)}
         fieldConfiguration={textAreaEditFields(false)}
       />
