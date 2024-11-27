@@ -10,13 +10,24 @@ import {
 /** Component to render a Field. */
 const DynamicCheckbox = ({ dynamicFieldData: { section, field, fieldPosition }, onFieldAction }) => {
   const { tabId, sectionId } = section;
-  // const fieldActions = (event, type) => onFieldAction({
-  //   event,
-  //   fieldPosition,
-  //   type,
-  // });
 
   const [inputValues, setInputValues] = useState({});
+
+  const inputId = `tab-${tabId}-section-${sectionId}-field-${fieldPosition}-checkbox`;
+
+  const [fieldState, setFieldState] = useState({
+    label: field.label || __('Check Box'),
+    required: field.required || false,
+    name: field.name || inputId,
+    visible: field.visible || true,
+    checked: field.checked || false,
+  });
+
+  const handleFieldUpdate = (updatedFields) => {
+    debugger
+    setFieldState((prevState) => ({ ...prevState, ...updatedFields }));
+    // onFieldAction({ ...dynamicFieldData, field: { ...dynamicFieldData.field, ...updatedFields } });
+  };
 
   const fieldActions = (event, inputProps, type = SD_ACTIONS.textAreaOnChange) => {
     setInputValues({
@@ -76,17 +87,33 @@ const DynamicCheckbox = ({ dynamicFieldData: { section, field, fieldPosition }, 
         {/* <FormLabel>
           {inputValues.labelText ? inputValues.labelText : 'Checkbox'}
         </FormLabel> */}
-        <Checkbox
-          id={`tab-${tabId}-section-${sectionId}-field-${fieldPosition}-checkbox`}
-          name={`tab-${tabId}-section-${sectionId}-field-${fieldPosition}-checkbox`}
+        {/* <Checkbox
+          id={inputId}
+          name={inputId}
           labelText={__('Checkbox')}
           {...inputValues}
           // onChange={(event) => fieldActions(event, SD_ACTIONS.checkboxOnChange)}
+        /> */}
+        <Checkbox
+          id={inputId}
+          name={fieldState.name}
+          labelText={fieldState.label}
+          required={fieldState.required}
+          visible={fieldState.visible}
+          checked={fieldState.checked}
+          onChange={(e) => handleFieldUpdate({ checked: e })}
         />
       </div>
-      <DynamicFieldActions
+      {/* <DynamicFieldActions
         componentId={field.componentId}
         // dynamicFieldAction={(action) => console.log(action, field)}
+        dynamicFieldAction={(event, inputProps) => fieldActions(event, inputProps)}
+        fieldConfiguration={checkboxEditFields(false)}
+      /> */}
+      <DynamicFieldActions
+        componentId={field.componentId}
+        fieldProps={fieldState}
+        updateFieldProps={handleFieldUpdate}
         dynamicFieldAction={(event, inputProps) => fieldActions(event, inputProps)}
         fieldConfiguration={checkboxEditFields(false)}
       />
