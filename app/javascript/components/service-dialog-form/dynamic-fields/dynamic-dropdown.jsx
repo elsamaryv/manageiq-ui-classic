@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, FormLabel } from 'carbon-components-react';
 import { dynamicFieldDataProps, SD_ACTIONS } from '../helper';
@@ -10,11 +10,28 @@ import {
 /** Component to render a Field. */
 const DynamicDropdown = ({ dynamicFieldData: { section, field, fieldPosition }, onFieldAction }) => {
   const { tabId, sectionId } = section;
-  const fieldActions = (event, type) => onFieldAction({
-    event,
-    fieldPosition,
-    type,
-  });
+  // const fieldActions = (event, type) => onFieldAction({
+  //   event,
+  //   fieldPosition,
+  //   type,
+  // });
+
+
+  const [inputValues, setInputValues] = useState({});
+
+  const fieldActions = (event, inputProps, type = SD_ACTIONS.textAreaOnChange) => {
+    setInputValues({
+      ...inputValues,
+      ...inputProps,
+    });
+
+    onFieldAction({
+      event,
+      fieldPosition,
+      type,
+      inputProps,
+    });
+  };
 
   const ordinaryDropdownOptions = () => ([
     dynamicFields.readOnly,
@@ -62,21 +79,22 @@ const DynamicDropdown = ({ dynamicFieldData: { section, field, fieldPosition }, 
   return (
     <div className="dynamic-form-field">
       <div className="dynamic-form-field-item">
-        <FormLabel>
+        {/* <FormLabel>
           Dropdown
-        </FormLabel>
+        </FormLabel> */}
         <Dropdown
           id={`tab-${tabId}-section-${sectionId}-field-${fieldPosition}-dropdown`}
-          name={`tab-${tabId}-section-${sectionId}-field-${fieldPosition}-dropdown`}
-          // titleText={__('Dropdown')}
-          label=""
+          name={inputValues.name || `tab-${tabId}-section-${sectionId}-field-${fieldPosition}-dropdown`}
+          titleText={__(inputValues.labelText || 'Dropdown')}
           items={['Option 0', 'Option 1', 'Option 2']}
-          onChange={(event) => fieldActions(event, SD_ACTIONS.dropdownOnChange)}
+          selectedItem={inputValues.defaultValue || ''}
+          {...inputValues}
+          // onChange={(event) => fieldActions(event, SD_ACTIONS.dropdownOnChange)}
         />
       </div>
       <DynamicFieldActions
         componentId={field.componentId}
-        dynamicFieldAction={(action) => console.log(action, field)}
+        dynamicFieldAction={(event, inputProps) => fieldActions(event, inputProps)}
         fieldConfiguration={DropdownEditFields(false)}
       />
     </div>

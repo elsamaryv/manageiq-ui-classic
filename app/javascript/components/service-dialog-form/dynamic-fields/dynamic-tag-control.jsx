@@ -20,7 +20,7 @@ const DynamicTagControl = ({ dynamicFieldData: { section, field, fieldPosition }
     dynamicFields.required,
     dynamicFields.readOnly,
     dynamicFields.visible,
-    dynamicFields.category,
+    // dynamicFields.category,
     dynamicFields.singleValue,
     dynamicFields.valueType,
     dynamicFields.sortBy,
