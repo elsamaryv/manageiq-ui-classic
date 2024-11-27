@@ -6,6 +6,8 @@ export const textFieldComponent = (field) => ({
   maxLength: 128,
   id: field.name,
   name: field.name,
+  // value: defaultValue,
+  initialValue: field.initialValue,
 });
 
 export const textAreaComponent = (field) => ({
@@ -14,6 +16,7 @@ export const textAreaComponent = (field) => ({
   name: field.name,
   label: field.label,
   rows: 10,
+  // value: defaultValue,
 });
 
 export const switchComponent = (field) => ({
@@ -22,7 +25,14 @@ export const switchComponent = (field) => ({
   name: field.name,
   label: field.label,
   maxLength: 50,
+  // value: defaultValue,
 });
+
+
+const valueTypes = [
+  { label: __('String'), value: 'String' },
+  { label: __('Integer'), value: 'Integer' },
+];
 
 const assignProfiles = [
   { label: __('Copy of sample'), value: 'Copy of sample' },
@@ -32,6 +42,15 @@ const assignProfiles = [
   { label: __('sample'), value: 'sample' },
 ];
 
+const selectOptions = (type) => {
+  switch (type) {
+    case 'valueType':
+      return valueTypes;
+    default:
+      return assignProfiles;
+  }
+};
+
 export const selectComponent = (field) => ({
   component: componentTypes.SELECT,
   id: field.name,
@@ -39,5 +58,6 @@ export const selectComponent = (field) => ({
   label: field.label,
   placeholder: __('<Choose>'),
   includeEmpty: true,
-  options: assignProfiles,
+  options: selectOptions(field.name),
+  // value: defaultValue,
 });

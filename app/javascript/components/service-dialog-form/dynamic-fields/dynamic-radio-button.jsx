@@ -70,14 +70,14 @@ const DynamicRadioButton = ({ dynamicFieldData: { section, field, fieldPosition 
             labelText={__('Radio Button 1')}
             name={`tab-${tabId}-section-${sectionId}-field-${fieldPosition}-radio-button-1`}
             value="default radio button value"
-            onChange={(event) => fieldActions(event, SD_ACTIONS.radioButtonOnchange)}
+            onChange={(event) => fieldActions(event, SD_ACTIONS.radioButtonOnChange)}
           />
           <RadioButton
             id={`tab-${tabId}-section-${sectionId}-field-${fieldPosition}-radio-button-2`}
             labelText={__('Radio Button 2')}
             name={`tab-${tabId}-section-${sectionId}-field-${fieldPosition}-radio-button-2`}
             value="default radio button value"
-            onChange={(event) => fieldActions(event, SD_ACTIONS.radioButtonOnchange)}
+            onChange={(event) => fieldActions(event, SD_ACTIONS.radioButtonOnChange)}
           />
         </RadioButtonGroup>
       </div>

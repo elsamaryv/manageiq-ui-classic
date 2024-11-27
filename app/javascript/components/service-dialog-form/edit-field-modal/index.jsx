@@ -20,8 +20,8 @@ const EditFieldModal = ({
 
   const component = dynamicComponents.find((item) => item.id === componentId);
 
-  const onSubmit = (formValues) => {
-    onModalApply(formValues);
+  const onSubmit = (formValues, event) => {
+    onModalApply(formValues, event);
   };
 
   const onCancel = () => onModalHide();
@@ -34,12 +34,15 @@ const EditFieldModal = ({
       secondaryButtonText={__('Cancel')}
       onRequestSubmit={onModalApply}
       onRequestClose={onModalHide}
+      passiveModal // Required to hide the save and cancel buttons on the Modal
       className="edit-field-modal"
     >
       <ModalBody className="edit-field-modal-body">
         <MiqFormRenderer
           schema={createSchema(fieldConfiguration)}
           initialValues={initialData}
+          // canSubmit={false}
+          // canCancel={false}
           onSubmit={onSubmit}
           onCancel={onCancel}
         />

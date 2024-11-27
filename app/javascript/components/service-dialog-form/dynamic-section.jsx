@@ -27,10 +27,12 @@ const DynamicSection = ({ section, sectionAction }) => {
     event, section, type,
   });
 
-  const onFieldAction = ({ event, type, fieldPosition }) => sectionAction({
-    event, section, type, fieldPosition,
-  });
-
+  const onFieldAction = ({ event, type, fieldPosition, inputProps }) => {
+    sectionAction({
+      event, section, type, fieldPosition, inputProps,
+    });
+  };
+  
   const renderMinMaxButton = () => (
     <Button
       renderIcon={sectionData.maximize ? Minimize16 : Maximize16}
