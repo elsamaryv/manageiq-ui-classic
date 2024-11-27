@@ -16,7 +16,7 @@ const DynamicTextArea = ({ dynamicFieldData: { section, field, fieldPosition }, 
   const inputId = `tab-${tabId}-section-${sectionId}-field-${fieldPosition}-text-area`;
 
   const [fieldState, setFieldState] = useState({
-    label: field.label || __('Text Box'),
+    label: field.label || __('Text Area'),
     placeholder: field.placeholder || '',
     required: field.required || false,
     name: field.name || inputId,
