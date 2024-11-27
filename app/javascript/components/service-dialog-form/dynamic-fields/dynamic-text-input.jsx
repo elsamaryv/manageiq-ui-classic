@@ -9,13 +9,23 @@ import {
 /** Component to render a Field. */
 const DynamicTextInput = ({ dynamicFieldData: { section, field, fieldPosition }, onFieldAction }) => {
   const { tabId, sectionId } = section;
-  // const fieldActions = (event, type) => onFieldAction({
-  //   event,
-  //   fieldPosition,
-  //   type,
-  // });
-
   const [inputValues, setInputValues] = useState({});
+  const inputId = `tab-${tabId}-section-${sectionId}-field-${fieldPosition}-text-input`;
+
+  const [fieldState, setFieldState] = useState({
+    label: field.label || __('Text Box'),
+    placeholder: field.placeholder || '',
+    required: field.required || false,
+    name: field.name || inputId,
+    visible: field.visible || true,
+    value: field.value || '',
+  });
+
+  const handleFieldUpdate = (updatedFields) => {
+    debugger
+    setFieldState((prevState) => ({ ...prevState, ...updatedFields }));
+    // onFieldAction({ ...dynamicFieldData, field: { ...dynamicFieldData.field, ...updatedFields } });
+  };
 
   const fieldActions = (event, inputProps, type = SD_ACTIONS.textAreaOnChange) => {
     setInputValues({
@@ -72,12 +82,10 @@ const DynamicTextInput = ({ dynamicFieldData: { section, field, fieldPosition },
     return tabs;
   };
 
-  const inputId = `tab-${tabId}-section-${sectionId}-field-${fieldPosition}-text-input`;
-
   return (
     <div className="dynamic-form-field">
       <div className="dynamic-form-field-item">
-        <TextInput
+        {/* <TextInput
           id={inputId}
           labelText={__('Text Box')}
           placeholder={__('Default value')}
@@ -85,14 +93,31 @@ const DynamicTextInput = ({ dynamicFieldData: { section, field, fieldPosition },
           // title={__('Text Box')}
           {...inputValues}
           // onChange={(event) => fieldActions(event, SD_ACTIONS.textInputOnChange)}
+        /> */}
+        <TextInput
+          id={inputId}
+          name={fieldState.name}
+          labelText={fieldState.label}
+          placeholder={fieldState.placeholder}
+          required={fieldState.required}
+          visible={fieldState.visible}
+          value={fieldState.value}
+          onChange={(e) => handleFieldUpdate({ value: e.target.value })}
         />
       </div>
-      <DynamicFieldActions
+      {/* <DynamicFieldActions
         componentId={field.componentId}
         // dynamicFieldAction={(action) => console.log(action, field)}
         dynamicFieldAction={(event, inputProps) => fieldActions(event, inputProps)}
         fieldConfiguration={textBoxEditFields(false)}
         // fieldProps={handleInputProps}
+      /> */}
+      <DynamicFieldActions
+        componentId={field.componentId}
+        fieldProps={fieldState}
+        updateFieldProps={handleFieldUpdate}
+        dynamicFieldAction={(event, inputProps) => fieldActions(event, inputProps)}
+        fieldConfiguration={textBoxEditFields(false)}
       />
     </div>
   );
