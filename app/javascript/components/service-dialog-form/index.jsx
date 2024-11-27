@@ -269,7 +269,7 @@ const ServiceDialogForm = () => {
 
   /** Function to render the tab contents. */
   const renderTabContents = () => {
-    debugger;
+    // debugger;
     return (
       <div className="dynamic-tabs-wrapper">
         <Tabs className="miq_custom_tabs" id="dynamic-tabs">
