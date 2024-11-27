@@ -64,3 +64,42 @@ export const dropSection = (tab, { sectionId }, dragEnterItem) => {
 export const dropComponent = (section, { componentId }) => {
   section.fields.push({ componentId });
 };
+
+// Shapes for each service dialog components as needed
+const textInputShape = PropTypes.shape({
+  label: PropTypes.string.isRequired,
+  placeholder: PropTypes.string,
+  required: PropTypes.bool,
+  value: PropTypes.string,
+});
+
+const textAreaShape = PropTypes.shape({
+  label: PropTypes.string.isRequired,
+  placeholder: PropTypes.string,
+  required: PropTypes.bool,
+  value: PropTypes.string,
+});
+
+const checkboxShape = PropTypes.shape({
+  label: PropTypes.string.isRequired,
+  checked: PropTypes.bool.isRequired,
+  required: PropTypes.bool,
+});
+
+const dropdownShape = PropTypes.shape({
+  label: PropTypes.string.isRequired,
+  options: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string.isRequired,
+      value: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  selectedValue: PropTypes.string,
+});
+
+export const SD_PROP_SHAPES = {
+  textbox: textInputShape,
+  textarea: textAreaShape,
+  checkbox: checkboxShape,
+  dropdown: dropdownShape,
+};
