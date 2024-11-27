@@ -161,6 +161,19 @@ const ServiceDialogForm = () => {
     }
   };
 
+  /** Function to handle text area field update */
+  const handlePropertiesEdit = ({ section, fieldPosition, inputProps }) => {
+    const { tabId, sectionId } = section;
+
+    const fieldVal = data.formFields[tabId].sections[sectionId].fields[fieldPosition];
+    const newFieldVal = { ...fieldVal, ...inputProps };
+
+    data.formFields[tabId].sections[sectionId].fields[fieldPosition] = newFieldVal;
+    setData({
+      ...data,
+    });
+  };
+
   /** Function to handle the call back actions from section. */
   /** TODO: Change this to Redux */
   // TODO: fieldPosition will only appeare for field drag and drop. Needs to change the logic.
@@ -182,14 +195,15 @@ const ServiceDialogForm = () => {
         return editSection(actionData);
       case SD_ACTIONS.section.delete:
         return deleteSection(actionData);
-      case SD_ACTIONS.textAreaOnchange:
-        return console.log('textAreaOnchange');
-      case SD_ACTIONS.textInputOnchange:
-        return console.log('textInputOnchange');
-      case SD_ACTIONS.checkboxOnchange:
-        return console.log('checkboxOnchange');
-      case SD_ACTIONS.radioButtonOnchange:
-        return console.log('radioButtonOnchange');
+      case SD_ACTIONS.textInputOnChange:
+        // return console.log('textInputOnChange');
+        return handlePropertiesEdit(actionData);
+      case SD_ACTIONS.textAreaOnChange:
+        return handlePropertiesEdit(actionData);
+      case SD_ACTIONS.checkboxOnChange:
+        return console.log('checkboxOnChange');
+      case SD_ACTIONS.radioButtonOnChange:
+        return console.log('radioButtonOnChange');
       case SD_ACTIONS.datePickerOnChange:
         return console.log('datePickerOnChange');
       case SD_ACTIONS.dropdownOnChange:
@@ -215,11 +229,12 @@ const ServiceDialogForm = () => {
   );
 
   /** Function to render the sections under a tab. */
-  const renderSections = ({ tabIb, sections }) => sections && sections.map((section, sectionPosition) => (
+  const renderSections = ({ tabId, sections }) => sections && sections.map((section, sectionPosition) => (
     <DynamicSection
       key={sectionPosition.toString()}
       section={section}
-      sectionAction={(actionType, event) => onSectionAction(actionType, tabIb, section.sectionId, event)}
+      // event, section, type, fieldPosition, inputProps,
+      sectionAction={(type, event, inputProps) => onSectionAction(type, tabId, section.sectionId, event, inputProps)}
     />
   ));
 
@@ -253,13 +268,17 @@ const ServiceDialogForm = () => {
   ));
 
   /** Function to render the tab contents. */
-  const renderTabContents = () => (
-    <div className="dynamic-tabs-wrapper">
-      <Tabs className="miq_custom_tabs" id="dynamic-tabs">
-        {renderTabs()}
-      </Tabs>
-    </div>
-  );
+  const renderTabContents = () => {
+    debugger;
+    return (
+      <div className="dynamic-tabs-wrapper">
+        <Tabs className="miq_custom_tabs" id="dynamic-tabs">
+          {renderTabs()}
+        </Tabs>
+      </div>
+    );
+  };
+
   return (
     <div className="drag-and-drop-wrapper">
       <DynamicComponentChooser

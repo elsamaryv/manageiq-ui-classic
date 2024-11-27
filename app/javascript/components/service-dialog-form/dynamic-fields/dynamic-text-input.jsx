@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { TextInput, FormLabel } from 'carbon-components-react';
 import { dynamicFieldDataProps, SD_ACTIONS } from '../helper';
@@ -9,11 +9,27 @@ import {
 /** Component to render a Field. */
 const DynamicTextInput = ({ dynamicFieldData: { section, field, fieldPosition }, onFieldAction }) => {
   const { tabId, sectionId } = section;
-  const fieldActions = (event, type) => onFieldAction({
-    event,
-    fieldPosition,
-    type,
-  });
+  // const fieldActions = (event, type) => onFieldAction({
+  //   event,
+  //   fieldPosition,
+  //   type,
+  // });
+
+  const [inputValues, setInputValues] = useState({});
+
+  const fieldActions = (event, inputProps, type = SD_ACTIONS.textAreaOnChange) => {
+    setInputValues({
+      ...inputValues,
+      ...inputProps,
+    });
+
+    onFieldAction({
+      event,
+      fieldPosition,
+      type,
+      inputProps,
+    });
+  };
 
   const ordinaryTextBoxOptions = () => ([
     dynamicFields.defaultValue,
@@ -56,26 +72,27 @@ const DynamicTextInput = ({ dynamicFieldData: { section, field, fieldPosition },
     return tabs;
   };
 
+  const inputId = `tab-${tabId}-section-${sectionId}-field-${fieldPosition}-text-input`;
+
   return (
     <div className="dynamic-form-field">
       <div className="dynamic-form-field-item">
-        <FormLabel>
-          Text Box
-        </FormLabel>
         <TextInput
-          id={`tab-${tabId}-section-${sectionId}-field-${fieldPosition}-text-input`}
+          id={inputId}
           labelText={__('Text Box')}
-          hideLabel
           placeholder={__('Default value')}
-          name={`tab-${tabId}-section-${sectionId}-field-${fieldPosition}-text-input`}
-          title={__('Text Box')}
-          onChange={(event) => fieldActions(event, SD_ACTIONS.textInputOnchange)}
+          name={inputId}
+          // title={__('Text Box')}
+          {...inputValues}
+          // onChange={(event) => fieldActions(event, SD_ACTIONS.textInputOnChange)}
         />
       </div>
       <DynamicFieldActions
         componentId={field.componentId}
-        dynamicFieldAction={(action) => console.log(action, field)}
+        // dynamicFieldAction={(action) => console.log(action, field)}
+        dynamicFieldAction={(event, inputProps) => fieldActions(event, inputProps)}
         fieldConfiguration={textBoxEditFields(false)}
+        // fieldProps={handleInputProps}
       />
     </div>
   );
