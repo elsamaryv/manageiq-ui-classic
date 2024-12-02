@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { DatePicker, DatePickerInput, FormLabel } from 'carbon-components-react';
 import { dynamicFieldDataProps, SD_ACTIONS } from '../helper';
@@ -10,15 +10,26 @@ import {
 /** Component to render a Field. */
 const DynamicDatePicker = ({ dynamicFieldData: { section, field, fieldPosition }, onFieldAction }) => {
   const { tabId, sectionId } = section;
-  const fieldActions = (event, type) => onFieldAction({
-    event,
-    fieldPosition,
-    type,
+
+  const [inputValues, setInputValues] = useState({});
+  // const fieldActions = (event, type) => onFieldAction({
+  //   event,
+  //   fieldPosition,
+  //   type,
+  // });
+
+  const inputId = `tab-${tabId}-section-${sectionId}-field-${fieldPosition}-date-picker`;
+
+  const [fieldState, setFieldState] = useState({
+    label: field.label || __('Datepicker'),
+    name: field.name || inputId,
+    visible: field.visible || true,
+    value: field.defaultDatePickerValue || '',
   });
 
   const ordinaryDatePickerOptions = () => ([
     dynamicFields.required,
-    dynamicFields.defaultValue,
+    dynamicFields.defaultDatePickerValue,
     dynamicFields.readOnly,
     dynamicFields.visible,
     dynamicFields.showPastDates,
@@ -28,12 +39,42 @@ const DynamicDatePicker = ({ dynamicFieldData: { section, field, fieldPosition }
   const dynamicDatePickerOptions = () => ([
     dynamicFields.entryPoint,
     dynamicFields.showRefresh,
-    dynamicFields.loadOnInit,
-    dynamicFields.required,
-    dynamicFields.validation,
-    dynamicFields.validator,
+    dynamicFields.showPastDates,
     dynamicFields.fieldsToRefresh,
+    dynamicFields.required,
   ]);
+
+  const fieldActions = (event, inputProps, type = SD_ACTIONS.textAreaOnChange) => {
+    setInputValues({
+      ...inputValues,
+      ...inputProps,
+    });
+
+    onFieldAction({
+      event,
+      fieldPosition,
+      type,
+      inputProps,
+    });
+  };
+
+  // const handleFieldUpdate = (updatedFields) => {
+  //   debugger
+  //   // date = updatedFields.value[0].toLocaleDateString('en-US');
+  //   setFieldState((prevState) => ({
+  //     ...prevState,
+  //     ...updatedFields,
+  //     value: updatedFields.value[0].toLocaleDateString('en-US'),
+  //   }));
+  //   // onFieldAction({ ...dynamicFieldData, field: { ...dynamicFieldData.field, ...updatedFields } });
+  // };
+
+  const handleFieldUpdate = (updatedFields) => {
+    debugger
+    // date = updatedFields.value[0].toLocaleDateString('en-US');
+    setFieldState((prevState) => ({ ...prevState, ...updatedFields }));
+    // onFieldAction({ ...dynamicFieldData, field: { ...dynamicFieldData.field, ...updatedFields } });
+  };
 
   const datePickerOptions = (dynamic) => ({
     name: fieldTab.options,
@@ -55,36 +96,31 @@ const DynamicDatePicker = ({ dynamicFieldData: { section, field, fieldPosition }
   return (
     <div className="dynamic-form-field">
       <div className="dynamic-form-field-item">
-        {/* <FormLabel>
-          Date Picker
-        </FormLabel> */}
-        {/* <DatePicker
-          id={`tab-${tabId}-section-${sectionId}-field-${fieldPosition}-date-picker`}
-          name={`tab-${tabId}-section-${sectionId}-field-${fieldPosition}-date-picker`}
-          datePickerType="single"
-          value="default date picker value"
-          title={__('Date Picker')}
-          onChange={(event) => fieldActions(event, SD_ACTIONS.datePickerOnChange)}
-        /> */}
         <DatePicker
           datePickerType="single"
-          onChange={() => {}}
-          onClose={() => {}}
-          onOpen={() => {}}
+          dateFormat="m/d/Y"
+          // onClose={() => {}}
+          // onOpen={() => {}}
+          // onChange={(e) => { handleFieldUpdate({ value: e.target.value }); }}
+          onChange={(selectedDates, dateStr) => handleFieldUpdate({ value: dateStr })}
         >
           <DatePickerInput
-            id="date-picker-single"
-            labelText="Date Picker label"
-            onChange={() => {}}
-            onClose={() => {}}
-            onOpen={() => {}}
+            datePickerType="single"
+            id={inputId}
+            labelText={fieldState.label}
+            value={fieldState.value}
+            // onChange={() => {}}
+            // onClose={() => {}}
+            // onOpen={() => {}}
             placeholder="mm/dd/yyyy"
           />
         </DatePicker>
       </div>
       <DynamicFieldActions
         componentId={field.componentId}
-        dynamicFieldAction={(action) => console.log(action)}
+        fieldProps={fieldState}
+        updateFieldProps={handleFieldUpdate}
+        dynamicFieldAction={(event, inputProps) => fieldActions(event, inputProps)}
         fieldConfiguration={datePickerEditFields(false)}
       />
     </div>

@@ -4,6 +4,8 @@ import {
   textAreaComponent,
   switchComponent,
   selectComponent,
+  fieldArrayComponent,
+  datePickerComponent
 } from './fields.schema';
 
 const fields = (tab) => tab.fields.map((item) => {
@@ -14,8 +16,12 @@ const fields = (tab) => tab.fields.map((item) => {
       return textAreaComponent(item);
     case componentTypes.SWITCH:
       return switchComponent(item);
+    case componentTypes.FIELD_ARRAY:
+      return fieldArrayComponent(item);
     case componentTypes.SELECT:
       return selectComponent(item);
+    case componentTypes.DATE_PICKER:
+      return datePickerComponent(item);
     default:
       return null;
   }
