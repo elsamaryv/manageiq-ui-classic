@@ -52,7 +52,6 @@ const DynamicTextArea = ({ dynamicFieldData: { section, field, fieldPosition }, 
     dynamicFields.readOnly,
     dynamicFields.visible,
     dynamicFields.validation,
-    dynamicFields.validator,
     dynamicFields.fieldsToRefresh,
   ]);
 
@@ -62,7 +61,6 @@ const DynamicTextArea = ({ dynamicFieldData: { section, field, fieldPosition }, 
     dynamicFields.loadOnInit,
     dynamicFields.required,
     dynamicFields.validation,
-    dynamicFields.validator,
     dynamicFields.fieldsToRefresh,
   ]);
 

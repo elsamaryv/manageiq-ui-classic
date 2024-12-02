@@ -132,6 +132,15 @@ const ServiceDialogForm = () => {
     });
   };
 
+  const deleteField = ({ tabId, sectionId }) => {
+    // const tab = selectedTab(data.formFields, tabId);
+    // tab.sections = tab.sections.filter((section) => section.sectionId !== sectionId);
+    // setData({
+    //   ...data,
+    //   formFields: [...data.formFields],
+    // });
+  };
+
   /** Function to handle the tab click event. */
   const onTabSelect = (tabId) => {
     if (tabId === 'new') {
@@ -178,6 +187,7 @@ const ServiceDialogForm = () => {
   /** TODO: Change this to Redux */
   // TODO: fieldPosition will only appeare for field drag and drop. Needs to change the logic.
   const onSectionAction = (actionData) => {
+    debugger
     switch (actionData.type) {
       case SD_ACTIONS.onDrop:
         return onDrop();
@@ -195,6 +205,9 @@ const ServiceDialogForm = () => {
         return editSection(actionData);
       case SD_ACTIONS.section.delete:
         return deleteSection(actionData);
+      case SD_ACTIONS.field.delete:
+        debugger
+        return deleteField(actionData);
       case SD_ACTIONS.textInputOnChange:
         // return console.log('textInputOnChange');
         return handlePropertiesEdit(actionData);

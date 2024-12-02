@@ -19,6 +19,44 @@ const DynamicDropdown = ({ dynamicFieldData: { section, field, fieldPosition }, 
 
   const [inputValues, setInputValues] = useState({});
 
+  const inputId = `tab-${tabId}-section-${sectionId}-field-${fieldPosition}-dropdown`;
+
+  const optionEntries = [
+    { id: 'option-0', text: 'Option 0' },
+    { id: 'option-1', text: 'Option 1' },
+  ];
+
+  // const [options, setOptions] = useState(optionEntries);
+  
+  // const [defaultValue, setDefaultValue] = useState(options[0]?.id || null);
+
+  const [fieldState, setFieldState] = useState({
+    label: field.label || __('Dropdown'),
+    required: field.required || false,
+    name: field.name || inputId,
+    visible: field.visible || true,
+    items: field.entries || optionEntries,
+    value: field.defaultValue || '',
+    multiselect: field.multiselect || false,
+  });
+
+  const handleFieldUpdate = (updatedFields) => {
+    debugger
+    setFieldState((prevState) => ({ ...prevState, ...updatedFields }));
+    // onFieldAction({ ...dynamicFieldData, field: { ...dynamicFieldData.field, ...updatedFields } });
+  };
+
+  // const handleFieldUpdate = (updatedFields) => {
+  //   setFieldState((prevState) => {
+  //     const newState = { ...prevState, ...updatedFields };
+  //     // Ensure defaultValue is valid if items are updated
+  //     if (updatedFields.items && !updatedFields.items.some((item) => item.id === newState.value)) {
+  //       newState.value = updatedFields.items.length > 0 ? updatedFields.items[0].id : '';
+  //     }
+  //     return newState;
+  //   });
+  // };
+
   const fieldActions = (event, inputProps, type = SD_ACTIONS.textAreaOnChange) => {
     setInputValues({
       ...inputValues,
@@ -37,7 +75,7 @@ const DynamicDropdown = ({ dynamicFieldData: { section, field, fieldPosition }, 
     dynamicFields.readOnly,
     dynamicFields.visible,
     dynamicFields.required,
-    dynamicFields.defaultValue,
+    dynamicFields.defaultDropdownValue,
     dynamicFields.valueType,
     dynamicFields.sortBy,
     dynamicFields.sortOrder,
@@ -47,16 +85,13 @@ const DynamicDropdown = ({ dynamicFieldData: { section, field, fieldPosition }, 
   ]);
 
   const dynamicDropdownOptions = () => ([
-    dynamicFields.entryPoint,
+    // dynamicFields.entryPoint,
     dynamicFields.showRefresh,
     dynamicFields.loadOnInit,
     dynamicFields.required,
-    dynamicFields.protected,
     dynamicFields.valueType,
-    dynamicFields.validation,
-    dynamicFields.validator,
-    dynamicFields.fieldsToRefresh,
     dynamicFields.multiselect,
+    dynamicFields.fieldsToRefresh,
   ]);
 
   const DropdownOptions = (dynamic) => ({
@@ -83,17 +118,49 @@ const DynamicDropdown = ({ dynamicFieldData: { section, field, fieldPosition }, 
           Dropdown
         </FormLabel> */}
         <Dropdown
-          id={`tab-${tabId}-section-${sectionId}-field-${fieldPosition}-dropdown`}
-          name={inputValues.name || `tab-${tabId}-section-${sectionId}-field-${fieldPosition}-dropdown`}
-          titleText={__(inputValues.labelText || 'Dropdown')}
-          items={['Option 0', 'Option 1', 'Option 2']}
-          selectedItem={inputValues.defaultValue || ''}
-          {...inputValues}
+          id={inputId}
+          name={fieldState.name}
+          // titleText={__(inputValues.labelText || 'Dropdown')}
+          titleText={fieldState.label}
+          // items={['Option 0', 'Option 1', 'Option 2']}
+          // items={[
+          //   { id: 'option-0', text: 'Option 0' },
+          //   { id: 'option-1', text: 'Option 1' },
+          //   { id: 'option-2', text: 'Option 2' },
+          // ]}
+          items={fieldState.items}
+          itemToString={(item) => (item ? item.text : '')}
+          value={fieldState.value}
+          // multiselect={fieldState.multiselect}
+          selectedItem={fieldState.items.find((item) => item.id === fieldState.value) || null}
+          onChange={({ selectedItem }) => {
+            handleFieldUpdate({ value: selectedItem.id });
+          }}
+          // selectedItem={inputValues.defaultDropdownValue || ''}
+          // {...inputValues}
           // onChange={(event) => fieldActions(event, SD_ACTIONS.dropdownOnChange)}
         />
+        {/* <Dropdown
+          id={inputId}
+          name={fieldState.name}
+          labelText={fieldState.label}
+          required={fieldState.required}
+          // visible={fieldState.visible}
+          // initialSelectedItem={fieldState.items[1]}
+          items={fieldState.items}
+          // itemToString={(item) => (item ? item.text : '')}
+          onChange={(e) => handleFieldUpdate({ checked: e })}
+        /> */}
       </div>
+      {/* <DynamicFieldActions
+        componentId={field.componentId}
+        dynamicFieldAction={(event, inputProps) => fieldActions(event, inputProps)}
+        fieldConfiguration={DropdownEditFields(false)}
+      /> */}
       <DynamicFieldActions
         componentId={field.componentId}
+        fieldProps={fieldState}
+        updateFieldProps={handleFieldUpdate}
         dynamicFieldAction={(event, inputProps) => fieldActions(event, inputProps)}
         fieldConfiguration={DropdownEditFields(false)}
       />

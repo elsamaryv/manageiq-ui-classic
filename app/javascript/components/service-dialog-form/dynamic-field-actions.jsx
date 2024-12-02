@@ -81,6 +81,7 @@ DynamicFieldActions.propTypes = {
     SD_PROP_SHAPES.textarea,
     SD_PROP_SHAPES.checkbox,
     SD_PROP_SHAPES.dropdown,
+    SD_PROP_SHAPES.datepicker,
   ]).isRequired,
   updateFieldProps: PropTypes.func.isRequired,
   dynamicFieldAction: PropTypes.func.isRequired,
