@@ -4,8 +4,10 @@ export const dynamicFields = {
   // category: { label: __('Category'), name: 'category', field: componentTypes.SELECT },
   defaultValue: { label: __('Default value'), name: 'value', field: componentTypes.TEXT_FIELD },
   defaultCheckboxValue: { label: __('Default value'), name: 'checked', field: componentTypes.SWITCH },
+  defaultDropdownValue: { label: __('Default value'), name: 'defaultDropdownValue', field: componentTypes.SELECT },
+  defaultDatePickerValue: { label: __('Default value'), name: 'value', field: componentTypes.DATE_PICKER },
   dynamic: { label: __('Dynamic'), name: 'dynamic', field: componentTypes.SWITCH },
-  entries: { label: __('Entries'), name: 'entries', field: componentTypes.SELECT },
+  entries: { label: __('Entries'), name: 'items', field: componentTypes.FIELD_ARRAY },
   entryPoint: { label: __('Entry point'), name: 'entryPoint', field: componentTypes.SELECT },
   fieldsToRefresh: { label: __('Fields to refresh'), name: 'fieldsToRefresh', field: componentTypes.SELECT },
   help: { label: __('Help'), name: 'helperText', field: componentTypes.TEXTAREA },
@@ -25,7 +27,6 @@ export const dynamicFields = {
   visible: { label: __('Visible'), name: 'visible', field: componentTypes.SWITCH },
   valueType: { label: __('Value type'), name: 'valueType', field: componentTypes.SELECT },
   validation: { label: __('Validation'), name: 'validation', field: componentTypes.SWITCH },
-  validator: { label: __('Validator'), name: 'validator', field: componentTypes.TEXT_FIELD },
 };
 
 export const fieldTab = {

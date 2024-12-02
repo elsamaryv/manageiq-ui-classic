@@ -4,7 +4,7 @@ import { Select, SelectItem, FormLabel } from 'carbon-components-react';
 import { dynamicFieldDataProps, SD_ACTIONS } from '../helper';
 import DynamicFieldActions from '../dynamic-field-actions';
 import {
-  fieldInformation, advanced, overridableOptions, fieldTab, dynamicFields,
+  fieldInformation, advanced, fieldTab, dynamicFields,
 } from './dynamic-field-configuration';
 
 /** Component to render a Field. */
@@ -29,33 +29,17 @@ const DynamicTagControl = ({ dynamicFieldData: { section, field, fieldPosition }
     dynamicFields.fieldsToRefresh,
   ]);
 
-  const dynamicTagControlOptions = () => ([
-    dynamicFields.entryPoint,
-    dynamicFields.showRefresh,
-    dynamicFields.loadOnInit,
-    dynamicFields.required,
-    dynamicFields.protected,
-    dynamicFields.valueType,
-    dynamicFields.validation,
-    dynamicFields.validator,
-    dynamicFields.fieldsToRefresh,
-    dynamicFields.multiselect,
-  ]);
-
-  const TagControlOptions = (dynamic) => ({
+  const TagControlOptions = () => ({
     name: fieldTab.options,
-    fields: dynamic ? dynamicTagControlOptions() : ordinaryTagControlOptions(),
+    fields: ordinaryTagControlOptions(),
   });
 
-  const TagControlEditFields = (dynamic) => {
+  const TagControlEditFields = () => {
     const tabs = [
       fieldInformation(),
-      TagControlOptions(dynamic),
+      TagControlOptions,
       advanced(),
     ];
-    if (dynamic) {
-      tabs.push(overridableOptions());
-    }
     return tabs;
   };
 
