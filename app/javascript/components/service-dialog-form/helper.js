@@ -23,8 +23,8 @@ export const SD_ACTIONS = {
     delete: 'sectionDelete',
   },
   field: {
-    edit: 'sectionEdit',
-    delete: 'sectionDelete',
+    edit: 'fieldEdit',
+    delete: 'fieldDelete',
   },
   onDragOverListener: 'onDragOverListener',
   onDrop: 'onDrop',
@@ -88,13 +88,19 @@ const checkboxShape = PropTypes.shape({
 
 const dropdownShape = PropTypes.shape({
   label: PropTypes.string.isRequired,
-  options: PropTypes.arrayOf(
+  items: PropTypes.arrayOf(
     PropTypes.shape({
-      label: PropTypes.string.isRequired,
-      value: PropTypes.string.isRequired,
+      id: PropTypes.string.isRequired,
+      text: PropTypes.string.isRequired,
     })
   ).isRequired,
   selectedValue: PropTypes.string,
+  multiselect: PropTypes.bool,
+});
+
+const datepickerShape = PropTypes.shape({
+  label: PropTypes.string.isRequired,
+  value: PropTypes.string,
 });
 
 export const SD_PROP_SHAPES = {
@@ -102,4 +108,5 @@ export const SD_PROP_SHAPES = {
   textarea: textAreaShape,
   checkbox: checkboxShape,
   dropdown: dropdownShape,
+  datepicker: datepickerShape,
 };

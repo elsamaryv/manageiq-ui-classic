@@ -49,7 +49,6 @@ const DynamicTextInput = ({ dynamicFieldData: { section, field, fieldPosition },
     dynamicFields.visible,
     dynamicFields.valueType,
     dynamicFields.validation,
-    dynamicFields.validator,
     dynamicFields.fieldsToRefresh,
   ]);
 
@@ -61,7 +60,6 @@ const DynamicTextInput = ({ dynamicFieldData: { section, field, fieldPosition },
     dynamicFields.protected,
     dynamicFields.valueType,
     dynamicFields.validation,
-    dynamicFields.validator,
     dynamicFields.fieldsToRefresh,
   ]);
 

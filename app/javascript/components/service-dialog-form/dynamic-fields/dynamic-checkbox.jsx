@@ -56,12 +56,7 @@ const DynamicCheckbox = ({ dynamicFieldData: { section, field, fieldPosition }, 
     dynamicFields.showRefresh,
     dynamicFields.loadOnInit,
     dynamicFields.required,
-    dynamicFields.protected,
-    dynamicFields.valueType,
-    dynamicFields.validation,
-    dynamicFields.validator,
     dynamicFields.fieldsToRefresh,
-    dynamicFields.multiselect,
   ]);
 
   const checkboxOptions = (dynamic) => ({

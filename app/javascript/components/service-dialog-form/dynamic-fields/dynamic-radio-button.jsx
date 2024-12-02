@@ -33,8 +33,7 @@ const DynamicRadioButton = ({ dynamicFieldData: { section, field, fieldPosition 
     dynamicFields.showRefresh,
     dynamicFields.loadOnInit,
     dynamicFields.required,
-    dynamicFields.validation,
-    dynamicFields.validator,
+    dynamicFields.valueType,
     dynamicFields.fieldsToRefresh,
   ]);
 
