@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
 	DatePicker, DatePickerInput, TimePicker, TimePickerSelect, SelectItem, FormLabel
@@ -12,11 +12,63 @@ import {
 /** Component to render a Field. */
 const DynamicTimePicker = ({ dynamicFieldData: { section, field, fieldPosition }, onFieldAction }) => {
   const { tabId, sectionId } = section;
-  const fieldActions = (event, type) => onFieldAction({
-    event,
-    fieldPosition,
-    type,
+
+  const [inputValues, setInputValues] = useState({});
+
+  // const fieldActions = (event, type) => onFieldAction({
+  //   event,
+  //   fieldPosition,
+  //   type,
+  // });
+
+  const [date, setDate] = React.useState('');
+  const [time, setTime] = React.useState('');
+
+  const handleDateChange = (selectedDates) => {
+    if (selectedDates.length > 0) {
+      const formattedDate = new Intl.DateTimeFormat('en-US', {
+        month: '2-digit',
+        day: '2-digit',
+        year: 'numeric',
+      }).format(selectedDates[0]);
+      setDate(formattedDate);
+    }
+  };
+
+  const handleTimeChange = (event) => {
+    setTime(event.target.value); // Capture time or AM/PM selection
+  };
+
+  const combinedDateTime = `${date} ${time}`;
+  console.log('Selected DateTime:', combinedDateTime);
+
+  const [fieldState, setFieldState] = useState({
+    label: field.label || __('Timepicker'),
+    name: field.name,
+    visible: field.visible || true,
+    // value: field.defaultDatePickerValue || '',
   });
+
+  const handleFieldUpdate = (updatedFields) => {
+    debugger
+    // date = updatedFields.value[0].toLocaleDateString('en-US');
+    setFieldState((prevState) => ({ ...prevState, ...updatedFields }));
+    // onFieldAction({ ...dynamicFieldData, field: { ...dynamicFieldData.field, ...updatedFields } });
+  };
+
+  const fieldActions = (event, inputProps, type = SD_ACTIONS.textAreaOnChange) => {
+    setInputValues({
+      ...inputValues,
+      ...inputProps,
+    });
+
+    onFieldAction({
+      event,
+      fieldPosition,
+      type,
+      inputProps,
+    });
+  };
 
   const ordinaryTimePickerOptions = () => ([
     dynamicFields.required,
@@ -30,11 +82,9 @@ const DynamicTimePicker = ({ dynamicFieldData: { section, field, fieldPosition }
   const dynamicTimePickerOptions = () => ([
     dynamicFields.entryPoint,
     dynamicFields.showRefresh,
-    dynamicFields.loadOnInit,
-    dynamicFields.required,
-    dynamicFields.validation,
-    dynamicFields.validator,
+    dynamicFields.showPastDates,
     dynamicFields.fieldsToRefresh,
+    dynamicFields.required,
   ]);
 
   const timePickerOptions = (dynamic) => ({
@@ -62,21 +112,17 @@ const DynamicTimePicker = ({ dynamicFieldData: { section, field, fieldPosition }
         </FormLabel> */}
         <DatePicker
           datePickerType="single"
-          onChange={() => {}}
-          onClose={() => {}}
-          onOpen={() => {}}
+          onChange={handleDateChange}
         >
           <DatePickerInput
             id="date-picker-single"
             labelText="Date Picker label"
-            onChange={() => {}}
-            onClose={() => {}}
-            onOpen={() => {}}
             placeholder="mm/dd/yyyy"
           />
         </DatePicker>
+
         <TimePicker id="time-picker" labelText="Select a time">
-          <TimePickerSelect id="time-picker-select-1">
+          <TimePickerSelect id="time-picker-select-1" onChange={handleTimeChange}>
             <SelectItem value="AM" text="AM" />
             <SelectItem value="PM" text="PM" />
           </TimePickerSelect>
@@ -86,6 +132,13 @@ const DynamicTimePicker = ({ dynamicFieldData: { section, field, fieldPosition }
         componentId={field.componentId}
         dynamicFieldAction={(action) => console.log(action)}
         fieldConfiguration={timePickerEditFields(false)}
+      />
+      <DynamicFieldActions
+        componentId={field.componentId}
+        fieldProps={fieldState}
+        updateFieldProps={handleFieldUpdate}
+        dynamicFieldAction={(event, inputProps) => fieldActions(event, inputProps)}
+        fieldConfiguration={timePickerOptions(false)}
       />
     </div>
   );
