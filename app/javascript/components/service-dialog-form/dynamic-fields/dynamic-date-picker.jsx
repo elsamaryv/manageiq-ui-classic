@@ -27,6 +27,11 @@ const DynamicDatePicker = ({ dynamicFieldData: { section, field, fieldPosition }
     value: field.defaultDatePickerValue || '',
   });
 
+  // To reset tabs in Edit Modal based on 'dynamic' switch
+  const resetEditModalTabs = (isDynamic) => {
+    setFieldState((prevState) => ({ ...prevState, dynamic: isDynamic }));
+  };
+
   const ordinaryDatePickerOptions = () => ([
     dynamicFields.required,
     dynamicFields.defaultDatePickerValue,
@@ -76,18 +81,18 @@ const DynamicDatePicker = ({ dynamicFieldData: { section, field, fieldPosition }
     // onFieldAction({ ...dynamicFieldData, field: { ...dynamicFieldData.field, ...updatedFields } });
   };
 
-  const datePickerOptions = (dynamic) => ({
+  const datePickerOptions = () => ({
     name: fieldTab.options,
-    fields: dynamic ? dynamicDatePickerOptions() : ordinaryDatePickerOptions(),
+    fields: fieldState.dynamic ? dynamicDatePickerOptions() : ordinaryDatePickerOptions(),
   });
 
-  const datePickerEditFields = (dynamic) => {
+  const datePickerEditFields = () => {
     const tabs = [
       fieldInformation(),
-      datePickerOptions(dynamic),
+      datePickerOptions(),
       advanced(),
     ];
-    if (dynamic) {
+    if (fieldState.dynamic) {
       tabs.push(overridableOptions());
     }
     return tabs;
@@ -121,7 +126,8 @@ const DynamicDatePicker = ({ dynamicFieldData: { section, field, fieldPosition }
         fieldProps={fieldState}
         updateFieldProps={handleFieldUpdate}
         dynamicFieldAction={(event, inputProps) => fieldActions(event, inputProps)}
-        fieldConfiguration={datePickerEditFields(false)}
+        fieldConfiguration={datePickerEditFields()}
+        dynamicToggleAction={(isDynamic) => resetEditModalTabs(isDynamic)}
       />
     </div>
   );

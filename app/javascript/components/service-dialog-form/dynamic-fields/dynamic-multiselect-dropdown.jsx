@@ -1,35 +1,42 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Checkbox, FormLabel } from 'carbon-components-react';
+import { MultiSelect } from 'carbon-components-react';
 import { dynamicFieldDataProps, SD_ACTIONS } from '../helper';
 import DynamicFieldActions from '../dynamic-field-actions';
+import { defaultDropdownValue as optionEntries } from '../edit-field-modal/fields.schema';
 import {
   fieldInformation, advanced, overridableOptions, fieldTab, dynamicFields,
 } from './dynamic-field-configuration';
 
 /** Component to render a Field. */
-const DynamicCheckbox = ({ dynamicFieldData: { section, field, fieldPosition }, onFieldAction }) => {
+const DynamicMultiSelectDropdown = ({ dynamicFieldData: { section, field, fieldPosition }, onFieldAction }) => {
   const { tabId, sectionId } = section;
 
   const [inputValues, setInputValues] = useState({});
 
-  const inputId = `tab-${tabId}-section-${sectionId}-field-${fieldPosition}-checkbox`;
+  const inputId = `tab-${tabId}-section-${sectionId}-field-${fieldPosition}-multiselect-dropdown`;
+
+  // const optionEntries = [
+  //   { id: 'option-0', text: 'Option 0' },
+  //   { id: 'option-1', text: 'Option 1' },
+  // ];
 
   const [fieldState, setFieldState] = useState({
-    label: field.label || __('Check Box'),
+    label: field.label || __('Multiselect Dropdown'),
     required: field.required || false,
     name: field.name || inputId,
     visible: field.visible || true,
-    checked: field.checked || false,
+    items: field.entries || optionEntries,
+    // multiselect: field.multiselect || false,
   });
 
   const handleFieldUpdate = (updatedFields) => {
-    debugger
     setFieldState((prevState) => ({ ...prevState, ...updatedFields }));
     // onFieldAction({ ...dynamicFieldData, field: { ...dynamicFieldData.field, ...updatedFields } });
   };
 
   const fieldActions = (event, inputProps, type = SD_ACTIONS.textAreaOnChange) => {
+    debugger
     setInputValues({
       ...inputValues,
       ...inputProps,
@@ -48,31 +55,38 @@ const DynamicCheckbox = ({ dynamicFieldData: { section, field, fieldPosition }, 
     setFieldState((prevState) => ({ ...prevState, dynamic: isDynamic }));
   };
 
-  const ordinaryCheckboxOptions = () => ([
-    dynamicFields.defaultCheckboxValue,
-    dynamicFields.required,
+  const ordinaryDropdownOptions = () => ([
     dynamicFields.readOnly,
     dynamicFields.visible,
+    dynamicFields.required,
+    dynamicFields.defaultDropdownValue,
+    dynamicFields.valueType,
+    dynamicFields.sortBy,
+    dynamicFields.sortOrder,
+    // dynamicFields.multiselect,
+    dynamicFields.entries,
     dynamicFields.fieldsToRefresh,
   ]);
-  
-  const dynamicCheckboxOptions = () => ([
-    dynamicFields.entryPoint,
+
+  const dynamicDropdownOptions = () => ([
+    // dynamicFields.entryPoint,
     dynamicFields.showRefresh,
     dynamicFields.loadOnInit,
     dynamicFields.required,
+    dynamicFields.valueType,
+    // dynamicFields.multiselect,
     dynamicFields.fieldsToRefresh,
   ]);
 
-  const checkboxOptions = () => ({
+  const DropdownOptions = () => ({
     name: fieldTab.options,
-    fields: fieldState.dynamic ? dynamicCheckboxOptions() : ordinaryCheckboxOptions(),
+    fields: fieldState.dynamic ? dynamicDropdownOptions() : ordinaryDropdownOptions(),
   });
 
-  const checkboxEditFields = () => {
+  const DropdownEditFields = () => {
     const tabs = [
       fieldInformation(),
-      checkboxOptions(),
+      DropdownOptions(),
       advanced(),
     ];
     if (fieldState.dynamic) {
@@ -84,47 +98,39 @@ const DynamicCheckbox = ({ dynamicFieldData: { section, field, fieldPosition }, 
   return (
     <div className="dynamic-form-field">
       <div className="dynamic-form-field-item">
-        {/* <FormLabel>
-          {inputValues.labelText ? inputValues.labelText : 'Checkbox'}
-        </FormLabel> */}
-        {/* <Checkbox
-          id={inputId}
-          name={inputId}
-          labelText={__('Checkbox')}
-          {...inputValues}
-          // onChange={(event) => fieldActions(event, SD_ACTIONS.checkboxOnChange)}
-        /> */}
-        <Checkbox
+        <MultiSelect
           id={inputId}
           name={fieldState.name}
-          labelText={fieldState.label}
-          required={fieldState.required}
-          visible={fieldState.visible}
-          checked={fieldState.checked}
-          onChange={(e) => handleFieldUpdate({ checked: e })}
+          label="Multiselect Label"
+          titleText={fieldState.label}
+          helperText="This is helper text"
+          items={fieldState.items}
+          itemToString={(item) => (item ? item.text : '')}
+          value={fieldState.value}
+          selectionFeedback="top-after-reopen"
+          // multiselect={fieldState.multiselect}
+          // selectedItem={fieldState.items.find((item) => item.id === fieldState.value) || null}
+          // onChange={({ selectedItem }) => {
+          //   debugger
+          //   // handleFieldUpdate({ value: selectedItem.id });
+          // }}
         />
       </div>
-      {/* <DynamicFieldActions
-        componentId={field.componentId}
-        // dynamicFieldAction={(action) => console.log(action, field)}
-        dynamicFieldAction={(event, inputProps) => fieldActions(event, inputProps)}
-        fieldConfiguration={checkboxEditFields(false)}
-      /> */}
       <DynamicFieldActions
         componentId={field.componentId}
         fieldProps={fieldState}
         updateFieldProps={handleFieldUpdate}
         dynamicFieldAction={(event, inputProps) => fieldActions(event, inputProps)}
-        fieldConfiguration={checkboxEditFields()}
+        fieldConfiguration={DropdownEditFields()}
         dynamicToggleAction={(isDynamic) => resetEditModalTabs(isDynamic)}
       />
     </div>
   );
 };
 
-DynamicCheckbox.propTypes = {
+DynamicMultiSelectDropdown.propTypes = {
   dynamicFieldData: dynamicFieldDataProps.isRequired,
   onFieldAction: PropTypes.func.isRequired,
 };
 
-export default DynamicCheckbox;
+export default DynamicMultiSelectDropdown;
