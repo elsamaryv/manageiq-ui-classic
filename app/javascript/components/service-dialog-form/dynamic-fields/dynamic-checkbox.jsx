@@ -29,7 +29,9 @@ const DynamicCheckbox = ({ dynamicFieldData: { section, field, fieldPosition }, 
     // onFieldAction({ ...dynamicFieldData, field: { ...dynamicFieldData.field, ...updatedFields } });
   };
 
-  const fieldActions = (event, inputProps, type = SD_ACTIONS.textAreaOnChange) => {
+  const fieldActions = (event, inputProps) => {
+    const type = (event === SD_ACTIONS.field.delete) ? SD_ACTIONS.field.delete : SD_ACTIONS.textAreaOnChange;
+
     setInputValues({
       ...inputValues,
       ...inputProps,
