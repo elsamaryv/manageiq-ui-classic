@@ -68,8 +68,6 @@ export const dropComponent = (section, { componentId }) => {
 // Shapes for each service dialog components as needed
 const textInputShape = PropTypes.shape({
   label: PropTypes.string.isRequired,
-  placeholder: PropTypes.string,
-  required: PropTypes.bool,
   value: PropTypes.string,
 });
 
