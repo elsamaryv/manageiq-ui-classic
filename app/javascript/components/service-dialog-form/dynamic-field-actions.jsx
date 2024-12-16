@@ -9,7 +9,6 @@ import EditFieldModal from './edit-field-modal';
 // const DynamicFieldActions = ({ componentId, dynamicFieldAction, fieldConfiguration }) => {
 const DynamicFieldActions = ({ componentId, fieldProps, updateFieldProps, dynamicFieldAction, fieldConfiguration, dynamicToggleAction }) => {
   const [{ showModal, ...editedFields }, setState] = useState({ showModal: false });
-  debugger
 
   const onModalHide = () => setState((state) => ({ ...state, showModal: false }));
   const onModalShow = () => setState((state) => ({ ...state, showModal: true }));
