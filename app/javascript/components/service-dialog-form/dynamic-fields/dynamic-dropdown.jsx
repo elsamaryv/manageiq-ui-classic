@@ -57,7 +57,9 @@ const DynamicDropdown = ({ dynamicFieldData: { section, field, fieldPosition }, 
   //   });
   // };
 
-  const fieldActions = (event, inputProps, type = SD_ACTIONS.textAreaOnChange) => {
+  const fieldActions = (event, inputProps) => {
+    const type = (event === SD_ACTIONS.field.delete) ? SD_ACTIONS.field.delete : SD_ACTIONS.textAreaOnChange;
+    
     setInputValues({
       ...inputValues,
       ...inputProps,
