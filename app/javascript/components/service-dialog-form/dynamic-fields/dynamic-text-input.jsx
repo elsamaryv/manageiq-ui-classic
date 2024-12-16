@@ -19,6 +19,7 @@ const DynamicTextInput = ({ dynamicFieldData: { section, field, fieldPosition },
     name: field.name || inputId,
     visible: field.visible || true,
     value: field.value || '',
+    dynamic: field.dynamic || false,
   });
 
   const handleFieldUpdate = (updatedFields) => {
@@ -39,6 +40,11 @@ const DynamicTextInput = ({ dynamicFieldData: { section, field, fieldPosition },
       type,
       inputProps,
     });
+  };
+
+  // To reset tabs in Edit Modal based on 'dynamic' switch
+  const resetEditModalTabs = (isDynamic) => {
+    setFieldState((prevState) => ({ ...prevState, dynamic: isDynamic }));
   };
 
   const ordinaryTextBoxOptions = () => ([
@@ -63,18 +69,18 @@ const DynamicTextInput = ({ dynamicFieldData: { section, field, fieldPosition },
     dynamicFields.fieldsToRefresh,
   ]);
 
-  const textboxOptions = (dynamic) => ({
+  const textboxOptions = () => ({
     name: fieldTab.options,
-    fields: dynamic ? dynamicTextBoxOptions() : ordinaryTextBoxOptions(),
+    fields: fieldState.dynamic ? dynamicTextBoxOptions() : ordinaryTextBoxOptions(),
   });
 
-  const textBoxEditFields = (dynamic) => {
+  const textBoxEditFields = () => {
     const tabs = [
       fieldInformation(),
-      textboxOptions(dynamic),
+      textboxOptions(),
       advanced(),
     ];
-    if (dynamic) {
+    if (fieldState.dynamic) {
       tabs.push(overridableOptions());
     }
     return tabs;
@@ -96,8 +102,8 @@ const DynamicTextInput = ({ dynamicFieldData: { section, field, fieldPosition },
           id={inputId}
           name={fieldState.name}
           labelText={fieldState.label}
-          placeholder={fieldState.placeholder}
-          required={fieldState.required}
+          helperText={fieldState.helperText}
+          placeholder={__('Default value')}
           visible={fieldState.visible}
           value={fieldState.value}
           onChange={(e) => handleFieldUpdate({ value: e.target.value })}
@@ -115,7 +121,8 @@ const DynamicTextInput = ({ dynamicFieldData: { section, field, fieldPosition },
         fieldProps={fieldState}
         updateFieldProps={handleFieldUpdate}
         dynamicFieldAction={(event, inputProps) => fieldActions(event, inputProps)}
-        fieldConfiguration={textBoxEditFields(false)}
+        fieldConfiguration={textBoxEditFields()}
+        dynamicToggleAction={(isDynamic) => resetEditModalTabs(isDynamic)}
       />
     </div>
   );

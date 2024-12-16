@@ -7,7 +7,7 @@ import EditFieldModal from './edit-field-modal';
 
 /** Component to render a Field. */
 // const DynamicFieldActions = ({ componentId, dynamicFieldAction, fieldConfiguration }) => {
-const DynamicFieldActions = ({ componentId, fieldProps, updateFieldProps, dynamicFieldAction, fieldConfiguration }) => {
+const DynamicFieldActions = ({ componentId, fieldProps, updateFieldProps, dynamicFieldAction, fieldConfiguration, dynamicToggleAction }) => {
   const [{ showModal, ...editedFields }, setState] = useState({ showModal: false });
   debugger
 
@@ -17,6 +17,11 @@ const DynamicFieldActions = ({ componentId, fieldProps, updateFieldProps, dynami
   const onModalApply = (formValues, event) => {
     setState((prevState) => ({ ...prevState, showModal: false, ...formValues }));
     dynamicFieldAction(event, formValues);
+  };
+
+  const onDynamicSwitchToggle = (isDynamic) => {
+    setState((prevState) => ({ ...prevState, dynamic: isDynamic }));
+    dynamicToggleAction(isDynamic);
   };
 
   const renderEditButton = () => (
@@ -55,6 +60,7 @@ const DynamicFieldActions = ({ componentId, fieldProps, updateFieldProps, dynami
           updateFieldProps(updatedFields);
           setState((state) => ({ ...state, showModal: false }));
         }}
+        onDynamicSwitchToggle={onDynamicSwitchToggle}
       />
     )
   );
@@ -81,11 +87,14 @@ DynamicFieldActions.propTypes = {
     SD_PROP_SHAPES.textarea,
     SD_PROP_SHAPES.checkbox,
     SD_PROP_SHAPES.dropdown,
+    SD_PROP_SHAPES.multiselectDropdown,
+    SD_PROP_SHAPES.radiobutton,
     SD_PROP_SHAPES.datepicker,
   ]).isRequired,
   updateFieldProps: PropTypes.func.isRequired,
   dynamicFieldAction: PropTypes.func.isRequired,
   fieldConfiguration: PropTypes.arrayOf(PropTypes.any).isRequired,
+  dynamicToggleAction: PropTypes.func.isRequired,
 };
 
 export default DynamicFieldActions;
