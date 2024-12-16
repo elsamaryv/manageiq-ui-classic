@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { TextInput, FormLabel } from 'carbon-components-react';
+import { TextInput } from 'carbon-components-react';
 import { dynamicFieldDataProps, SD_ACTIONS } from '../helper';
 import DynamicFieldActions from '../dynamic-field-actions';
 import {
@@ -14,8 +14,8 @@ const DynamicTextInput = ({ dynamicFieldData: { section, field, fieldPosition },
 
   const [fieldState, setFieldState] = useState({
     label: field.label || __('Text Box'),
-    placeholder: field.placeholder || '',
-    required: field.required || false,
+    // placeholder: field.placeholder || '',
+    // required: field.required || false,
     name: field.name || inputId,
     visible: field.visible || true,
     value: field.value || '',
