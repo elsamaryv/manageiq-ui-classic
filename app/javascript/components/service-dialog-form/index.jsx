@@ -212,8 +212,7 @@ const ServiceDialogForm = () => {
         // return console.log('textInputOnChange');
         return handlePropertiesEdit(actionData);
       case SD_ACTIONS.textAreaOnChange:
-        // return handlePropertiesEdit(actionData);
-        return deleteField(actionData);
+        return handlePropertiesEdit(actionData);
       case SD_ACTIONS.checkboxOnChange:
         return console.log('checkboxOnChange');
       case SD_ACTIONS.radioButtonOnChange:

@@ -49,7 +49,9 @@ const DynamicDatePicker = ({ dynamicFieldData: { section, field, fieldPosition }
     dynamicFields.required,
   ]);
 
-  const fieldActions = (event, inputProps, type = SD_ACTIONS.textAreaOnChange) => {
+  const fieldActions = (event, inputProps) => {
+    const type = (event === SD_ACTIONS.field.delete) ? SD_ACTIONS.field.delete : SD_ACTIONS.textAreaOnChange;
+    
     setInputValues({
       ...inputValues,
       ...inputProps,
