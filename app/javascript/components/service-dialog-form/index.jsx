@@ -123,7 +123,7 @@ const ServiceDialogForm = () => {
   };
 
   /** Function to delete a section */
-  const deleteSection = ({ tabId, sectionId }) => {
+  const deleteSection = ({ section: { tabId, sectionId } }) => {
     const tab = selectedTab(data.formFields, tabId);
     tab.sections = tab.sections.filter((section) => section.sectionId !== sectionId);
     setData({
@@ -132,13 +132,14 @@ const ServiceDialogForm = () => {
     });
   };
 
-  const deleteField = ({ tabId, sectionId }) => {
-    // const tab = selectedTab(data.formFields, tabId);
-    // tab.sections = tab.sections.filter((section) => section.sectionId !== sectionId);
-    // setData({
-    //   ...data,
-    //   formFields: [...data.formFields],
-    // });
+  /** Function to delete a field */
+  const deleteField = ({ section, fieldPosition }) => {
+    const otherFields = section.fields.filter((_field, index) => index !== fieldPosition);
+    section.fields = otherFields;
+    setData({
+      ...data,
+      formFields: [...data.formFields],
+    });
   };
 
   /** Function to handle the tab click event. */
@@ -206,13 +207,13 @@ const ServiceDialogForm = () => {
       case SD_ACTIONS.section.delete:
         return deleteSection(actionData);
       case SD_ACTIONS.field.delete:
-        debugger
         return deleteField(actionData);
       case SD_ACTIONS.textInputOnChange:
         // return console.log('textInputOnChange');
         return handlePropertiesEdit(actionData);
       case SD_ACTIONS.textAreaOnChange:
-        return handlePropertiesEdit(actionData);
+        // return handlePropertiesEdit(actionData);
+        return deleteField(actionData);
       case SD_ACTIONS.checkboxOnChange:
         return console.log('checkboxOnChange');
       case SD_ACTIONS.radioButtonOnChange:
@@ -281,16 +282,13 @@ const ServiceDialogForm = () => {
   ));
 
   /** Function to render the tab contents. */
-  const renderTabContents = () => {
-    // debugger;
-    return (
-      <div className="dynamic-tabs-wrapper">
-        <Tabs className="miq_custom_tabs" id="dynamic-tabs">
-          {renderTabs()}
-        </Tabs>
-      </div>
-    );
-  };
+  const renderTabContents = () => (
+    <div className="dynamic-tabs-wrapper">
+      <Tabs className="miq_custom_tabs" id="dynamic-tabs">
+        {renderTabs()}
+      </Tabs>
+    </div>
+  );
 
   return (
     <div className="drag-and-drop-wrapper">
