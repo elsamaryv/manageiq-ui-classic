@@ -15,10 +15,11 @@ export const dynamicComponents = [
   { id: 2, title: 'Text Area', icon: <TextSmallCaps32 /> },
   { id: 3, title: 'Check Box', icon: <CheckboxChecked32 /> },
   { id: 4, title: 'Dropdown', icon: <CaretDown32 /> },
-  { id: 5, title: 'Radio Button', icon: <RadioButtonChecked32 /> },
-  { id: 6, title: 'Datepicker', icon: <Calendar32 /> },
-  { id: 7, title: 'Timepicker', icon: <Time32 /> },
-  { id: 8, title: 'Tag Control', icon: <Tag32 /> },
+  { id: 5, title: 'Multiselect', icon: <CaretDown32 /> },
+  { id: 6, title: 'Radio Button', icon: <RadioButtonChecked32 /> },
+  { id: 7, title: 'Datepicker', icon: <Calendar32 /> },
+  { id: 8, title: 'Timepicker', icon: <Time32 /> },
+  { id: 9, title: 'Tag Control', icon: <Tag32 /> },
 ];
 
 /** Function which returens the default data for a section under a tab. */

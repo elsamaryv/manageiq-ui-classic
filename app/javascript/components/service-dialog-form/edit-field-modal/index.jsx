@@ -8,20 +8,33 @@ import {
 } from 'carbon-components-react';
 import { dynamicComponents } from '../data';
 import { createSchema } from './edit-field-modal.schema';
+import { propTypes } from 'react-markdown';
 
 const EditFieldModal = ({
-  componentId, fieldConfiguration, showModal, onModalHide, onModalApply, initialData, onSave,
+  componentId, fieldConfiguration, showModal, onModalHide, onModalApply, initialData, onSave, onDynamicSwitchToggle,
 }) => {
-  const [data, setData] = useState({
-    initialValues: initialData,
-  });
+  // const [data, setData] = useState({
+  //   initialValues: initialData,
+  // });
   // const [initialValues, setInitialValues] = useState({});
 
 
   const component = dynamicComponents.find((item) => item.id === componentId);
 
-  const onSubmit = (formValues, event) => {
-    onModalApply(formValues, event);
+  // const onSubmit = (formValues, event) => {
+  //   onModalApply(formValues, event);
+  // };
+
+  // const handleFieldUpdates = (event) => {
+  //   if (event.target.name === 'dynamic') {
+  //     onDynamicSwitchToggle(event.target.checked);
+  //   }
+  // };
+
+  const handleFieldUpdates = ({ target: { name, checked } }) => {
+    if (name === 'dynamic') {
+      onDynamicSwitchToggle(checked);
+    }
   };
 
   const onCancel = () => onModalHide();
@@ -40,6 +53,7 @@ const EditFieldModal = ({
       onRequestClose={onModalHide}
       passiveModal // Required to hide the save and cancel buttons on the Modal
       className="edit-field-modal"
+      onChange={handleFieldUpdates}
     >
       <ModalBody className="edit-field-modal-body">
         <MiqFormRenderer
@@ -67,6 +81,7 @@ EditFieldModal.propTypes = {
   onModalApply: PropTypes.func.isRequired,
   initialData: PropTypes.objectOf(PropTypes.any).isRequired,
   onSave: PropTypes.func.isRequired,
+  onDynamicSwitchToggle: PropTypes.func.isRequired,
 };
 
 export default EditFieldModal;

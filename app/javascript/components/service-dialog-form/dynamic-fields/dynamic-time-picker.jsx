@@ -70,6 +70,11 @@ const DynamicTimePicker = ({ dynamicFieldData: { section, field, fieldPosition }
     });
   };
 
+  // To reset tabs in Edit Modal based on 'dynamic' switch
+  const resetEditModalTabs = (isDynamic) => {
+    setFieldState((prevState) => ({ ...prevState, dynamic: isDynamic }));
+  };
+
   const ordinaryTimePickerOptions = () => ([
     dynamicFields.required,
     dynamicFields.defaultValue,
@@ -87,18 +92,18 @@ const DynamicTimePicker = ({ dynamicFieldData: { section, field, fieldPosition }
     dynamicFields.required,
   ]);
 
-  const timePickerOptions = (dynamic) => ({
+  const timePickerOptions = () => ({
     name: fieldTab.options,
-    fields: dynamic ? dynamicTimePickerOptions() : ordinaryTimePickerOptions(),
+    fields: fieldState.dynamic ? dynamicTimePickerOptions() : ordinaryTimePickerOptions(),
   });
 
-  const timePickerEditFields = (dynamic) => {
+  const timePickerEditFields = () => {
     const tabs = [
       fieldInformation(),
-      timePickerOptions(dynamic),
+      timePickerOptions(),
       advanced(),
     ];
-    if (dynamic) {
+    if (fieldState.dynamic) {
       tabs.push(overridableOptions());
     }
     return tabs;
@@ -128,17 +133,18 @@ const DynamicTimePicker = ({ dynamicFieldData: { section, field, fieldPosition }
           </TimePickerSelect>
         </TimePicker>
       </div>
-      <DynamicFieldActions
+      {/* <DynamicFieldActions
         componentId={field.componentId}
         dynamicFieldAction={(action) => console.log(action)}
         fieldConfiguration={timePickerEditFields(false)}
-      />
+      /> */}
       <DynamicFieldActions
         componentId={field.componentId}
         fieldProps={fieldState}
         updateFieldProps={handleFieldUpdate}
         dynamicFieldAction={(event, inputProps) => fieldActions(event, inputProps)}
-        fieldConfiguration={timePickerOptions(false)}
+        fieldConfiguration={timePickerEditFields()}
+        dynamicToggleAction={(isDynamic) => resetEditModalTabs(isDynamic)}
       />
     </div>
   );

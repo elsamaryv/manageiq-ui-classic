@@ -71,6 +71,11 @@ const DynamicDropdown = ({ dynamicFieldData: { section, field, fieldPosition }, 
     });
   };
 
+  // To reset tabs in Edit Modal based on 'dynamic' switch
+  const resetEditModalTabs = (isDynamic) => {
+    setFieldState((prevState) => ({ ...prevState, dynamic: isDynamic }));
+  };
+
   const ordinaryDropdownOptions = () => ([
     dynamicFields.readOnly,
     dynamicFields.visible,
@@ -94,18 +99,18 @@ const DynamicDropdown = ({ dynamicFieldData: { section, field, fieldPosition }, 
     dynamicFields.fieldsToRefresh,
   ]);
 
-  const DropdownOptions = (dynamic) => ({
+  const DropdownOptions = () => ({
     name: fieldTab.options,
-    fields: dynamic ? dynamicDropdownOptions() : ordinaryDropdownOptions(),
+    fields: fieldState.dynamic ? dynamicDropdownOptions() : ordinaryDropdownOptions(),
   });
 
-  const DropdownEditFields = (dynamic) => {
+  const DropdownEditFields = () => {
     const tabs = [
       fieldInformation(),
-      DropdownOptions(dynamic),
+      DropdownOptions(),
       advanced(),
     ];
-    if (dynamic) {
+    if (fieldState.dynamic) {
       tabs.push(overridableOptions());
     }
     return tabs;
@@ -162,7 +167,8 @@ const DynamicDropdown = ({ dynamicFieldData: { section, field, fieldPosition }, 
         fieldProps={fieldState}
         updateFieldProps={handleFieldUpdate}
         dynamicFieldAction={(event, inputProps) => fieldActions(event, inputProps)}
-        fieldConfiguration={DropdownEditFields(false)}
+        fieldConfiguration={DropdownEditFields()}
+        dynamicToggleAction={(isDynamic) => resetEditModalTabs(isDynamic)}
       />
     </div>
   );

@@ -44,7 +44,10 @@ const DynamicTextArea = ({ dynamicFieldData: { section, field, fieldPosition }, 
     });
   };
 
-  
+  // To reset tabs in Edit Modal based on 'dynamic' switch
+  const resetEditModalTabs = (isDynamic) => {
+    setFieldState((prevState) => ({ ...prevState, dynamic: isDynamic }));
+  };
 
   const ordinaryTextAreaOptions = () => ([
     dynamicFields.defaultValue,
@@ -64,18 +67,18 @@ const DynamicTextArea = ({ dynamicFieldData: { section, field, fieldPosition }, 
     dynamicFields.fieldsToRefresh,
   ]);
 
-  const textAreaOptions = (dynamic) => ({
+  const textAreaOptions = () => ({
     name: fieldTab.options,
-    fields: dynamic ? dynamicTextAreaOptions() : ordinaryTextAreaOptions(),
+    fields: fieldState.dynamic ? dynamicTextAreaOptions() : ordinaryTextAreaOptions(),
   });
 
-  const textAreaEditFields = (dynamic) => {
+  const textAreaEditFields = () => {
     const tabs = [
       fieldInformation(),
-      textAreaOptions(dynamic),
+      textAreaOptions(),
       advanced(),
     ];
-    if (dynamic) {
+    if (fieldState.dynamic) {
       tabs.push(overridableOptions());
     }
     return tabs;
@@ -120,7 +123,8 @@ const DynamicTextArea = ({ dynamicFieldData: { section, field, fieldPosition }, 
         fieldProps={fieldState}
         updateFieldProps={handleFieldUpdate}
         dynamicFieldAction={(event, inputProps) => fieldActions(event, inputProps)}
-        fieldConfiguration={textAreaEditFields(false)}
+        fieldConfiguration={textAreaEditFields()}
+        dynamicToggleAction={(isDynamic) => resetEditModalTabs(isDynamic)}
       />
     </div>
   );
