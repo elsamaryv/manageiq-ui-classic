@@ -101,7 +101,6 @@ const selectOptions = (field) => {
     case 'sortBy':
       return sortBy;
     case 'defaultDropdownValue':
-      debugger
       return defaultDropdownValue;
     default:
       return assignProfiles;
