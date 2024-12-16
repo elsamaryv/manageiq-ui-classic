@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { RadioButtonGroup, RadioButton, FormLabel } from 'carbon-components-react';
+import { RadioButtonGroup, RadioButton } from 'carbon-components-react';
 import { dynamicFieldDataProps, SD_ACTIONS } from '../helper';
+import { defaultDropdownValue as rbOptions } from '../edit-field-modal/fields.schema';
 import DynamicFieldActions from '../dynamic-field-actions';
 import {
   fieldInformation, advanced, overridableOptions, fieldTab, dynamicFields,
@@ -10,17 +11,68 @@ import {
 /** Component to render a Field. */
 const DynamicRadioButton = ({ dynamicFieldData: { section, field, fieldPosition }, onFieldAction }) => {
   const { tabId, sectionId } = section;
-  const fieldActions = (event, type) => onFieldAction({
-    event,
-    fieldPosition,
-    type,
+
+  const [inputValues, setInputValues] = useState({});
+  // const [rbSelectOptions, setRbSelectOptions] = useState(rbOptions);
+
+
+  const inputId = `tab-${tabId}-section-${sectionId}-field-${fieldPosition}-radio-button-group`;
+
+  // const optionEntries = [
+  //   { id: 'option-0', text: 'Option 00' },
+  //   { id: 'option-1', text: 'Option 1' },
+  // ];
+
+  const [fieldState, setFieldState] = useState({
+    label: field.label || __('Radio Button'),
+    required: field.required || false,
+    name: field.name || inputId,
+    visible: field.visible || true,
+    items: field.items || rbOptions,
+    // items: field.entries || rbSelectOptions,
   });
+
+  useEffect(() => {
+    debugger; // Pauses every time fieldState changes.
+    console.log('fieldState updated:', fieldState);
+  }, [fieldState]);
+  
+
+  const handleFieldUpdate = (updatedFields) => {
+    debugger
+    // setRbSelectOptions((prevState) => ({ ...prevState, ...updatedFields.items }));
+    setFieldState((prevState) => ({ ...prevState, ...updatedFields }));
+    
+    // onFieldAction({ ...dynamicFieldData, field: { ...dynamicFieldData.field, ...updatedFields } });
+  };
+
+  const fieldActions = (event, inputProps, type = SD_ACTIONS.textAreaOnChange) => {
+    debugger
+    // setFieldState((prevState) => ({ ...prevState, ...updatedFields }));
+
+    setInputValues({
+      ...inputValues,
+      ...inputProps,
+    });
+
+    onFieldAction({
+      event,
+      fieldPosition,
+      type,
+      inputProps,
+    });
+  };
+
+  // To reset tabs in Edit Modal based on 'dynamic' switch
+  const resetEditModalTabs = (isDynamic) => {
+    setFieldState((prevState) => ({ ...prevState, dynamic: isDynamic }));
+  };
 
   const ordinaryRadioButtonOptions = () => ([
     dynamicFields.readOnly,
     dynamicFields.visible,
     dynamicFields.required,
-    dynamicFields.defaultValue,
+    dynamicFields.defaultDropdownValue,
     dynamicFields.valueType,
     dynamicFields.sortBy,
     dynamicFields.sortOrder,
@@ -37,18 +89,18 @@ const DynamicRadioButton = ({ dynamicFieldData: { section, field, fieldPosition 
     dynamicFields.fieldsToRefresh,
   ]);
 
-  const radioButtonOptions = (dynamic) => ({
+  const radioButtonOptions = () => ({
     name: fieldTab.options,
-    fields: dynamic ? dynamicRadioButtonOptions() : ordinaryRadioButtonOptions(),
+    fields: fieldState.dynamic ? dynamicRadioButtonOptions() : ordinaryRadioButtonOptions(),
   });
 
-  const radioButtonEditFields = (dynamic) => {
+  const radioButtonEditFields = () => {
     const tabs = [
       fieldInformation(),
-      radioButtonOptions(dynamic),
+      radioButtonOptions(),
       advanced(),
     ];
-    if (dynamic) {
+    if (fieldState.dynamic) {
       tabs.push(overridableOptions());
     }
     return tabs;
@@ -57,33 +109,30 @@ const DynamicRadioButton = ({ dynamicFieldData: { section, field, fieldPosition 
   return (
     <div className="dynamic-form-field">
       <div className="dynamic-form-field-item">
-        {/* <FormLabel>
-          Radio Button
-        </FormLabel> */}
         <RadioButtonGroup
           legendText="Radio Button group"
           name={`tab-${tabId}-section-${sectionId}-field-${fieldPosition}-radio-button-group`}
+          onChange={(selectedValue) => handleFieldUpdate({ defaultDropdownValue: selectedValue })}
+          valueSelected={fieldState.defaultDropdownValue}
         >
-          <RadioButton
-            id={`tab-${tabId}-section-${sectionId}-field-${fieldPosition}-radio-button-1`}
-            labelText={__('Radio Button 1')}
-            name={`tab-${tabId}-section-${sectionId}-field-${fieldPosition}-radio-button-1`}
-            value="default radio button value"
-            onChange={(event) => fieldActions(event, SD_ACTIONS.radioButtonOnChange)}
-          />
-          <RadioButton
-            id={`tab-${tabId}-section-${sectionId}-field-${fieldPosition}-radio-button-2`}
-            labelText={__('Radio Button 2')}
-            name={`tab-${tabId}-section-${sectionId}-field-${fieldPosition}-radio-button-2`}
-            value="default radio button value"
-            onChange={(event) => fieldActions(event, SD_ACTIONS.radioButtonOnChange)}
-          />
+          {rbOptions.map((option) => (
+            <RadioButton
+              key={option.id}
+              id={`tab-${tabId}-section-${sectionId}-field-${fieldPosition}-radio-button-${option.id}`}
+              labelText={__(option.text)}
+              name={`tab-${tabId}-section-${sectionId}-field-${fieldPosition}-radio-button-${option.id}`}
+              value={option.id}
+            />
+          ))}
         </RadioButtonGroup>
       </div>
       <DynamicFieldActions
         componentId={field.componentId}
-        dynamicFieldAction={(action) => console.log(action)}
-        fieldConfiguration={radioButtonEditFields(false)}
+        fieldProps={fieldState}
+        updateFieldProps={handleFieldUpdate}
+        dynamicFieldAction={(event, inputProps) => fieldActions(event, inputProps)}
+        fieldConfiguration={radioButtonEditFields()}
+        dynamicToggleAction={(isDynamic) => resetEditModalTabs(isDynamic)}
       />
     </div>
   );
