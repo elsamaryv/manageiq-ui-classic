@@ -188,7 +188,6 @@ const ServiceDialogForm = () => {
   /** TODO: Change this to Redux */
   // TODO: fieldPosition will only appeare for field drag and drop. Needs to change the logic.
   const onSectionAction = (actionData) => {
-    debugger
     switch (actionData.type) {
       case SD_ACTIONS.onDrop:
         return onDrop();
