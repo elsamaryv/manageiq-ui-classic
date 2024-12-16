@@ -46,8 +46,8 @@ const DynamicRadioButton = ({ dynamicFieldData: { section, field, fieldPosition 
     // onFieldAction({ ...dynamicFieldData, field: { ...dynamicFieldData.field, ...updatedFields } });
   };
 
-  const fieldActions = (event, inputProps, type = SD_ACTIONS.textAreaOnChange) => {
-    debugger
+  const fieldActions = (event, inputProps) => {
+    const type = (event === SD_ACTIONS.field.delete) ? SD_ACTIONS.field.delete : SD_ACTIONS.textAreaOnChange;
     // setFieldState((prevState) => ({ ...prevState, ...updatedFields }));
 
     setInputValues({
