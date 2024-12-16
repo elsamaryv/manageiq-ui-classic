@@ -41,7 +41,6 @@ const DynamicDropdown = ({ dynamicFieldData: { section, field, fieldPosition }, 
   });
 
   const handleFieldUpdate = (updatedFields) => {
-    debugger
     setFieldState((prevState) => ({ ...prevState, ...updatedFields }));
     // onFieldAction({ ...dynamicFieldData, field: { ...dynamicFieldData.field, ...updatedFields } });
   };
@@ -59,7 +58,7 @@ const DynamicDropdown = ({ dynamicFieldData: { section, field, fieldPosition }, 
 
   const fieldActions = (event, inputProps) => {
     const type = (event === SD_ACTIONS.field.delete) ? SD_ACTIONS.field.delete : SD_ACTIONS.textAreaOnChange;
-    
+
     setInputValues({
       ...inputValues,
       ...inputProps,
