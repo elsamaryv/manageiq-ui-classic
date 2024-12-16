@@ -6,7 +6,6 @@ export const textFieldComponent = (field) => ({
   maxLength: 128,
   id: field.name,
   name: field.name,
-  // value: defaultValue,
   initialValue: field.initialValue,
 });
 
@@ -16,7 +15,6 @@ export const textAreaComponent = (field) => ({
   name: field.name,
   label: field.label,
   rows: 10,
-  // value: defaultValue,
 });
 
 export const switchComponent = (field) => ({
@@ -25,7 +23,6 @@ export const switchComponent = (field) => ({
   name: field.name,
   label: field.label,
   maxLength: 50,
-  // value: defaultValue,
 });
 
 export const fieldArrayComponent = (field) => ({
@@ -47,6 +44,13 @@ export const fieldArrayComponent = (field) => ({
       label: 'Option Text',
       isRequired: true,
       helperText: 'The label to display for the option.',
+    },
+    {
+      component: componentTypes.TEXT_FIELD,
+      name: 'value',
+      label: 'Option Value',
+      isRequired: true,
+      helperText: 'Value for the option.',
     },
   ],
 });
@@ -83,15 +87,13 @@ const assignProfiles = [
   { label: __('sample'), value: 'sample' },
 ];
 
-const defaultDropdownValue = [
-  // { id: 'option-0', text: 'Option 0' },
-  // { id: 'option-1', text: 'Option 1' },
-  { label: __('Option 0'), value: 'option-0' },
-  { label: __('Option 1'), value: 'option-1' },
+export const defaultDropdownValue = [
+  { text: __('Option 00'), value: 'option-0', id: 'option-0' },
+  { text: __('Option 1'), value: 'option-1', id: 'option-1' },
 ];
 
-const selectOptions = (type) => {
-  switch (type) {
+const selectOptions = (field) => {
+  switch (field.name) {
     case 'valueType':
       return valueTypes;
     case 'sortOrder':
@@ -99,6 +101,7 @@ const selectOptions = (type) => {
     case 'sortBy':
       return sortBy;
     case 'defaultDropdownValue':
+      debugger
       return defaultDropdownValue;
     default:
       return assignProfiles;
@@ -112,7 +115,8 @@ export const selectComponent = (field) => ({
   label: field.label,
   placeholder: __('<Choose>'),
   includeEmpty: true,
-  options: selectOptions(field.name),
+  options: selectOptions(field),
+  // initialValue: field.initialValue,
   // multiselect: field.multiselect,
   // value: field.value,
 });

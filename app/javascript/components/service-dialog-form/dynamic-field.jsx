@@ -4,6 +4,7 @@ import DynamicTextInput from './dynamic-fields/dynamic-text-input';
 import DynamicTextArea from './dynamic-fields/dynamic-text-area';
 import DynamicCheckbox from './dynamic-fields/dynamic-checkbox';
 import DynamicDropdown from './dynamic-fields/dynamic-dropdown';
+import DynamicMultiSelectDropdown from './dynamic-fields/dynamic-multiselect-dropdown';
 import DynamicRadioButton from './dynamic-fields/dynamic-radio-button';
 import DynamicDatepicker from './dynamic-fields/dynamic-date-picker';
 import DynamicTimepicker from './dynamic-fields/dynamic-time-picker';
@@ -22,12 +23,14 @@ const DynamicField = ({ fieldData, onFieldAction }) => {
       case 4:
         return <DynamicDropdown dynamicFieldData={fieldData} onFieldAction={(newFieldData) => onFieldAction(newFieldData)} />;
       case 5:
-        return <DynamicRadioButton dynamicFieldData={fieldData} onFieldAction={(newFieldData) => onFieldAction(newFieldData)} />;
+        return <DynamicMultiSelectDropdown dynamicFieldData={fieldData} onFieldAction={(newFieldData) => onFieldAction(newFieldData)} />;
       case 6:
-        return <DynamicDatepicker dynamicFieldData={fieldData} onFieldAction={(newFieldData) => onFieldAction(newFieldData)} />;
+        return <DynamicRadioButton dynamicFieldData={fieldData} onFieldAction={(newFieldData) => onFieldAction(newFieldData)} />;
       case 7:
-        return <DynamicTimepicker dynamicFieldData={fieldData} onFieldAction={(newFieldData) => onFieldAction(newFieldData)} />;
+        return <DynamicDatepicker dynamicFieldData={fieldData} onFieldAction={(newFieldData) => onFieldAction(newFieldData)} />;
       case 8:
+        return <DynamicTimepicker dynamicFieldData={fieldData} onFieldAction={(newFieldData) => onFieldAction(newFieldData)} />;
+      case 9:
         return <DynamicTagControl dynamicFieldData={fieldData} onFieldAction={(newFieldData) => onFieldAction(newFieldData)} />;
       default:
         return <DynamicTextInput dynamicFieldData={fieldData} onFieldAction={(newFieldData) => onFieldAction(newFieldData)} />;
