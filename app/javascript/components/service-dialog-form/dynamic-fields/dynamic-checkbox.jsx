@@ -24,7 +24,6 @@ const DynamicCheckbox = ({ dynamicFieldData: { section, field, fieldPosition }, 
   });
 
   const handleFieldUpdate = (updatedFields) => {
-    debugger
     setFieldState((prevState) => ({ ...prevState, ...updatedFields }));
     // onFieldAction({ ...dynamicFieldData, field: { ...dynamicFieldData.field, ...updatedFields } });
   };

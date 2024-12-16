@@ -32,14 +32,13 @@ const DynamicRadioButton = ({ dynamicFieldData: { section, field, fieldPosition 
     // items: field.entries || rbSelectOptions,
   });
 
-  useEffect(() => {
-    debugger; // Pauses every time fieldState changes.
-    console.log('fieldState updated:', fieldState);
-  }, [fieldState]);
+  // useEffect(() => {
+  //   debugger; // Pauses every time fieldState changes.
+  //   console.log('fieldState updated:', fieldState);
+  // }, [fieldState]);
   
 
   const handleFieldUpdate = (updatedFields) => {
-    debugger
     // setRbSelectOptions((prevState) => ({ ...prevState, ...updatedFields.items }));
     setFieldState((prevState) => ({ ...prevState, ...updatedFields }));
     

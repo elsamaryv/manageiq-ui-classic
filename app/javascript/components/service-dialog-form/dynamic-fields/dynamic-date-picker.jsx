@@ -51,7 +51,7 @@ const DynamicDatePicker = ({ dynamicFieldData: { section, field, fieldPosition }
 
   const fieldActions = (event, inputProps) => {
     const type = (event === SD_ACTIONS.field.delete) ? SD_ACTIONS.field.delete : SD_ACTIONS.textAreaOnChange;
-    
+
     setInputValues({
       ...inputValues,
       ...inputProps,
@@ -77,7 +77,6 @@ const DynamicDatePicker = ({ dynamicFieldData: { section, field, fieldPosition }
   // };
 
   const handleFieldUpdate = (updatedFields) => {
-    debugger
     // date = updatedFields.value[0].toLocaleDateString('en-US');
     setFieldState((prevState) => ({ ...prevState, ...updatedFields }));
     // onFieldAction({ ...dynamicFieldData, field: { ...dynamicFieldData.field, ...updatedFields } });
