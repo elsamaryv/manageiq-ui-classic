@@ -125,6 +125,11 @@ const datepickerShape = PropTypes.shape({
   value: PropTypes.string,
 });
 
+const tagControlShape = PropTypes.shape({
+  label: PropTypes.string.isRequired,
+  required: PropTypes.bool,
+});
+
 export const SD_PROP_SHAPES = {
   textbox: textInputShape,
   textarea: textAreaShape,
@@ -133,4 +138,5 @@ export const SD_PROP_SHAPES = {
   multiselectDropdown: multiselectDropdownShape,
   radiobutton: radioButtonShape,
   datepicker: datepickerShape,
+  tagControl: tagControlShape,
 };
