@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Select, SelectItem, FormLabel } from 'carbon-components-react';
+import { Select, SelectItem } from 'carbon-components-react';
 import { dynamicFieldDataProps, SD_ACTIONS } from '../helper';
 import DynamicFieldActions from '../dynamic-field-actions';
 import {
@@ -12,9 +12,11 @@ const DynamicTagControl = ({ dynamicFieldData: { section, field, fieldPosition }
   const { tabId, sectionId } = section;
   const [inputValues, setInputValues] = useState({});
 
+  const inputId = `tab-${tabId}-section-${sectionId}-field-${fieldPosition}-tag-control`;
+
   const [fieldState, setFieldState] = useState({
     label: field.label || __('Tag Control'),
-    name: field.name,
+    name: field.name || inputId,
     visible: field.visible || true,
   });
 
@@ -64,15 +66,15 @@ const DynamicTagControl = ({ dynamicFieldData: { section, field, fieldPosition }
     dynamicFields.fieldsToRefresh,
   ]);
 
-  const TagControlOptions = () => ({
+  const tagControlOptions = () => ({
     name: fieldTab.options,
     fields: ordinaryTagControlOptions(),
   });
 
-  const TagControlEditFields = () => {
+  const tagControlEditFields = () => {
     const tabs = [
       fieldInformation(),
-      TagControlOptions,
+      tagControlOptions(),
       advanced(),
     ];
     return tabs;
@@ -81,31 +83,22 @@ const DynamicTagControl = ({ dynamicFieldData: { section, field, fieldPosition }
   return (
     <div className="dynamic-form-field">
       <div className="dynamic-form-field-item">
-        {/* <FormLabel>
-          Tag Control
-        </FormLabel> */}
         <Select
-          id={`tab-${tabId}-section-${sectionId}-field-${fieldPosition}-tag-control`}
-          labelText="Select an option"
-          helperText="Optional helper text"
+          id={fieldState.name}
+          labelText={fieldState.label}
+          helperText={fieldState.helperText}
         >
           <SelectItem value="" text="" />
           <SelectItem value="option-1" text="Option 1" />
           <SelectItem value="option-2" text="Option 2" />
         </Select>
       </div>
-      {/* <DynamicFieldActions
-        componentId={field.componentId}
-        dynamicFieldAction={(action) => console.log(action, field)}
-        fieldConfiguration={TagControlEditFields()}
-        dynamicToggleAction={(isDynamic) => resetEditModalTabs(isDynamic)}
-      /> */}
       <DynamicFieldActions
         componentId={field.componentId}
         fieldProps={fieldState}
         updateFieldProps={handleFieldUpdate}
         dynamicFieldAction={(event, inputProps) => fieldActions(event, inputProps)}
-        fieldConfiguration={TagControlEditFields()}
+        fieldConfiguration={tagControlEditFields()}
         dynamicToggleAction={(isDynamic) => resetEditModalTabs(isDynamic)}
       />
     </div>

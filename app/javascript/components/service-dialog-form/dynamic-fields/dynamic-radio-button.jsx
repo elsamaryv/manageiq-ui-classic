@@ -110,7 +110,7 @@ const DynamicRadioButton = ({ dynamicFieldData: { section, field, fieldPosition 
       <div className="dynamic-form-field-item">
         <RadioButtonGroup
           legendText="Radio Button group"
-          name={`tab-${tabId}-section-${sectionId}-field-${fieldPosition}-radio-button-group`}
+          name={fieldState.name}
           onChange={(selectedValue) => handleFieldUpdate({ defaultDropdownValue: selectedValue })}
           valueSelected={fieldState.defaultDropdownValue}
         >
