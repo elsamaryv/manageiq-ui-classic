@@ -88,7 +88,7 @@ const assignProfiles = [
 ];
 
 export const defaultDropdownValue = [
-  { text: __('Option 00'), value: 'option-0', id: 'option-0' },
+  { text: __('Option 0'), value: 'option-0', id: 'option-0' },
   { text: __('Option 1'), value: 'option-1', id: 'option-1' },
 ];
 

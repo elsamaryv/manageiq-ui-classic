@@ -89,6 +89,7 @@ DynamicFieldActions.propTypes = {
     SD_PROP_SHAPES.multiselectDropdown,
     SD_PROP_SHAPES.radiobutton,
     SD_PROP_SHAPES.datepicker,
+    SD_PROP_SHAPES.tagControl,
   ]).isRequired,
   updateFieldProps: PropTypes.func.isRequired,
   dynamicFieldAction: PropTypes.func.isRequired,
