@@ -1,4 +1,6 @@
-import { componentTypes } from '@data-driven-forms/react-form-renderer';
+// import { componentTypes } from '@data-driven-forms/react-form-renderer';
+import { componentTypes } from '../component-types';
+// import { componentTypes } from '@@ddf';
 
 export const dynamicFields = {
   // category: { label: __('Category'), name: 'category', field: componentTypes.SELECT },
@@ -6,6 +8,7 @@ export const dynamicFields = {
   defaultCheckboxValue: { label: __('Default value'), name: 'checked', field: componentTypes.SWITCH },
   defaultDropdownValue: { label: __('Default value'), name: 'defaultDropdownValue', field: componentTypes.SELECT },
   defaultDatePickerValue: { label: __('Default value'), name: 'value', field: componentTypes.DATE_PICKER },
+  defaultDateTimePickerValue: { label: __('Default value'), name: 'value', field: componentTypes.DATE_TIME_PICKER },
   dynamic: { label: __('Dynamic'), name: 'dynamic', field: componentTypes.SWITCH },
   entries: { label: __('Entries'), name: 'items', field: componentTypes.FIELD_ARRAY },
   entryPoint: { label: __('Entry point'), name: 'entryPoint', field: componentTypes.SELECT },

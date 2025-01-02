@@ -1,4 +1,6 @@
-import { componentTypes } from '@data-driven-forms/react-form-renderer';
+// import { componentTypes } from '@data-driven-forms/react-form-renderer';
+import { componentTypes } from '../component-types';
+// import { componentTypes } from '@@ddf';
 
 export const textFieldComponent = (field) => ({
   component: componentTypes.TEXT_FIELD,
@@ -57,6 +59,14 @@ export const fieldArrayComponent = (field) => ({
 
 export const datePickerComponent = (field) => ({
   component: componentTypes.DATE_PICKER,
+  id: field.name,
+  name: field.name,
+  label: field.label,
+  value: field.value,
+});
+
+export const dateTimePickerComponent = (field) => ({
+  component: componentTypes.DATE_TIME_PICKER,
   id: field.name,
   name: field.name,
   label: field.label,
