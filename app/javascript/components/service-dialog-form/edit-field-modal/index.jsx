@@ -9,6 +9,9 @@ import {
 import { dynamicComponents } from '../data';
 import { createSchema } from './edit-field-modal.schema';
 import { propTypes } from 'react-markdown';
+// import { componentTypes } from '../component-types';
+import componentMapper from '../../../forms/mappers/componentMapper';
+import CustomDateTimePicker from '../../date-time-picker';
 
 const EditFieldModal = ({
   componentId, fieldConfiguration, showModal, onModalHide, onModalApply, initialData, onSave, onDynamicSwitchToggle,
@@ -20,6 +23,13 @@ const EditFieldModal = ({
 
 
   const component = dynamicComponents.find((item) => item.id === componentId);
+
+  // custom component mapper
+  const mapper = {
+    ...componentMapper,
+    // [componentTypes.DATE_TIME_PICKER]: CustomDateTimePicker,
+    'date-time-picker': CustomDateTimePicker,
+  };
 
   // const onSubmit = (formValues, event) => {
   //   onModalApply(formValues, event);
@@ -59,6 +69,7 @@ const EditFieldModal = ({
         <MiqFormRenderer
           schema={createSchema(fieldConfiguration)}
           initialValues={initialData}
+          componentMapper={mapper}
           // canSubmit={false}
           // canCancel={false}
           // onSubmit={onSubmit}

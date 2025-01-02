@@ -92,7 +92,7 @@ const DynamicTimePicker = ({ dynamicFieldData: { section, field, fieldPosition }
 
   const ordinaryTimePickerOptions = () => ([
     dynamicFields.required,
-    dynamicFields.defaultValue,
+    dynamicFields.defaultDateTimePickerValue,
     dynamicFields.readOnly,
     dynamicFields.visible,
     dynamicFields.showPastDates,
