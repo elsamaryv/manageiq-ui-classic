@@ -105,6 +105,7 @@ const DynamicDatePicker = ({ dynamicFieldData: { section, field, fieldPosition }
         <DatePicker
           datePickerType="single"
           dateFormat="m/d/Y"
+          minDate={fieldState.showPastDates ? undefined : new Date().toLocaleDateString()}
           // onClose={() => {}}
           // onOpen={() => {}}
           // onChange={(e) => { handleFieldUpdate({ value: e.target.value }); }}
