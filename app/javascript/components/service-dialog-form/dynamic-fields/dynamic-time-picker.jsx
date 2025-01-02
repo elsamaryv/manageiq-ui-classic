@@ -23,6 +23,8 @@ const DynamicTimePicker = ({ dynamicFieldData: { section, field, fieldPosition }
 
   const [date, setDate] = React.useState('');
   const [time, setTime] = React.useState('');
+  const [isValid, setIsValid] = useState(true);
+  const [period, setPeriod] = useState('AM');
 
   const handleDateChange = (selectedDates) => {
     if (selectedDates.length > 0) {
@@ -35,11 +37,23 @@ const DynamicTimePicker = ({ dynamicFieldData: { section, field, fieldPosition }
     }
   };
 
-  const handleTimeChange = (event) => {
-    setTime(event.target.value); // Capture time or AM/PM selection
+  // Function to validate the time input
+  const validateTime = (value) => {
+    const timeRegex = /^(0[1-9]|1[0-2]):[0-5][0-9]$/; // Matches 12-hour format hh:mm
+    setIsValid(timeRegex.test(value));
   };
 
-  const combinedDateTime = `${date} ${time}`;
+  const handleTimeChange = (event) => {
+    const newTime = event.target.value;
+    setTime(newTime);
+    validateTime(newTime);
+  };
+
+  const handlePeriodChange = (event) => {
+    setPeriod(event.target.value);
+  };
+
+  const combinedDateTime = `${date} ${time} ${period}`;
   console.log('Selected DateTime:', combinedDateTime);
 
   const [fieldState, setFieldState] = useState({
@@ -113,32 +127,30 @@ const DynamicTimePicker = ({ dynamicFieldData: { section, field, fieldPosition }
   return (
     <div className="dynamic-form-field">
       <div className="dynamic-form-field-item">
-        {/* <FormLabel>
-          Date Picker
-        </FormLabel> */}
+        <FormLabel>{ fieldState.label }</FormLabel>
         <DatePicker
           datePickerType="single"
           onChange={handleDateChange}
+          minDate={fieldState.showPastDates ? undefined : new Date().toLocaleDateString()}
         >
           <DatePickerInput
             id="date-picker-single"
-            labelText="Date Picker label"
             placeholder="mm/dd/yyyy"
           />
+          <TimePicker
+            id="time-picker"
+            value={time}
+            invalid={!isValid}
+            invalidText="Enter a valid 12-hour time (e.g., 01:30)"
+            onChange={handleTimeChange}
+          >
+            <TimePickerSelect id="time-picker-select-1" onChange={handlePeriodChange}>
+              <SelectItem value="AM" text="AM" />
+              <SelectItem value="PM" text="PM" />
+            </TimePickerSelect>
+          </TimePicker>
         </DatePicker>
-
-        <TimePicker id="time-picker" labelText="Select a time">
-          <TimePickerSelect id="time-picker-select-1" onChange={handleTimeChange}>
-            <SelectItem value="AM" text="AM" />
-            <SelectItem value="PM" text="PM" />
-          </TimePickerSelect>
-        </TimePicker>
       </div>
-      {/* <DynamicFieldActions
-        componentId={field.componentId}
-        dynamicFieldAction={(action) => console.log(action)}
-        fieldConfiguration={timePickerEditFields(false)}
-      /> */}
       <DynamicFieldActions
         componentId={field.componentId}
         fieldProps={fieldState}
