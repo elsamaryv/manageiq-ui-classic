@@ -120,7 +120,12 @@ const radioButtonShape = PropTypes.shape({
   // selectedValue: PropTypes.string,
 });
 
-const datepickerShape = PropTypes.shape({
+const datePickerShape = PropTypes.shape({
+  label: PropTypes.string.isRequired,
+  value: PropTypes.string,
+});
+
+const dateTimePickerShape = PropTypes.shape({
   label: PropTypes.string.isRequired,
   value: PropTypes.string,
 });
@@ -137,6 +142,7 @@ export const SD_PROP_SHAPES = {
   dropdown: dropdownShape,
   multiselectDropdown: multiselectDropdownShape,
   radiobutton: radioButtonShape,
-  datepicker: datepickerShape,
+  datePicker: datePickerShape,
+  dateTimePicker: dateTimePickerShape,
   tagControl: tagControlShape,
 };
