@@ -6,8 +6,9 @@ import { SD_ACTIONS, SD_PROP_SHAPES } from './helper';
 import EditFieldModal from './edit-field-modal';
 
 /** Component to render a Field. */
-// const DynamicFieldActions = ({ componentId, dynamicFieldAction, fieldConfiguration }) => {
-const DynamicFieldActions = ({ componentId, fieldProps, updateFieldProps, dynamicFieldAction, fieldConfiguration, dynamicToggleAction }) => {
+const DynamicFieldActions = ({
+  componentId, fieldProps, updateFieldProps, dynamicFieldAction, fieldConfiguration, dynamicToggleAction,
+}) => {
   const [{ showModal, ...editedFields }, setState] = useState({ showModal: false });
 
   const onModalHide = () => setState((state) => ({ ...state, showModal: false }));
