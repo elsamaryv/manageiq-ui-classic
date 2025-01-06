@@ -16,11 +16,6 @@ const DynamicMultiSelectDropdown = ({ dynamicFieldData: { section, field, fieldP
 
   const inputId = `tab-${tabId}-section-${sectionId}-field-${fieldPosition}-multiselect-dropdown`;
 
-  // const optionEntries = [
-  //   { id: 'option-0', text: 'Option 0' },
-  //   { id: 'option-1', text: 'Option 1' },
-  // ];
-
   const [fieldState, setFieldState] = useState({
     label: field.label || __('Multiselect Dropdown'),
     required: field.required || false,
