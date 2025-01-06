@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
-	DatePicker, DatePickerInput, TimePicker, TimePickerSelect, SelectItem, FormLabel
+  DatePicker, DatePickerInput, TimePicker, TimePickerSelect, SelectItem, FormLabel
 } from 'carbon-components-react';
 import { dynamicFieldDataProps, SD_ACTIONS } from '../helper';
 import DynamicFieldActions from '../dynamic-field-actions';
@@ -14,12 +14,6 @@ const DynamicTimePicker = ({ dynamicFieldData: { section, field, fieldPosition }
   const { tabId, sectionId } = section;
 
   const [inputValues, setInputValues] = useState({});
-
-  // const fieldActions = (event, type) => onFieldAction({
-  //   event,
-  //   fieldPosition,
-  //   type,
-  // });
 
   const [date, setDate] = React.useState('');
   const [time, setTime] = React.useState('');
