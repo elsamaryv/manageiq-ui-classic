@@ -14,23 +14,13 @@ const DynamicTagControl = ({ dynamicFieldData: { section, field, fieldPosition }
   const [inputValues, setInputValues] = useState({});
 
   const inputId = `tab-${tabId}-section-${sectionId}-field-${fieldPosition}-tag-control`;
- 
-  // const fetchCategories = async() => {
-  //   try {
-  //     const { resources } = await API.get('/api/categories?expand=resources&attributes=id,name,description,single_value,children');
-  //     console.log("RREsources: ", resources)
-  //     return resources; // Return the categories from the API
-  //   } catch (error) {
-  //     console.error('Error fetching categories:', error);
-  //     return [];
-  //   }
-  // };
 
   const [fieldState, setFieldState] = useState({
     label: field.label || __('Tag Control'),
     name: field.name || inputId,
     visible: field.visible || true,
-    categories: field.categories || null,
+    categories: field.categories || [],
+    subCategories: field.subCategories || [],
   });
 
   useEffect(() => {
@@ -59,7 +49,6 @@ const DynamicTagControl = ({ dynamicFieldData: { section, field, fieldPosition }
 
   const handleFieldUpdate = (updatedFields) => {
     setFieldState((prevState) => ({ ...prevState, ...updatedFields }));
-    // onFieldAction({ ...dynamicFieldData, field: { ...dynamicFieldData.field, ...updatedFields } });
   };
 
   const fieldActions = (event, inputProps) => {
@@ -77,18 +66,6 @@ const DynamicTagControl = ({ dynamicFieldData: { section, field, fieldPosition }
       inputProps,
     });
   };
-
-  // const categories = () => fieldState.categories.map((category) => ({
-  //   label: __(category.description),
-  //   value: category.name,
-  // }));
-
-
-  // const fieldActions = (event, type) => onFieldAction({
-  //   event,
-  //   fieldPosition,
-  //   type,
-  // });
 
   // To reset tabs in Edit Modal based on 'dynamic' switch
   const resetEditModalTabs = (isDynamic) => {
@@ -114,8 +91,12 @@ const DynamicTagControl = ({ dynamicFieldData: { section, field, fieldPosition }
   });
 
   const tagControlEditFields = () => {
+    // Removes dynamic switch from the list
+    const fieldInfo = fieldInformation();
+    fieldInfo.fields = fieldInfo.fields.filter((field) => field.name !== 'dynamic');
+
     const tabs = [
-      fieldInformation(),
+      fieldInfo,
       tagControlOptions(),
       advanced(),
     ];
@@ -130,9 +111,9 @@ const DynamicTagControl = ({ dynamicFieldData: { section, field, fieldPosition }
           labelText={fieldState.label}
           helperText={fieldState.helperText}
         >
-          <SelectItem value="" text="" />
-          <SelectItem value="option-1" text="Option 1" />
-          <SelectItem value="option-2" text="Option 2" />
+          {fieldState.subCategories.map((subcat) => (
+            <SelectItem value={subcat.value} text={subcat.label} />
+          ))}
         </Select>
       </div>
       <DynamicFieldActions
