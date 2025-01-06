@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Select, SelectItem } from 'carbon-components-react';
 import { dynamicFieldDataProps, SD_ACTIONS } from '../helper';
@@ -6,6 +6,7 @@ import DynamicFieldActions from '../dynamic-field-actions';
 import {
   fieldInformation, advanced, fieldTab, dynamicFields,
 } from './dynamic-field-configuration';
+import { tagControlCategories } from '../data';
 
 /** Component to render a Field. */
 const DynamicTagControl = ({ dynamicFieldData: { section, field, fieldPosition }, onFieldAction }) => {
@@ -13,12 +14,48 @@ const DynamicTagControl = ({ dynamicFieldData: { section, field, fieldPosition }
   const [inputValues, setInputValues] = useState({});
 
   const inputId = `tab-${tabId}-section-${sectionId}-field-${fieldPosition}-tag-control`;
+ 
+  // const fetchCategories = async() => {
+  //   try {
+  //     const { resources } = await API.get('/api/categories?expand=resources&attributes=id,name,description,single_value,children');
+  //     console.log("RREsources: ", resources)
+  //     return resources; // Return the categories from the API
+  //   } catch (error) {
+  //     console.error('Error fetching categories:', error);
+  //     return [];
+  //   }
+  // };
 
   const [fieldState, setFieldState] = useState({
     label: field.label || __('Tag Control'),
     name: field.name || inputId,
     visible: field.visible || true,
+    categories: field.categories || null,
   });
+
+  useEffect(() => {
+    if (!field.categories) {
+      tagControlCategories().then((categories) => {
+        setFieldState((prevState) => ({
+          ...prevState,
+          categories: categories.map((cat) => ({
+            label: __(cat.description),
+            value: cat.name,
+            // data: {
+            //   subCategories: JSON.stringify(
+            //     cat.children.map((subCat) => ({
+            //       label: __(subCat.description),
+            //       value: subCat.id,
+            //       parent_id: subCat.parent_id,
+            //       tag_id: subCat.tag_id,
+            //     }))
+            //   ),
+            // },
+          })),
+        }));
+      });
+    }
+  }, [field.categories]);
 
   const handleFieldUpdate = (updatedFields) => {
     setFieldState((prevState) => ({ ...prevState, ...updatedFields }));
@@ -41,6 +78,11 @@ const DynamicTagControl = ({ dynamicFieldData: { section, field, fieldPosition }
     });
   };
 
+  // const categories = () => fieldState.categories.map((category) => ({
+  //   label: __(category.description),
+  //   value: category.name,
+  // }));
+
 
   // const fieldActions = (event, type) => onFieldAction({
   //   event,
@@ -57,12 +99,12 @@ const DynamicTagControl = ({ dynamicFieldData: { section, field, fieldPosition }
     dynamicFields.required,
     dynamicFields.readOnly,
     dynamicFields.visible,
-    // dynamicFields.category,
+    dynamicFields.categories,
     dynamicFields.singleValue,
     dynamicFields.valueType,
     dynamicFields.sortBy,
     dynamicFields.sortOrder,
-    dynamicFields.entries,
+    dynamicFields.subCategories,
     dynamicFields.fieldsToRefresh,
   ]);
 

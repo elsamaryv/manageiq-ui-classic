@@ -3,7 +3,8 @@ import { componentTypes } from '../component-types';
 // import { componentTypes } from '@@ddf';
 
 export const dynamicFields = {
-  // category: { label: __('Category'), name: 'category', field: componentTypes.SELECT },
+  categories: { label: __('Categories'), name: 'categories', field: componentTypes.SELECT },
+  subCategories: { label: __('Entries'), name: 'subCategories', field: componentTypes.SELECT },
   defaultValue: { label: __('Default value'), name: 'value', field: componentTypes.TEXT_FIELD },
   defaultCheckboxValue: { label: __('Default value'), name: 'checked', field: componentTypes.SWITCH },
   defaultDropdownValue: { label: __('Default value'), name: 'defaultDropdownValue', field: componentTypes.SELECT },
