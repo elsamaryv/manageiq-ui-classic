@@ -44,3 +44,25 @@ export const createNewTab = () => ({
   name: 'Create Tab',
   sections: [],
 });
+
+export const tagControlCategories = async() => {
+  try {
+    const { resources } = await API.get('/api/categories?expand=resources&attributes=id,name,description,single_value,children');
+    console.log("Resources: ", resources);
+
+    // // Transform categories into the desired format
+    // const cats = resources.map((cat) => ({
+    //   id: cat.id,
+    //   name: __(cat.name),
+    //   description: __(cat.description),
+    //   subcategories: cat.children,
+    // }));
+
+    // return cats;
+
+    return resources;
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+    return [];
+  }
+};

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import MiqFormRenderer from '@@ddf';
 import {
@@ -12,11 +12,14 @@ import { propTypes } from 'react-markdown';
 // import { componentTypes } from '../component-types';
 import componentMapper from '../../../forms/mappers/componentMapper';
 import CustomDateTimePicker from '../../date-time-picker';
+import miqRedirectBack from '../../../helpers/miq-redirect-back';
 
 const EditFieldModal = ({
-  componentId, fieldConfiguration, showModal, onModalHide, onModalApply, initialData, onSave, onDynamicSwitchToggle,
+  componentId, fieldConfiguration, showModal, onModalHide, onModalApply, initialData,
+  onSave, onDynamicSwitchToggle, onCategorySelect,
 }) => {
-  // const [data, setData] = useState({
+
+ // const [data, setData] = useState({
   //   initialValues: initialData,
   // });
   // const [initialValues, setInitialValues] = useState({});
@@ -41,10 +44,14 @@ const EditFieldModal = ({
   //   }
   // };
 
-  const handleFieldUpdates = ({ target: { name, checked } }) => {
-    if (name === 'dynamic') {
-      onDynamicSwitchToggle(checked);
+  const handleFieldUpdates = ({ target }) => {
+    if (target.name === 'dynamic') {
+      onDynamicSwitchToggle(target.checked);
     }
+    // if (target.name === 'categories') {
+    //   debugger
+    //   onCategorySelect(target.value);
+    // }
   };
 
   const onCancel = () => onModalHide();
@@ -67,7 +74,7 @@ const EditFieldModal = ({
     >
       <ModalBody className="edit-field-modal-body">
         <MiqFormRenderer
-          schema={createSchema(fieldConfiguration)}
+          schema={createSchema(fieldConfiguration, initialData)}
           initialValues={initialData}
           componentMapper={mapper}
           // canSubmit={false}
@@ -93,6 +100,7 @@ EditFieldModal.propTypes = {
   initialData: PropTypes.objectOf(PropTypes.any).isRequired,
   onSave: PropTypes.func.isRequired,
   onDynamicSwitchToggle: PropTypes.func.isRequired,
+  onCategorySelect: PropTypes.func.isRequired,
 };
 
 export default EditFieldModal;
