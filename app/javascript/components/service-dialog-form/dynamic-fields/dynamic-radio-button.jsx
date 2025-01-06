@@ -13,15 +13,8 @@ const DynamicRadioButton = ({ dynamicFieldData: { section, field, fieldPosition 
   const { tabId, sectionId } = section;
 
   const [inputValues, setInputValues] = useState({});
-  // const [rbSelectOptions, setRbSelectOptions] = useState(rbOptions);
-
 
   const inputId = `tab-${tabId}-section-${sectionId}-field-${fieldPosition}-radio-button-group`;
-
-  // const optionEntries = [
-  //   { id: 'option-0', text: 'Option 00' },
-  //   { id: 'option-1', text: 'Option 1' },
-  // ];
 
   const [fieldState, setFieldState] = useState({
     label: field.label || __('Radio Button'),
@@ -32,16 +25,8 @@ const DynamicRadioButton = ({ dynamicFieldData: { section, field, fieldPosition 
     // items: field.entries || rbSelectOptions,
   });
 
-  // useEffect(() => {
-  //   debugger; // Pauses every time fieldState changes.
-  //   console.log('fieldState updated:', fieldState);
-  // }, [fieldState]);
-  
-
   const handleFieldUpdate = (updatedFields) => {
-    // setRbSelectOptions((prevState) => ({ ...prevState, ...updatedFields.items }));
     setFieldState((prevState) => ({ ...prevState, ...updatedFields }));
-    
     // onFieldAction({ ...dynamicFieldData, field: { ...dynamicFieldData.field, ...updatedFields } });
   };
 

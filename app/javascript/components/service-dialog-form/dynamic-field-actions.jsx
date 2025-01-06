@@ -74,12 +74,6 @@ const DynamicFieldActions = ({
   );
 };
 
-// DynamicFieldActions.propTypes = {
-//   componentId: PropTypes.number.isRequired,
-//   dynamicFieldAction: PropTypes.func.isRequired,
-//   fieldConfiguration: PropTypes.arrayOf(PropTypes.any).isRequired,
-// };
-
 DynamicFieldActions.propTypes = {
   componentId: PropTypes.number.isRequired,
   fieldProps: PropTypes.oneOfType([
