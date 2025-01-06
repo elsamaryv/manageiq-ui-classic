@@ -1,7 +1,6 @@
 // import { componentTypes } from '@data-driven-forms/react-form-renderer';
 import { componentTypes } from '../component-types';
 // import { componentTypes } from '@@ddf';
-// import { tagControlCategories } from '../data';
 
 export const textFieldComponent = (field) => ({
   component: componentTypes.TEXT_FIELD,
@@ -103,26 +102,6 @@ export const defaultDropdownValue = [
   { text: __('Option 1'), value: 'option-1', id: 'option-1' },
 ];
 
-// const fetchCategories = async() => {
-//   const cats = await tagControlCategories();
-//   return cats;
-// };
-
-// export const categoriesOptions = async() => {
-//   try {
-//     const cats = await fetchCategories();
-//     debugger
-//     return cats.map((cat) => ({
-//       label: cat.description,
-//       value: cat.name,
-//       // id: cat.id,
-//     }));
-//   } catch (error) {
-//     console.error('Error fetching and mapping categories:', error);
-//     return [];
-//   }
-// };
-
 const selectOptions = (field, initialData) => {
   switch (field.name) {
     case 'valueType':
@@ -133,13 +112,7 @@ const selectOptions = (field, initialData) => {
       return sortBy;
     case 'defaultDropdownValue':
       return defaultDropdownValue;
-    // case 'categories': {
-      // const cats = await categoriesOptions();
-      // console.log("CAAAATS: ", cats);
-      // return cats;
-    // }
     case 'categories':
-      console.log("Cat subcat: ", initialData.categories);
       return initialData.categories;
     case 'subCategories':
       return [];

@@ -91,18 +91,6 @@ const DynamicTextArea = ({ dynamicFieldData: { section, field, fieldPosition }, 
         {/* <FormLabel>
           Text Area
         </FormLabel> */}
-        {/* <TextArea
-          id={inputId}
-          labelText={__('Text Area')}
-          // hideLabel
-          // placeholder={__('Text Area')}
-          placeholder={__('Default value')}
-          name={inputId}
-          // value="default text area value"
-          // title={__('Text Area')}
-          {...inputValues}
-          // onChange={(event) => fieldActions(event, SD_ACTIONS.textAreaOnChange)}
-        /> */}
         <TextArea
           id={inputId}
           name={fieldState.name}
@@ -114,11 +102,6 @@ const DynamicTextArea = ({ dynamicFieldData: { section, field, fieldPosition }, 
           onChange={(e) => handleFieldUpdate({ value: e.target.value })}
         />
       </div>
-      {/* <DynamicFieldActions
-        componentId={field.componentId}
-        dynamicFieldAction={(event, inputProps) => fieldActions(event, inputProps)}
-        fieldConfiguration={textAreaEditFields(false)}
-      /> */}
       <DynamicFieldActions
         componentId={field.componentId}
         fieldProps={fieldState}
