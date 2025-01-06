@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { DatePicker, DatePickerInput, FormLabel } from 'carbon-components-react';
+import { DatePicker, DatePickerInput } from 'carbon-components-react';
 import { dynamicFieldDataProps, SD_ACTIONS } from '../helper';
 import DynamicFieldActions from '../dynamic-field-actions';
 import {
@@ -12,12 +12,6 @@ const DynamicDatePicker = ({ dynamicFieldData: { section, field, fieldPosition }
   const { tabId, sectionId } = section;
 
   const [inputValues, setInputValues] = useState({});
-  // const fieldActions = (event, type) => onFieldAction({
-  //   event,
-  //   fieldPosition,
-  //   type,
-  // });
-
   const inputId = `tab-${tabId}-section-${sectionId}-field-${fieldPosition}-date-picker`;
 
   const [fieldState, setFieldState] = useState({
@@ -65,17 +59,6 @@ const DynamicDatePicker = ({ dynamicFieldData: { section, field, fieldPosition }
     });
   };
 
-  // const handleFieldUpdate = (updatedFields) => {
-  //   debugger
-  //   // date = updatedFields.value[0].toLocaleDateString('en-US');
-  //   setFieldState((prevState) => ({
-  //     ...prevState,
-  //     ...updatedFields,
-  //     value: updatedFields.value[0].toLocaleDateString('en-US'),
-  //   }));
-  //   // onFieldAction({ ...dynamicFieldData, field: { ...dynamicFieldData.field, ...updatedFields } });
-  // };
-
   const handleFieldUpdate = (updatedFields) => {
     // date = updatedFields.value[0].toLocaleDateString('en-US');
     setFieldState((prevState) => ({ ...prevState, ...updatedFields }));
@@ -106,9 +89,6 @@ const DynamicDatePicker = ({ dynamicFieldData: { section, field, fieldPosition }
           datePickerType="single"
           dateFormat="m/d/Y"
           minDate={fieldState.showPastDates ? undefined : new Date().toLocaleDateString()}
-          // onClose={() => {}}
-          // onOpen={() => {}}
-          // onChange={(e) => { handleFieldUpdate({ value: e.target.value }); }}
           onChange={(selectedDates, dateStr) => handleFieldUpdate({ value: dateStr })}
         >
           <DatePickerInput
@@ -116,9 +96,6 @@ const DynamicDatePicker = ({ dynamicFieldData: { section, field, fieldPosition }
             id={inputId}
             labelText={fieldState.label}
             value={fieldState.value}
-            // onChange={() => {}}
-            // onClose={() => {}}
-            // onOpen={() => {}}
             placeholder="mm/dd/yyyy"
           />
         </DatePicker>

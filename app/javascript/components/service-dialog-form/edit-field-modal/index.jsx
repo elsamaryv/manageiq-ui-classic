@@ -8,23 +8,14 @@ import {
 } from 'carbon-components-react';
 import { dynamicComponents } from '../data';
 import { createSchema } from './edit-field-modal.schema';
-import { propTypes } from 'react-markdown';
 // import { componentTypes } from '../component-types';
 import componentMapper from '../../../forms/mappers/componentMapper';
 import CustomDateTimePicker from '../../date-time-picker';
-import miqRedirectBack from '../../../helpers/miq-redirect-back';
 
 const EditFieldModal = ({
   componentId, fieldConfiguration, showModal, onModalHide, onModalApply, initialData,
-  onSave, onDynamicSwitchToggle, onCategorySelect,
+  onSave, onDynamicSwitchToggle,
 }) => {
-
- // const [data, setData] = useState({
-  //   initialValues: initialData,
-  // });
-  // const [initialValues, setInitialValues] = useState({});
-
-
   const component = dynamicComponents.find((item) => item.id === componentId);
 
   // custom component mapper
@@ -34,22 +25,11 @@ const EditFieldModal = ({
     'date-time-picker': CustomDateTimePicker,
   };
 
-  // const onSubmit = (formValues, event) => {
-  //   onModalApply(formValues, event);
-  // };
-
-  // const handleFieldUpdates = (event) => {
-  //   if (event.target.name === 'dynamic') {
-  //     onDynamicSwitchToggle(event.target.checked);
-  //   }
-  // };
-
   const handleFieldUpdates = ({ target }) => {
     if (target.name === 'dynamic') {
       onDynamicSwitchToggle(target.checked);
     }
     // if (target.name === 'categories') {
-    //   debugger
     //   onCategorySelect(target.value);
     // }
   };
@@ -64,9 +44,6 @@ const EditFieldModal = ({
     <Modal
       open={showModal}
       modalHeading={__(`Edit this ${component.title}`)}
-      // primaryButtonText={__('Save')}
-      // secondaryButtonText={__('Cancel')}
-      // onRequestSubmit={onModalApply}
       onRequestClose={onModalHide}
       passiveModal // Required to hide the save and cancel buttons on the Modal
       className="edit-field-modal"
@@ -77,9 +54,6 @@ const EditFieldModal = ({
           schema={createSchema(fieldConfiguration, initialData)}
           initialValues={initialData}
           componentMapper={mapper}
-          // canSubmit={false}
-          // canCancel={false}
-          // onSubmit={onSubmit}
           onSubmit={handleSubmit}
           onCancel={onCancel}
         />
@@ -100,7 +74,6 @@ EditFieldModal.propTypes = {
   initialData: PropTypes.objectOf(PropTypes.any).isRequired,
   onSave: PropTypes.func.isRequired,
   onDynamicSwitchToggle: PropTypes.func.isRequired,
-  onCategorySelect: PropTypes.func.isRequired,
 };
 
 export default EditFieldModal;

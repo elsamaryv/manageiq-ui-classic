@@ -6,6 +6,7 @@ import DynamicFieldActions from '../dynamic-field-actions';
 import {
   fieldInformation, advanced, overridableOptions, fieldTab, dynamicFields,
 } from './dynamic-field-configuration';
+
 /** Component to render a Field. */
 const DynamicTextInput = ({ dynamicFieldData: { section, field, fieldPosition }, onFieldAction }) => {
   const { tabId, sectionId } = section;
@@ -14,8 +15,6 @@ const DynamicTextInput = ({ dynamicFieldData: { section, field, fieldPosition },
 
   const [fieldState, setFieldState] = useState({
     label: field.label || __('Text Box'),
-    // placeholder: field.placeholder || '',
-    // required: field.required || false,
     name: field.name || inputId,
     visible: field.visible || true,
     value: field.value || '',
@@ -90,15 +89,6 @@ const DynamicTextInput = ({ dynamicFieldData: { section, field, fieldPosition },
   return (
     <div className="dynamic-form-field">
       <div className="dynamic-form-field-item">
-        {/* <TextInput
-          id={inputId}
-          labelText={__('Text Box')}
-          placeholder={__('Default value')}
-          name={inputId}
-          // title={__('Text Box')}
-          {...inputValues}
-          // onChange={(event) => fieldActions(event, SD_ACTIONS.textInputOnChange)}
-        /> */}
         <TextInput
           id={inputId}
           name={fieldState.name}
@@ -110,13 +100,6 @@ const DynamicTextInput = ({ dynamicFieldData: { section, field, fieldPosition },
           onChange={(e) => handleFieldUpdate({ value: e.target.value })}
         />
       </div>
-      {/* <DynamicFieldActions
-        componentId={field.componentId}
-        // dynamicFieldAction={(action) => console.log(action, field)}
-        dynamicFieldAction={(event, inputProps) => fieldActions(event, inputProps)}
-        fieldConfiguration={textBoxEditFields(false)}
-        // fieldProps={handleInputProps}
-      /> */}
       <DynamicFieldActions
         componentId={field.componentId}
         fieldProps={fieldState}
