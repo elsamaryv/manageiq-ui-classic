@@ -5,7 +5,7 @@ import { dynamicFieldDataProps, SD_ACTIONS } from '../helper';
 import { defaultDropdownValue as rbOptions } from '../edit-field-modal/fields.schema';
 import DynamicFieldActions from '../dynamic-field-actions';
 import {
-  fieldInformation, advanced, overridableOptions, fieldTab, dynamicFields,
+  fieldInformation, advanced, overridableOptionsWithSort, fieldTab, dynamicFields,
 } from './dynamic-field-configuration';
 
 /** Component to render a Field. */
@@ -85,7 +85,7 @@ const DynamicRadioButton = ({ dynamicFieldData: { section, field, fieldPosition 
       advanced(),
     ];
     if (fieldState.dynamic) {
-      tabs.push(overridableOptions());
+      tabs.push(overridableOptionsWithSort());
     }
     return tabs;
   };
