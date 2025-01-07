@@ -212,14 +212,14 @@ const ServiceDialogForm = () => {
         return handlePropertiesEdit(actionData);
       case SD_ACTIONS.textAreaOnChange:
         return handlePropertiesEdit(actionData);
-      case SD_ACTIONS.checkboxOnChange:
-        return console.log('checkboxOnChange');
-      case SD_ACTIONS.radioButtonOnChange:
-        return console.log('radioButtonOnChange');
-      case SD_ACTIONS.datePickerOnChange:
-        return console.log('datePickerOnChange');
-      case SD_ACTIONS.dropdownOnChange:
-        return console.log('dropdownOnChange');
+      // case SD_ACTIONS.checkboxOnChange:
+      //   return console.log('checkboxOnChange');
+      // case SD_ACTIONS.radioButtonOnChange:
+      //   return console.log('radioButtonOnChange');
+      // case SD_ACTIONS.datePickerOnChange:
+      //   return console.log('datePickerOnChange');
+      // case SD_ACTIONS.dropdownOnChange:
+      //   return console.log('dropdownOnChange');
       default:
         return undefined;
     }
