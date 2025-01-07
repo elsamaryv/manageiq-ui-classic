@@ -4,7 +4,7 @@ import { Dropdown, FormLabel } from 'carbon-components-react';
 import { dynamicFieldDataProps, SD_ACTIONS } from '../helper';
 import DynamicFieldActions from '../dynamic-field-actions';
 import {
-  fieldInformation, advanced, overridableOptions, fieldTab, dynamicFields,
+  fieldInformation, advanced, overridableOptionsWithSort, fieldTab, dynamicFields,
 } from './dynamic-field-configuration';
 
 /** Component to render a Field. */
@@ -15,8 +15,14 @@ const DynamicDropdown = ({ dynamicFieldData: { section, field, fieldPosition }, 
   const inputId = `tab-${tabId}-section-${sectionId}-field-${fieldPosition}-dropdown`;
 
   const optionEntries = [
-    { id: 'option-0', text: 'Option 0' },
-    { id: 'option-1', text: 'Option 1' },
+    // { value: 'option-0', description: 'Option 0' },
+    // { value: 'option-1', description: 'Option 1' },
+
+    { value: '1', description: 'A' },
+    { value: '2', description: 'B' },
+    { value: '3', description: 'C' },
+    { value: '4', description: 'D' },
+    { value: '5', description: 'E' },
   ];
 
   const [fieldState, setFieldState] = useState({
@@ -90,10 +96,20 @@ const DynamicDropdown = ({ dynamicFieldData: { section, field, fieldPosition }, 
       advanced(),
     ];
     if (fieldState.dynamic) {
-      tabs.push(overridableOptions());
+      tabs.push(overridableOptionsWithSort());
     }
     return tabs;
   };
+
+  const sortedItems = () =>
+    [...fieldState.items].sort((a, b) => {
+      const sortBy = fieldState.sortBy || 'description';
+      const sortOrder = fieldState.sortOrder || 'ascending';
+
+      return sortOrder === 'ascending'
+        ? a[sortBy].localeCompare(b[sortBy])
+        : b[sortBy].localeCompare(a[sortBy]);
+    });
 
   return (
     <div className="dynamic-form-field">
@@ -106,12 +122,12 @@ const DynamicDropdown = ({ dynamicFieldData: { section, field, fieldPosition }, 
           name={fieldState.name}
           // titleText={__(inputValues.labelText || 'Dropdown')}
           titleText={fieldState.label}
-          items={fieldState.items}
-          itemToString={(item) => (item ? item.text : '')}
+          items={sortedItems()}
+          itemToString={(item) => (item ? item.description : '')}
           value={fieldState.value}
-          selectedItem={fieldState.items.find((item) => item.id === fieldState.value) || null}
+          selectedItem={fieldState.items.find((item) => item.value === fieldState.value) || null}
           onChange={({ selectedItem }) => {
-            handleFieldUpdate({ value: selectedItem.id });
+            handleFieldUpdate({ value: selectedItem.value });
           }}
         />
       </div>
