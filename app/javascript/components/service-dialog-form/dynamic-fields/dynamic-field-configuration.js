@@ -4,12 +4,11 @@ import { componentTypes } from '../component-types';
 
 export const dynamicFields = {
   categories: { label: __('Categories'), name: 'categories', field: componentTypes.SELECT },
-  subCategories: { label: __('Entries'), name: 'subCategories', field: componentTypes.SELECT },
   defaultValue: { label: __('Default value'), name: 'value', field: componentTypes.TEXT_FIELD },
   defaultCheckboxValue: { label: __('Default value'), name: 'checked', field: componentTypes.SWITCH },
-  defaultDropdownValue: { label: __('Default value'), name: 'defaultDropdownValue', field: componentTypes.SELECT },
   defaultDatePickerValue: { label: __('Default value'), name: 'value', field: componentTypes.DATE_PICKER },
   defaultDateTimePickerValue: { label: __('Default value'), name: 'value', field: componentTypes.DATE_TIME_PICKER },
+  defaultDropdownValue: { label: __('Default value'), name: 'defaultDropdownValue', field: componentTypes.SELECT },
   dynamic: { label: __('Dynamic'), name: 'dynamic', field: componentTypes.SWITCH },
   entries: { label: __('Entries'), name: 'items', field: componentTypes.FIELD_ARRAY },
   entryPoint: { label: __('Entry point'), name: 'entryPoint', field: componentTypes.SELECT },
@@ -28,9 +27,23 @@ export const dynamicFields = {
   sortOrder: { label: __('Sort order'), name: 'sortOrder', field: componentTypes.SELECT },
   showPastDates: { label: __('Show Past Dates'), name: 'showPastDates', field: componentTypes.SWITCH },
   singleValue: { label: __('Single value'), name: 'singleValue', field: componentTypes.SWITCH },
+  subCategories: { label: __('Entries'), name: 'subCategories', field: componentTypes.SELECT },
   visible: { label: __('Visible'), name: 'visible', field: componentTypes.SWITCH },
   valueType: { label: __('Value type'), name: 'valueType', field: componentTypes.SELECT },
   validation: { label: __('Validation'), name: 'validation', field: componentTypes.SWITCH },
+  validatorRule: {
+    condition: { when: 'validation', is: true },
+    label: __('Validator Rule'),
+    name: 'validatorRule',
+    field: componentTypes.TEXT_FIELD,
+    placeholder: __('Regular Expression'),
+  },
+  validatorMessage: {
+    condition: { when: 'validation', is: true },
+    label: __('Validation Message'),
+    name: 'validationMessage',
+    field: componentTypes.TEXT_FIELD,
+  },
 };
 
 export const fieldTab = {
@@ -61,5 +74,15 @@ export const overridableOptions = () => ({
     dynamicFields.readOnly,
     dynamicFields.visible,
     dynamicFields.defaultValue,
+  ],
+});
+
+export const overridableOptionsWithSort = () => ({
+  name: fieldTab.overridableOptions,
+  fields: [
+    dynamicFields.readOnly,
+    dynamicFields.visible,
+    dynamicFields.sortBy,
+    dynamicFields.sortOrder,
   ],
 });

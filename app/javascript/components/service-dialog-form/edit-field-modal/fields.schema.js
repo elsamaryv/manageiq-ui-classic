@@ -8,7 +8,8 @@ export const textFieldComponent = (field) => ({
   maxLength: 128,
   id: field.name,
   name: field.name,
-  initialValue: field.initialValue,
+  ...(field.condition && { condition: field.condition }),
+  ...(field.placeholder && { placeholder: field.placeholder }),
 });
 
 export const textAreaComponent = (field) => ({
@@ -17,6 +18,8 @@ export const textAreaComponent = (field) => ({
   name: field.name,
   label: field.label,
   rows: 10,
+  ...(field.condition && { condition: field.condition }),
+  ...(field.placeholder && { placeholder: field.placeholder }),
 });
 
 export const switchComponent = (field) => ({
@@ -33,26 +36,42 @@ export const fieldArrayComponent = (field) => ({
   label: field.label,
   id: field.name,
   fields: [
-    {
-      component: componentTypes.TEXT_FIELD,
-      name: 'id',
-      label: 'Option ID',
-      isRequired: true,
-      helperText: 'Unique ID for the option.',
-    },
-    {
-      component: componentTypes.TEXT_FIELD,
-      name: 'text',
-      label: 'Option Text',
-      isRequired: true,
-      helperText: 'The label to display for the option.',
-    },
+    // {
+    //   component: componentTypes.TEXT_FIELD,
+    //   name: 'id',
+    //   label: 'Option ID',
+    //   isRequired: true,
+    //   helperText: 'Unique ID for the option.',
+    // },
+    // {
+    //   component: componentTypes.TEXT_FIELD,
+    //   name: 'text',
+    //   label: 'Option Text',
+    //   isRequired: true,
+    //   helperText: 'The label to display for the option.',
+    // },
+
+    // {
+    //   component: componentTypes.TEXT_FIELD,
+    //   name: 'value',
+    //   label: 'Option Value',
+    //   isRequired: true,
+    //   helperText: 'Value for the option.',
+    // },
+
     {
       component: componentTypes.TEXT_FIELD,
       name: 'value',
       label: 'Option Value',
       isRequired: true,
-      helperText: 'Value for the option.',
+      helperText: 'Unique value for the option.',
+    },
+    {
+      component: componentTypes.TEXT_FIELD,
+      name: 'description',
+      label: 'Option Description',
+      isRequired: true,
+      helperText: 'The label to display for the option.',
     },
   ],
 });
@@ -79,14 +98,13 @@ const valueTypes = [
 ];
 
 const sortOrder = [
-  { label: __('Ascending'), value: 'Ascending' },
-  { label: __('Descending'), value: 'Descending' },
+  { label: __('Ascending'), value: 'ascending' },
+  { label: __('Descending'), value: 'descending' },
 ];
 
 const sortBy = [
-  { label: __('None'), value: 'None' },
-  { label: __('Description'), value: 'Description' },
-  { label: __('Value'), value: 'Value' },
+  { label: __('Description'), value: 'description' },
+  { label: __('Value'), value: 'value' },
 ];
 
 const assignProfiles = [
