@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { MultiSelect } from 'carbon-components-react';
 import { dynamicFieldDataProps, SD_ACTIONS } from '../helper';
 import DynamicFieldActions from '../dynamic-field-actions';
-import { defaultDropdownValue as optionEntries } from '../edit-field-modal/fields.schema';
+// import { defaultDropdownValue as optionEntries } from '../edit-field-modal/fields.schema';
 import {
-  fieldInformation, advanced, overridableOptions, fieldTab, dynamicFields,
+  fieldInformation, advanced, overridableOptionsWithSort, fieldTab, dynamicFields,
 } from './dynamic-field-configuration';
 
 /** Component to render a Field. */
@@ -16,13 +16,25 @@ const DynamicMultiSelectDropdown = ({ dynamicFieldData: { section, field, fieldP
 
   const inputId = `tab-${tabId}-section-${sectionId}-field-${fieldPosition}-multiselect-dropdown`;
 
+  const optionEntries = [
+    // { value: 'option-0', description: 'Option 0' },
+    // { value: 'option-1', description: 'Option 1' },
+
+    { description: 'A', value: '1' },
+    { description: 'B', value: '2' },
+    { description: 'C', value: '3' },
+    { description: 'D', value: '4' },
+    { description: 'E', value: '5' },
+  ];
+
   const [fieldState, setFieldState] = useState({
-    label: field.label || __('Multiselect Dropdown'),
+    label: field.label || __('Selection Dropdown'),
     required: field.required || false,
     name: field.name || inputId,
     visible: field.visible || true,
     items: field.entries || optionEntries,
-    // multiselect: field.multiselect || false,
+    multiselect: field.multiselect || false,
+    value: field.defaultValue || [],
   });
 
   const handleFieldUpdate = (updatedFields) => {
@@ -59,7 +71,7 @@ const DynamicMultiSelectDropdown = ({ dynamicFieldData: { section, field, fieldP
     dynamicFields.valueType,
     dynamicFields.sortBy,
     dynamicFields.sortOrder,
-    // dynamicFields.multiselect,
+    dynamicFields.multiselect,
     dynamicFields.entries,
     dynamicFields.fieldsToRefresh,
   ]);
@@ -70,7 +82,7 @@ const DynamicMultiSelectDropdown = ({ dynamicFieldData: { section, field, fieldP
     dynamicFields.loadOnInit,
     dynamicFields.required,
     dynamicFields.valueType,
-    // dynamicFields.multiselect,
+    dynamicFields.multiselect,
     dynamicFields.fieldsToRefresh,
   ]);
 
@@ -86,9 +98,71 @@ const DynamicMultiSelectDropdown = ({ dynamicFieldData: { section, field, fieldP
       advanced(),
     ];
     if (fieldState.dynamic) {
-      tabs.push(overridableOptions());
+      tabs.push(overridableOptionsWithSort());
     }
     return tabs;
+  };
+
+  const isSelectionInvalid = () => {
+    // If single-select mode
+    if (!fieldState.multiselect) {
+      return fieldState.value.length > 1;
+    }
+    // If multi-select mode
+    return false;
+  };
+
+  // const sortedItems = () =>
+  //   [...fieldState.items].sort((a, b) => {
+  //     const sortBy = fieldState.sortBy || 'description';
+  //     const sortOrder = fieldState.sortOrder || 'ascending';
+
+  //     return sortOrder === 'ascending'
+  //       ? a[sortBy].localeCompare(b[sortBy])
+  //       : b[sortBy].localeCompare(a[sortBy]);
+  //   });
+
+  const sortedItems = () => {
+    // Log original items for debugging
+    console.log('Before Sorting:', fieldState.items);
+  
+    const sortedArray = [...fieldState.items].sort((a, b) => {
+      const sortBy = fieldState.sortBy || 'description';
+      const sortOrder = fieldState.sortOrder || 'ascending';
+  
+      // Log the comparison for debugging
+      console.log('Comparing:', a[sortBy], 'and', b[sortBy]);
+  
+      // Ensure that both properties are strings
+      const valueA = a[sortBy] ? a[sortBy].toString() : '';
+      const valueB = b[sortBy] ? b[sortBy].toString() : '';
+  
+      return sortOrder === 'ascending'
+        ? valueA.localeCompare(valueB)
+        : valueB.localeCompare(valueA);
+    });
+  
+    // Log sorted items for debugging
+    console.log('After Sorting:', sortedArray);
+  
+    return sortedArray;
+  };
+
+  // const sortedItems = () =>
+  //   [...fieldState.items].sort((a, b) => {
+  //     const sortBy = fieldState.sortBy || 'description';
+  //     const sortOrder = fieldState.sortOrder || 'ascending';
+
+  //     return sortOrder === 'ascending'
+  //       ? a[sortBy].localeCompare(b[sortBy])
+  //       : b[sortBy].localeCompare(a[sortBy]);
+  //   });
+
+  const handleSelectionChange = ({ selectedItems }) => {
+    setFieldState((prevState) => ({
+      ...prevState,
+      value: selectedItems,
+    }));
   };
 
   return (
@@ -97,19 +171,16 @@ const DynamicMultiSelectDropdown = ({ dynamicFieldData: { section, field, fieldP
         <MultiSelect
           id={inputId}
           name={fieldState.name}
-          label="Multiselect Label"
-          titleText={fieldState.label}
+          label={fieldState.label}
+          titleText="Multiselect dropdown title text"
           helperText="This is helper text"
-          items={fieldState.items}
-          itemToString={(item) => (item ? item.text : '')}
+          items={sortedItems()}
+          itemToString={(item) => (item ? item.description : '')}
           value={fieldState.value}
           selectionFeedback="top-after-reopen"
-          // multiselect={fieldState.multiselect}
-          // selectedItem={fieldState.items.find((item) => item.id === fieldState.value) || null}
-          // onChange={({ selectedItem }) => {
-          //   debugger
-          //   // handleFieldUpdate({ value: selectedItem.id });
-          // }}
+          invalid={isSelectionInvalid()}
+          invalidText="Please select only one item."
+          onChange={handleSelectionChange}
         />
       </div>
       <DynamicFieldActions
