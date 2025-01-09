@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Dropdown, FormLabel } from 'carbon-components-react';
+import { MultiSelect } from 'carbon-components-react';
 import { dynamicFieldDataProps, SD_ACTIONS } from '../helper';
 import DynamicFieldActions from '../dynamic-field-actions';
+// import { defaultDropdownValue as optionEntries } from '../edit-field-modal/fields.schema';
 import {
   fieldInformation, advanced, overridableOptionsWithSort, fieldTab, dynamicFields,
 } from './dynamic-field-configuration';
@@ -10,6 +11,7 @@ import {
 /** Component to render a Field. */
 const DynamicDropdown = ({ dynamicFieldData: { section, field, fieldPosition }, onFieldAction }) => {
   const { tabId, sectionId } = section;
+
   const [inputValues, setInputValues] = useState({});
 
   const inputId = `tab-${tabId}-section-${sectionId}-field-${fieldPosition}-dropdown`;
@@ -18,21 +20,21 @@ const DynamicDropdown = ({ dynamicFieldData: { section, field, fieldPosition }, 
     // { value: 'option-0', description: 'Option 0' },
     // { value: 'option-1', description: 'Option 1' },
 
-    { value: '1', description: 'A' },
-    { value: '2', description: 'B' },
-    { value: '3', description: 'C' },
-    { value: '4', description: 'D' },
-    { value: '5', description: 'E' },
+    { description: 'A', value: '1' },
+    { description: 'B', value: '2' },
+    { description: 'C', value: '3' },
+    { description: 'D', value: '4' },
+    { description: 'E', value: '5' },
   ];
 
   const [fieldState, setFieldState] = useState({
-    label: field.label || __('Dropdown'),
+    label: field.label || __('Selection Dropdown'),
     required: field.required || false,
     name: field.name || inputId,
     visible: field.visible || true,
     items: field.entries || optionEntries,
-    value: field.defaultValue || '',
     multiselect: field.multiselect || false,
+    value: field.defaultValue || [],
   });
 
   const handleFieldUpdate = (updatedFields) => {
@@ -101,34 +103,53 @@ const DynamicDropdown = ({ dynamicFieldData: { section, field, fieldPosition }, 
     return tabs;
   };
 
-  const sortedItems = () =>
-    [...fieldState.items].sort((a, b) => {
-      const sortBy = fieldState.sortBy || 'description';
-      const sortOrder = fieldState.sortOrder || 'ascending';
+  const isSelectionInvalid = () => {
+    // If single-select mode
+    if (!fieldState.multiselect) {
+      return fieldState.value.length > 1;
+    }
+    // If multi-select mode
+    return false;
+  };
 
+  const sortedItems = () => {
+    const sortBy = fieldState.sortBy || 'description';
+    const sortOrder = fieldState.sortOrder || 'ascending';
+    const sortedArray = [...fieldState.items].sort((a, b) => {
+      const valueA = a[sortBy] ? a[sortBy].toString() : '';
+      const valueB = b[sortBy] ? b[sortBy].toString() : '';
+      // Alphanumeric comparison using localeCompare
       return sortOrder === 'ascending'
-        ? a[sortBy].localeCompare(b[sortBy])
-        : b[sortBy].localeCompare(a[sortBy]);
+        ? valueA.localeCompare(valueB, undefined, { numeric: true, sensitivity: 'base' })
+        : valueB.localeCompare(valueA, undefined, { numeric: true, sensitivity: 'base' });
     });
+    return sortedArray;
+  };
+
+  const handleSelectionChange = ({ selectedItems }) => {
+    setFieldState((prevState) => ({
+      ...prevState,
+      value: selectedItems,
+    }));
+  };
 
   return (
     <div className="dynamic-form-field">
       <div className="dynamic-form-field-item">
-        {/* <FormLabel>
-          Dropdown
-        </FormLabel> */}
-        <Dropdown
+        <MultiSelect
           id={inputId}
           name={fieldState.name}
-          // titleText={__(inputValues.labelText || 'Dropdown')}
-          titleText={fieldState.label}
+          label={fieldState.label}
+          // titleText="Dropdown title text"
+          helperText="This is helper text"
           items={sortedItems()}
+          sortItems={(items) => items}
           itemToString={(item) => (item ? item.description : '')}
           value={fieldState.value}
-          selectedItem={fieldState.items.find((item) => item.value === fieldState.value) || null}
-          onChange={({ selectedItem }) => {
-            handleFieldUpdate({ value: selectedItem.value });
-          }}
+          selectionFeedback="top-after-reopen"
+          invalid={isSelectionInvalid()}
+          invalidText="Please select only one item."
+          onChange={handleSelectionChange}
         />
       </div>
       <DynamicFieldActions
