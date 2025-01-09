@@ -4,11 +4,11 @@ import { componentTypes } from '../component-types';
 
 export const dynamicFields = {
   categories: { label: __('Categories'), name: 'categories', field: componentTypes.SELECT },
-  defaultValue: { label: __('Default value'), name: 'value', field: componentTypes.TEXT_FIELD },
   defaultCheckboxValue: { label: __('Default value'), name: 'checked', field: componentTypes.SWITCH },
   defaultDatePickerValue: { label: __('Default value'), name: 'value', field: componentTypes.DATE_PICKER },
   defaultDateTimePickerValue: { label: __('Default value'), name: 'value', field: componentTypes.DATE_TIME_PICKER },
-  defaultDropdownValue: { label: __('Default value'), name: 'defaultDropdownValue', field: componentTypes.SELECT },
+  defaultDropdownValue: { label: __('Default value'), name: 'value', field: componentTypes.SELECT },
+  defaultValue: { label: __('Default value'), name: 'value', field: componentTypes.TEXT_FIELD },
   dynamic: { label: __('Dynamic'), name: 'dynamic', field: componentTypes.SWITCH },
   entries: { label: __('Entries'), name: 'items', field: componentTypes.FIELD_ARRAY },
   entryPoint: { label: __('Entry point'), name: 'entryPoint', field: componentTypes.SELECT },

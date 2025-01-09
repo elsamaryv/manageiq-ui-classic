@@ -34,7 +34,7 @@ const DynamicDropdown = ({ dynamicFieldData: { section, field, fieldPosition }, 
     visible: field.visible || true,
     items: field.entries || defaultDropdownOptions,
     multiselect: field.multiselect || false,
-    defaultDropdownValue: field.defaultDropdownValue || [],
+    value: field.value || '',
   });
 
   const handleFieldUpdate = (updatedFields) => {
@@ -106,7 +106,7 @@ const DynamicDropdown = ({ dynamicFieldData: { section, field, fieldPosition }, 
   const isSelectionInvalid = () => {
     // If single-select mode
     if (!fieldState.multiselect) {
-      return fieldState.defaultDropdownValue.length > 1;
+      return fieldState.value.length > 1;
     }
     // If multi-select mode
     return false;
@@ -129,7 +129,7 @@ const DynamicDropdown = ({ dynamicFieldData: { section, field, fieldPosition }, 
   const handleSelectionChange = ({ selectedItems }) => {
     setFieldState((prevState) => ({
       ...prevState,
-      defaultDropdownValue: selectedItems,
+      value: selectedItems,
     }));
   };
 
@@ -145,7 +145,7 @@ const DynamicDropdown = ({ dynamicFieldData: { section, field, fieldPosition }, 
           items={sortedItems()}
           sortItems={(items) => items}
           itemToString={(item) => (item ? item.description : '')}
-          value={fieldState.defaultDropdownValue}
+          value={fieldState.value}
           selectionFeedback="top-after-reopen"
           invalid={isSelectionInvalid()}
           invalidText={__('Please select only one item.')}
