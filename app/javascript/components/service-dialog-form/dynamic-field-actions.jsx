@@ -81,7 +81,6 @@ DynamicFieldActions.propTypes = {
     SD_PROP_SHAPES.textarea,
     SD_PROP_SHAPES.checkbox,
     SD_PROP_SHAPES.dropdown,
-    SD_PROP_SHAPES.multiselectDropdown,
     SD_PROP_SHAPES.radiobutton,
     SD_PROP_SHAPES.datePicker,
     SD_PROP_SHAPES.dateTimePicker,
