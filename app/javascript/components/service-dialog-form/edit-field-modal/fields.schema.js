@@ -35,46 +35,70 @@ export const fieldArrayComponent = (field) => ({
   name: field.name,
   label: field.label,
   id: field.name,
+  // className: 'field-array-item',
   fields: [
-    // {
-    //   component: componentTypes.TEXT_FIELD,
-    //   name: 'id',
-    //   label: 'Option ID',
-    //   isRequired: true,
-    //   helperText: 'Unique ID for the option.',
-    // },
-    // {
-    //   component: componentTypes.TEXT_FIELD,
-    //   name: 'text',
-    //   label: 'Option Text',
-    //   isRequired: true,
-    //   helperText: 'The label to display for the option.',
-    // },
-
-    // {
-    //   component: componentTypes.TEXT_FIELD,
-    //   name: 'value',
-    //   label: 'Option Value',
-    //   isRequired: true,
-    //   helperText: 'Value for the option.',
-    // },
-
-    {
-      component: componentTypes.TEXT_FIELD,
-      name: 'value',
-      label: 'Option Value',
-      isRequired: true,
-      helperText: 'Unique value for the option.',
-    },
     {
       component: componentTypes.TEXT_FIELD,
       name: 'description',
-      label: 'Option Description',
+      placeholder: 'Description',
       isRequired: true,
-      helperText: 'The label to display for the option.',
+    },
+    {
+      component: componentTypes.TEXT_FIELD,
+      name: 'value',
+      placeholder: 'Value',
+      isRequired: true,
     },
   ],
 });
+
+// export const fieldArrayComponent = (field) => ({
+//   component: componentTypes.FIELD_ARRAY,
+//   name: field.name,
+//   label: field.label,
+//   id: field.name,
+//   fields: [
+//     // {
+//     //   component: componentTypes.TEXT_FIELD,
+//     //   name: 'id',
+//     //   label: 'Option ID',
+//     //   isRequired: true,
+//     //   helperText: 'Unique ID for the option.',
+//     // },
+//     // {
+//     //   component: componentTypes.TEXT_FIELD,
+//     //   name: 'text',
+//     //   label: 'Option Text',
+//     //   isRequired: true,
+//     //   helperText: 'The label to display for the option.',
+//     // },
+
+//     // {
+//     //   component: componentTypes.TEXT_FIELD,
+//     //   name: 'value',
+//     //   label: 'Option Value',
+//     //   isRequired: true,
+//     //   helperText: 'Value for the option.',
+//     // },
+
+//     {
+//       component: componentTypes.TEXT_FIELD,
+//       name: 'description',
+//       // label: 'Option Description',
+//       placeholder: 'Description',
+//       isRequired: true,
+//       // helperText: 'Description',
+//     },
+//     {
+//       component: componentTypes.TEXT_FIELD,
+//       name: 'value',
+//       // label: 'Option Value',
+//       placeholder: 'Value',
+//       isRequired: true,
+//       // helperText: 'Value',
+//     },
+//   ],
+// });
 
 export const datePickerComponent = (field) => ({
   component: componentTypes.DATE_PICKER,
