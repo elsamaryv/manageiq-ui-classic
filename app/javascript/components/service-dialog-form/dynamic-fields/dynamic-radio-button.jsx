@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { RadioButtonGroup, RadioButton } from 'carbon-components-react';
 import { dynamicFieldDataProps, SD_ACTIONS } from '../helper';
-import { defaultDropdownOptions as rbOptions } from '../edit-field-modal/fields.schema';
+import { defaultRadioButtonOptions } from '../edit-field-modal/fields.schema';
 import DynamicFieldActions from '../dynamic-field-actions';
 import {
   fieldInformation, advanced, overridableOptionsWithSort, fieldTab, dynamicFields,
@@ -21,13 +21,20 @@ const DynamicRadioButton = ({ dynamicFieldData: { section, field, fieldPosition 
     required: field.required || false,
     name: field.name || inputId,
     visible: field.visible || true,
-    items: field.items || rbOptions,
-    // items: field.entries || rbSelectOptions,
+    items: field.items || defaultRadioButtonOptions,
+    value: field.value || '',
   });
 
   const handleFieldUpdate = (updatedFields) => {
     setFieldState((prevState) => ({ ...prevState, ...updatedFields }));
     // onFieldAction({ ...dynamicFieldData, field: { ...dynamicFieldData.field, ...updatedFields } });
+  };
+
+  const handleSelectionChange = (selectedItem) => {
+    setFieldState((prevState) => ({
+      ...prevState,
+      value: selectedItem,
+    }));
   };
 
   const fieldActions = (event, inputProps) => {
@@ -90,16 +97,30 @@ const DynamicRadioButton = ({ dynamicFieldData: { section, field, fieldPosition 
     return tabs;
   };
 
+  const sortedItems = () => {
+    const sortBy = fieldState.sortBy || 'description';
+    const sortOrder = fieldState.sortOrder || 'ascending';
+    const sortedArray = [...fieldState.items].sort((a, b) => {
+      const valueA = a[sortBy] ? a[sortBy].toString() : '';
+      const valueB = b[sortBy] ? b[sortBy].toString() : '';
+      // Alphanumeric comparison using localeCompare
+      return sortOrder === 'ascending'
+        ? valueA.localeCompare(valueB, undefined, { numeric: true, sensitivity: 'base' })
+        : valueB.localeCompare(valueA, undefined, { numeric: true, sensitivity: 'base' });
+    });
+    return sortedArray;
+  };
+
   return (
     <div className="dynamic-form-field">
       <div className="dynamic-form-field-item">
         <RadioButtonGroup
           legendText="Radio Button group"
           name={fieldState.name}
-          onChange={(selectedValue) => handleFieldUpdate({ defaultDropdownValue: selectedValue })}
-          valueSelected={fieldState.defaultDropdownValue}
+          onChange={(selectedValue) => handleSelectionChange(selectedValue)}
+          valueSelected={fieldState.value}
         >
-          {rbOptions.map((option) => (
+          {sortedItems().map((option) => (
             <RadioButton
               key={option.id}
               id={`tab-${tabId}-section-${sectionId}-field-${fieldPosition}-radio-button-${option.id}`}
