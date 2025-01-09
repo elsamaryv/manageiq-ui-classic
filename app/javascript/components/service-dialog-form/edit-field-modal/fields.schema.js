@@ -151,7 +151,25 @@ const assignProfiles = [
 //   { description: 'D', value: '5' },
 // ];
 
+export const defaultRadioButtonOptions = [
+  
+  // Radio button needs 'id' & 'text'
+  // Dropdown in edit pop up needs 'text' and 'value'
+  // Option entries need 'value' & 'description'
+
+  { text: 'AA', id: '1', value: '11', description: 'AA' },
+  { text: 'BB', id: '2', value: '22', description: 'BB' },
+  { text: 'cc', id: '3', value: '333', description: 'cc' },
+  { text: 'CC', id: '4', value: '44', description: 'CC' },
+  { text: 'DD', id: '55', value: '55', description: 'DD' },
+];
+
 export const defaultDropdownOptions = [
+
+  // Dropdown component needs 'value' & 'description'
+  // Dropdown in edit pop up needs 'text' and 'value'
+  // Option entries need 'value' & 'description'
+
   { text: 'A', description: 'A', label: 'A', value: '1' },
   { text: 'B', description: 'B', label: 'B', value: '2' },
   { text: 'C', description: 'C', label: 'C', value: '3' },
@@ -167,7 +185,7 @@ const selectOptions = (field, initialData) => {
       return sortOrder;
     case 'sortBy':
       return sortBy;
-    case 'defaultDropdownValue':
+    case 'value':
       return initialData.items;
     case 'categories':
       return initialData.categories;
@@ -186,5 +204,5 @@ export const selectComponent = (field, initialData) => ({
   placeholder: __('<Choose>'),
   // includeEmpty: true,
   options: selectOptions(field, initialData),
-  ...(field.name === 'defaultDropdownValue' && initialData.multiselect && { isMulti: initialData.multiselect }),
+  ...(field.name === 'value' && initialData.multiselect && { isMulti: initialData.multiselect }),
 });
