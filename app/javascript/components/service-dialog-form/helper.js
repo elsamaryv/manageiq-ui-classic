@@ -92,19 +92,6 @@ const dropdownShape = PropTypes.shape({
       text: PropTypes.string.isRequired,
     })
   ).isRequired,
-  selectedValue: PropTypes.string,
-  multiselect: PropTypes.bool,
-});
-
-const multiselectDropdownShape = PropTypes.shape({
-  label: PropTypes.string.isRequired,
-  items: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      text: PropTypes.string.isRequired,
-    })
-  ).isRequired,
-  // selectedValue: PropTypes.string,
   // multiselect: PropTypes.bool,
 });
 
@@ -140,7 +127,6 @@ export const SD_PROP_SHAPES = {
   textarea: textAreaShape,
   checkbox: checkboxShape,
   dropdown: dropdownShape,
-  multiselectDropdown: multiselectDropdownShape,
   radiobutton: radioButtonShape,
   datePicker: datePickerShape,
   dateTimePicker: dateTimePickerShape,
