@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { MultiSelect } from 'carbon-components-react';
 import { dynamicFieldDataProps, SD_ACTIONS } from '../helper';
 import DynamicFieldActions from '../dynamic-field-actions';
-// import { defaultDropdownValue as optionEntries } from '../edit-field-modal/fields.schema';
+import { defaultDropdownOptions } from '../edit-field-modal/fields.schema';
 import {
   fieldInformation, advanced, overridableOptionsWithSort, fieldTab, dynamicFields,
 } from './dynamic-field-configuration';
@@ -16,25 +16,25 @@ const DynamicDropdown = ({ dynamicFieldData: { section, field, fieldPosition }, 
 
   const inputId = `tab-${tabId}-section-${sectionId}-field-${fieldPosition}-dropdown`;
 
-  const optionEntries = [
-    // { value: 'option-0', description: 'Option 0' },
-    // { value: 'option-1', description: 'Option 1' },
+  // const defaultDropdownOptions = [
+  //   // { value: 'option-0', description: 'Option 0' },
+  //   // { value: 'option-1', description: 'Option 1' },
 
-    { description: 'A', value: '1' },
-    { description: 'B', value: '2' },
-    { description: 'C', value: '3' },
-    { description: 'D', value: '4' },
-    { description: 'E', value: '5' },
-  ];
+  //   { description: 'A', value: '1' },
+  //   { description: 'B', value: '2' },
+  //   { description: 'C', value: '3' },
+  //   { description: 'D', value: '4' },
+  //   { description: 'E', value: '5' },
+  // ];
 
   const [fieldState, setFieldState] = useState({
     label: field.label || __('Selection Dropdown'),
     required: field.required || false,
     name: field.name || inputId,
     visible: field.visible || true,
-    items: field.entries || optionEntries,
+    items: field.entries || defaultDropdownOptions,
     multiselect: field.multiselect || false,
-    value: field.defaultValue || [],
+    defaultDropdownValue: field.defaultDropdownValue || [],
   });
 
   const handleFieldUpdate = (updatedFields) => {
@@ -67,11 +67,11 @@ const DynamicDropdown = ({ dynamicFieldData: { section, field, fieldPosition }, 
     dynamicFields.readOnly,
     dynamicFields.visible,
     dynamicFields.required,
+    dynamicFields.multiselect,
     dynamicFields.defaultDropdownValue,
     dynamicFields.valueType,
     dynamicFields.sortBy,
     dynamicFields.sortOrder,
-    dynamicFields.multiselect,
     dynamicFields.entries,
     dynamicFields.fieldsToRefresh,
   ]);
@@ -81,8 +81,8 @@ const DynamicDropdown = ({ dynamicFieldData: { section, field, fieldPosition }, 
     dynamicFields.showRefresh,
     dynamicFields.loadOnInit,
     dynamicFields.required,
-    dynamicFields.valueType,
     dynamicFields.multiselect,
+    dynamicFields.valueType,
     dynamicFields.fieldsToRefresh,
   ]);
 
@@ -106,7 +106,7 @@ const DynamicDropdown = ({ dynamicFieldData: { section, field, fieldPosition }, 
   const isSelectionInvalid = () => {
     // If single-select mode
     if (!fieldState.multiselect) {
-      return fieldState.value.length > 1;
+      return fieldState.defaultDropdownValue.length > 1;
     }
     // If multi-select mode
     return false;
@@ -129,7 +129,7 @@ const DynamicDropdown = ({ dynamicFieldData: { section, field, fieldPosition }, 
   const handleSelectionChange = ({ selectedItems }) => {
     setFieldState((prevState) => ({
       ...prevState,
-      value: selectedItems,
+      defaultDropdownValue: selectedItems,
     }));
   };
 
@@ -141,14 +141,14 @@ const DynamicDropdown = ({ dynamicFieldData: { section, field, fieldPosition }, 
           name={fieldState.name}
           label={fieldState.label}
           // titleText="Dropdown title text"
-          helperText="This is helper text"
+          helperText={__('This is helper text')}
           items={sortedItems()}
           sortItems={(items) => items}
           itemToString={(item) => (item ? item.description : '')}
-          value={fieldState.value}
+          value={fieldState.defaultDropdownValue}
           selectionFeedback="top-after-reopen"
           invalid={isSelectionInvalid()}
-          invalidText="Please select only one item."
+          invalidText={__('Please select only one item.')}
           onChange={handleSelectionChange}
         />
       </div>

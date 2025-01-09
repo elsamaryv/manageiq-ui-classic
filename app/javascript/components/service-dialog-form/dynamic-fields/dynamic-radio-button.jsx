@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { RadioButtonGroup, RadioButton } from 'carbon-components-react';
 import { dynamicFieldDataProps, SD_ACTIONS } from '../helper';
-import { defaultDropdownValue as rbOptions } from '../edit-field-modal/fields.schema';
+import { defaultDropdownOptions as rbOptions } from '../edit-field-modal/fields.schema';
 import DynamicFieldActions from '../dynamic-field-actions';
 import {
   fieldInformation, advanced, overridableOptionsWithSort, fieldTab, dynamicFields,

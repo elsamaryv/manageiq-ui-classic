@@ -139,9 +139,24 @@ const assignProfiles = [
   { label: __('sample'), value: 'sample' },
 ];
 
-export const defaultDropdownValue = [
-  { text: __('Option 0'), value: 'option-0', id: 'option-0' },
-  { text: __('Option 1'), value: 'option-1', id: 'option-1' },
+// export const defaultDropdownOptions = [
+
+// { text: __('Option 0'), value: 'option-0', id: 'option-0' },
+//   { text: __('Option 1'), value: 'option-1', id: 'option-1' },
+
+//   { description: 'A', value: '1' },
+//   { description: 'B', value: '2' },
+//   { description: 'C', value: '3' },
+//   { description: 'b', value: '4' },
+//   { description: 'D', value: '5' },
+// ];
+
+export const defaultDropdownOptions = [
+  { text: 'A', description: 'A', label: 'A', value: '1' },
+  { text: 'B', description: 'B', label: 'B', value: '2' },
+  { text: 'C', description: 'C', label: 'C', value: '3' },
+  { text: 'b', description: 'b', label: 'b', value: '4' },
+  { text: 'D', description: 'D', label: 'D', value: '5' },
 ];
 
 const selectOptions = (field, initialData) => {
@@ -153,7 +168,7 @@ const selectOptions = (field, initialData) => {
     case 'sortBy':
       return sortBy;
     case 'defaultDropdownValue':
-      return defaultDropdownValue;
+      return initialData.items;
     case 'categories':
       return initialData.categories;
     case 'subCategories':
@@ -169,6 +184,7 @@ export const selectComponent = (field, initialData) => ({
   name: field.name,
   label: field.label,
   placeholder: __('<Choose>'),
-  includeEmpty: true,
+  // includeEmpty: true,
   options: selectOptions(field, initialData),
+  ...(field.name === 'defaultDropdownValue' && initialData.multiselect && { isMulti: initialData.multiselect }),
 });
