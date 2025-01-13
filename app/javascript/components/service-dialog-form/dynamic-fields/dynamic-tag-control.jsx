@@ -24,17 +24,16 @@ const DynamicTagControl = ({ dynamicFieldData: { section, field, fieldPosition }
   });
 
   useEffect(() => {
-    if (!field.categories) {
+    if (fieldState.categories.length === 0) {
       tagControlCategories().then((fetchedCategories) => {
         const formattedCategories = fetchedCategories.map((cat) => ({
           label: __(cat.description),
-          value: cat.name,
+          value: cat.id,
           key: cat.id,
           data: {
             subCategories: cat.children.map((subCat) => ({
               id: subCat.id,
               label: __(subCat.description),
-              parent_id: subCat.parent_id,
             })),
           },
         }));
@@ -45,10 +44,14 @@ const DynamicTagControl = ({ dynamicFieldData: { section, field, fieldPosition }
         }));
       });
     }
-  }, [field.categories]);
+  }, [fieldState.categories.length]);
 
   const handleFieldUpdate = (updatedFields) => {
-    setFieldState((prevState) => ({ ...prevState, ...updatedFields }));
+    setFieldState((prevState) => ({
+      ...prevState,
+      ...updatedFields, // update other fields
+      categories: prevState.categories, // this is required to retain the options in the dropdown
+    }));
   };
 
   const fieldActions = (event, inputProps) => {
@@ -75,7 +78,10 @@ const DynamicTagControl = ({ dynamicFieldData: { section, field, fieldPosition }
   const fetchSubCategories = (categoryValue) => {
     const selectedCategory = fieldState.categories.find((cat) => cat.value === categoryValue);
     if (selectedCategory) {
-      setFieldState((prevState) => ({ ...prevState, subCategories: selectedCategory.data.subCategories }));
+      setFieldState((prevState) => ({
+        ...prevState,
+        subCategories: selectedCategory.data.subCategories,
+      }));
     }
   };
 
