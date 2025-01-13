@@ -29,11 +29,11 @@ const DynamicTagControl = ({ dynamicFieldData: { section, field, fieldPosition }
         const formattedCategories = fetchedCategories.map((cat) => ({
           label: __(cat.description),
           value: cat.name,
+          key: cat.id,
           data: {
             subCategories: cat.children.map((subCat) => ({
               id: subCat.id,
               label: __(subCat.description),
-              // value: `${subCat.id}-${cat.parent_id}`,
               parent_id: subCat.parent_id,
             })),
           },
