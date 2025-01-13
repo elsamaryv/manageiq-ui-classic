@@ -31,11 +31,10 @@ const DynamicTagControl = ({ dynamicFieldData: { section, field, fieldPosition }
           value: cat.name,
           data: {
             subCategories: cat.children.map((subCat) => ({
+              id: subCat.id,
               label: __(subCat.description),
-              // value: subCat.id,
-              value: `${subCat.id}-${cat.parent_id}`,
-              // key: subCat.id,
-              parentId: subCat.parent_id,
+              // value: `${subCat.id}-${cat.parent_id}`,
+              parent_id: subCat.parent_id,
             })),
           },
         }));
@@ -120,7 +119,7 @@ const DynamicTagControl = ({ dynamicFieldData: { section, field, fieldPosition }
           helperText={fieldState.helperText}
         >
           {fieldState.subCategories.map((subcat) => (
-            <SelectItem text={subcat.label} value={subcat.value} />
+            <SelectItem key={subcat.id} text={subcat.label} value={subcat.id} />
           ))}
         </Select>
       </div>
