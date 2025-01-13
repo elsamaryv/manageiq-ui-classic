@@ -36,6 +36,12 @@ export const fieldArrayComponent = (field) => ({
   label: field.label,
   id: field.name,
   // className: 'field-array-item',
+  AddButtonProps: {
+    size: 'small',
+  },
+  RemoveButtonProps: {
+    size: 'small',
+  },
   fields: [
     {
       component: componentTypes.TEXT_FIELD,
@@ -51,54 +57,6 @@ export const fieldArrayComponent = (field) => ({
     },
   ],
 });
-
-// export const fieldArrayComponent = (field) => ({
-//   component: componentTypes.FIELD_ARRAY,
-//   name: field.name,
-//   label: field.label,
-//   id: field.name,
-//   fields: [
-//     // {
-//     //   component: componentTypes.TEXT_FIELD,
-//     //   name: 'id',
-//     //   label: 'Option ID',
-//     //   isRequired: true,
-//     //   helperText: 'Unique ID for the option.',
-//     // },
-//     // {
-//     //   component: componentTypes.TEXT_FIELD,
-//     //   name: 'text',
-//     //   label: 'Option Text',
-//     //   isRequired: true,
-//     //   helperText: 'The label to display for the option.',
-//     // },
-
-//     // {
-//     //   component: componentTypes.TEXT_FIELD,
-//     //   name: 'value',
-//     //   label: 'Option Value',
-//     //   isRequired: true,
-//     //   helperText: 'Value for the option.',
-//     // },
-
-//     {
-//       component: componentTypes.TEXT_FIELD,
-//       name: 'description',
-//       // label: 'Option Description',
-//       placeholder: 'Description',
-//       isRequired: true,
-//       // helperText: 'Description',
-//     },
-//     {
-//       component: componentTypes.TEXT_FIELD,
-//       name: 'value',
-//       // label: 'Option Value',
-//       placeholder: 'Value',
-//       isRequired: true,
-//       // helperText: 'Value',
-//     },
-//   ],
-// });
 
 export const datePickerComponent = (field) => ({
   component: componentTypes.DATE_PICKER,
@@ -139,20 +97,7 @@ const assignProfiles = [
   { label: __('sample'), value: 'sample' },
 ];
 
-// export const defaultDropdownOptions = [
-
-// { text: __('Option 0'), value: 'option-0', id: 'option-0' },
-//   { text: __('Option 1'), value: 'option-1', id: 'option-1' },
-
-//   { description: 'A', value: '1' },
-//   { description: 'B', value: '2' },
-//   { description: 'C', value: '3' },
-//   { description: 'b', value: '4' },
-//   { description: 'D', value: '5' },
-// ];
-
 export const defaultRadioButtonOptions = [
-  
   // Radio button needs 'id' & 'text'
   // Dropdown in edit pop up needs 'text' and 'value'
   // Option entries need 'value' & 'description'
@@ -190,7 +135,7 @@ const selectOptions = (field, initialData) => {
     case 'categories':
       return initialData.categories;
     case 'subCategories':
-      return [];
+      return initialData.subCategories;
     default:
       return assignProfiles;
   }
@@ -202,7 +147,7 @@ export const selectComponent = (field, initialData) => ({
   name: field.name,
   label: field.label,
   placeholder: __('<Choose>'),
-  // includeEmpty: true,
+  includeEmpty: true,
   options: selectOptions(field, initialData),
   ...(field.name === 'value' && initialData.multiselect && { isMulti: initialData.multiselect }),
 });
