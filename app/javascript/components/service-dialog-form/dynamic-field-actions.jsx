@@ -7,7 +7,7 @@ import EditFieldModal from './edit-field-modal';
 
 /** Component to render a Field. */
 const DynamicFieldActions = ({
-  componentId, fieldProps, updateFieldProps, dynamicFieldAction, fieldConfiguration, dynamicToggleAction,
+  componentId, fieldProps, updateFieldProps, dynamicFieldAction, fieldConfiguration, dynamicToggleAction, fetchSubCategories
 }) => {
   const [{ showModal, ...editedFields }, setState] = useState({ showModal: false });
 
@@ -22,6 +22,10 @@ const DynamicFieldActions = ({
   const onDynamicSwitchToggle = (isDynamic) => {
     setState((prevState) => ({ ...prevState, dynamic: isDynamic }));
     dynamicToggleAction(isDynamic);
+  };
+
+  const onCategorySelect = (category) => {
+    fetchSubCategories(category);
   };
 
   const renderEditButton = () => (
@@ -61,6 +65,7 @@ const DynamicFieldActions = ({
           setState((state) => ({ ...state, showModal: false }));
         }}
         onDynamicSwitchToggle={onDynamicSwitchToggle}
+        onCategorySelect={onCategorySelect}
       />
     )
   );
@@ -90,6 +95,11 @@ DynamicFieldActions.propTypes = {
   dynamicFieldAction: PropTypes.func.isRequired,
   fieldConfiguration: PropTypes.arrayOf(PropTypes.any).isRequired,
   dynamicToggleAction: PropTypes.func.isRequired,
+  fetchSubCategories: PropTypes.func,
+};
+
+DynamicFieldActions.defaultProps = {
+  fetchSubCategories: () => {}, // Default to a no-op function
 };
 
 export default DynamicFieldActions;
