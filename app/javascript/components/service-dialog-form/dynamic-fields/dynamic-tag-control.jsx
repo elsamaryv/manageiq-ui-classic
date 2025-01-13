@@ -25,23 +25,24 @@ const DynamicTagControl = ({ dynamicFieldData: { section, field, fieldPosition }
 
   useEffect(() => {
     if (!field.categories) {
-      tagControlCategories().then((categories) => {
+      tagControlCategories().then((fetchedCategories) => {
+        const formattedCategories = fetchedCategories.map((cat) => ({
+          label: __(cat.description),
+          value: cat.name,
+          data: {
+            subCategories: cat.children.map((subCat) => ({
+              label: __(subCat.description),
+              // value: subCat.id,
+              value: `${subCat.id}-${cat.parent_id}`,
+              // key: subCat.id,
+              parentId: subCat.parent_id,
+            })),
+          },
+        }));
+
         setFieldState((prevState) => ({
           ...prevState,
-          categories: categories.map((cat) => ({
-            label: __(cat.description),
-            value: cat.name,
-            // data: {
-            //   subCategories: JSON.stringify(
-            //     cat.children.map((subCat) => ({
-            //       label: __(subCat.description),
-            //       value: subCat.id,
-            //       parent_id: subCat.parent_id,
-            //       tag_id: subCat.tag_id,
-            //     }))
-            //   ),
-            // },
-          })),
+          categories: formattedCategories,
         }));
       });
     }
@@ -70,6 +71,13 @@ const DynamicTagControl = ({ dynamicFieldData: { section, field, fieldPosition }
   // To reset tabs in Edit Modal based on 'dynamic' switch
   const resetEditModalTabs = (isDynamic) => {
     setFieldState((prevState) => ({ ...prevState, dynamic: isDynamic }));
+  };
+
+  const fetchSubCategories = (categoryValue) => {
+    const selectedCategory = fieldState.categories.find((cat) => cat.value === categoryValue);
+    if (selectedCategory) {
+      setFieldState((prevState) => ({ ...prevState, subCategories: selectedCategory.data.subCategories }));
+    }
   };
 
   const ordinaryTagControlOptions = () => ([
@@ -112,7 +120,7 @@ const DynamicTagControl = ({ dynamicFieldData: { section, field, fieldPosition }
           helperText={fieldState.helperText}
         >
           {fieldState.subCategories.map((subcat) => (
-            <SelectItem value={subcat.value} text={subcat.label} />
+            <SelectItem text={subcat.label} value={subcat.value} />
           ))}
         </Select>
       </div>
@@ -123,6 +131,7 @@ const DynamicTagControl = ({ dynamicFieldData: { section, field, fieldPosition }
         dynamicFieldAction={(event, inputProps) => fieldActions(event, inputProps)}
         fieldConfiguration={tagControlEditFields()}
         dynamicToggleAction={(isDynamic) => resetEditModalTabs(isDynamic)}
+        fetchSubCategories={(category) => fetchSubCategories(category)}
       />
     </div>
   );
