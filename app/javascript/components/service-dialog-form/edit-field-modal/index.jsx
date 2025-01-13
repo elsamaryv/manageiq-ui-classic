@@ -14,7 +14,7 @@ import CustomDateTimePicker from '../../date-time-picker';
 
 const EditFieldModal = ({
   componentId, fieldConfiguration, showModal, onModalHide, onModalApply, initialData,
-  onSave, onDynamicSwitchToggle,
+  onSave, onDynamicSwitchToggle, onCategorySelect,
 }) => {
   const component = dynamicComponents.find((item) => item.id === componentId);
 
@@ -29,9 +29,9 @@ const EditFieldModal = ({
     if (target.name === 'dynamic') {
       onDynamicSwitchToggle(target.checked);
     }
-    // if (target.name === 'categories') {
-    //   onCategorySelect(target.value);
-    // }
+    if (target.name === 'categories') {
+      onCategorySelect(target.value);
+    }
   };
 
   const onCancel = () => onModalHide();
@@ -74,6 +74,7 @@ EditFieldModal.propTypes = {
   initialData: PropTypes.objectOf(PropTypes.any).isRequired,
   onSave: PropTypes.func.isRequired,
   onDynamicSwitchToggle: PropTypes.func.isRequired,
+  onCategorySelect: PropTypes.func.isRequired,
 };
 
 export default EditFieldModal;
