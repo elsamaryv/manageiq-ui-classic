@@ -9,8 +9,8 @@ import {
 import { dynamicComponents } from '../data';
 import { createSchema } from './edit-field-modal.schema';
 // import { componentTypes } from '../component-types';
-import componentMapper from '../../../forms/mappers/componentMapper';
-import CustomDateTimePicker from '../../date-time-picker';
+// import componentMapper from '../../../forms/mappers/componentMapper';
+// import CustomDateTimePicker from '../../date-time-picker';
 
 const EditFieldModal = ({
   componentId, fieldConfiguration, showModal, onModalHide, onModalApply, initialData,
@@ -18,12 +18,12 @@ const EditFieldModal = ({
 }) => {
   const component = dynamicComponents.find((item) => item.id === componentId);
 
-  // custom component mapper
-  const mapper = {
-    ...componentMapper,
-    // [componentTypes.DATE_TIME_PICKER]: CustomDateTimePicker,
-    'date-time-picker': CustomDateTimePicker,
-  };
+  // // custom component mapper
+  // const mapper = {
+  //   ...componentMapper,
+  //   // [componentTypes.DATE_TIME_PICKER]: CustomDateTimePicker,
+  //   'date-time-picker': CustomDateTimePicker,
+  // };
 
   const handleFieldUpdates = ({ target }) => {
     if (target.name === 'dynamic') {
@@ -37,6 +37,7 @@ const EditFieldModal = ({
   const onCancel = () => onModalHide();
 
   const handleSubmit = (formValues) => {
+    debugger
     onSave(formValues);
   };
 
@@ -53,7 +54,7 @@ const EditFieldModal = ({
         <MiqFormRenderer
           schema={createSchema(fieldConfiguration, initialData)}
           initialValues={initialData}
-          componentMapper={mapper}
+          // componentMapper={mapper}
           onSubmit={handleSubmit}
           onCancel={onCancel}
         />
