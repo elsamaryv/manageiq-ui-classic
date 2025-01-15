@@ -113,7 +113,7 @@ const datePickerShape = PropTypes.shape({
 });
 
 const dateTimePickerShape = PropTypes.shape({
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
   value: PropTypes.string,
 });
 

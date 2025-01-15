@@ -1,12 +1,12 @@
 // import { componentTypes } from '@data-driven-forms/react-form-renderer';
-import { componentTypes } from '../component-types';
-// import { componentTypes } from '@@ddf';
+// import { componentTypes } from '../component-types';
+import { componentTypes } from '@@ddf';
 
 export const dynamicFields = {
   categories: { label: __('Categories'), name: 'categories', field: componentTypes.SELECT },
   defaultCheckboxValue: { label: __('Default value'), name: 'checked', field: componentTypes.SWITCH },
   defaultDatePickerValue: { label: __('Default value'), name: 'value', field: componentTypes.DATE_PICKER },
-  defaultDateTimePickerValue: { label: __('Default value'), name: 'value', field: componentTypes.DATE_TIME_PICKER },
+  defaultDateTimePickerValue: { label: __('Default value'), name: 'value', field: 'date-time-picker' },
   defaultDropdownValue: { label: __('Default value'), name: 'value', field: componentTypes.SELECT },
   defaultValue: { label: __('Default value'), name: 'value', field: componentTypes.TEXT_FIELD },
   dynamic: { label: __('Dynamic'), name: 'dynamic', field: componentTypes.SWITCH },

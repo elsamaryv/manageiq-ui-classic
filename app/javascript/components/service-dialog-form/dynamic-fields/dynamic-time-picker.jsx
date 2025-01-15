@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
-  DatePicker, DatePickerInput, TimePicker, TimePickerSelect, SelectItem, FormLabel
+  DatePicker, DatePickerInput, TimePicker, TimePickerSelect, SelectItem, FormLabel,
 } from 'carbon-components-react';
 import { dynamicFieldDataProps, SD_ACTIONS } from '../helper';
 import DynamicFieldActions from '../dynamic-field-actions';
@@ -14,11 +14,37 @@ const DynamicTimePicker = ({ dynamicFieldData: { section, field, fieldPosition }
   const { tabId, sectionId } = section;
 
   const [inputValues, setInputValues] = useState({});
+  const inputId = `tab-${tabId}-section-${sectionId}-field-${fieldPosition}-date-time-picker`;
 
-  const [date, setDate] = React.useState('');
-  const [time, setTime] = React.useState('');
+  // Helper function to get the formatted current date
+  const getCurrentDate = () => {
+    const now = new Date();
+    return now.toLocaleDateString('en-US', {
+      month: '2-digit',
+      day: '2-digit',
+      year: 'numeric',
+    });
+  };
+
+  // Helper function to get the current time and period
+  const getCurrentTimeAndPeriod = () => {
+    const now = new Date();
+    let hours = now.getHours();
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+    const currentPeriod = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12 || 12; // Convert 0 hours to 12 in 12-hour format
+    return { time: `${hours}:${minutes}`, period: currentPeriod };
+  };
+
+  const [date, setDate] = useState(getCurrentDate);
+  const [time, setTime] = useState(() => getCurrentTimeAndPeriod().time);
   const [isValid, setIsValid] = useState(true);
-  const [period, setPeriod] = useState('AM');
+  const [period, setPeriod] = useState(() => getCurrentTimeAndPeriod().period);
+
+  // const [date, setDate] = React.useState('');
+  // const [time, setTime] = React.useState('');
+  // const [isValid, setIsValid] = useState(true);
+  // const [period, setPeriod] = useState('AM');
 
   const handleDateChange = (selectedDates) => {
     if (selectedDates.length > 0) {
@@ -52,12 +78,16 @@ const DynamicTimePicker = ({ dynamicFieldData: { section, field, fieldPosition }
 
   const [fieldState, setFieldState] = useState({
     label: field.label || __('Timepicker'),
-    name: field.name,
+    name: field.name || inputId,
     visible: field.visible || true,
     // value: field.defaultDatePickerValue || '',
+    date,
+    time,
+    period,
   });
 
   const handleFieldUpdate = (updatedFields) => {
+    debugger
     // date = updatedFields.value[0].toLocaleDateString('en-US');
     setFieldState((prevState) => ({ ...prevState, ...updatedFields }));
     // onFieldAction({ ...dynamicFieldData, field: { ...dynamicFieldData.field, ...updatedFields } });
@@ -121,7 +151,7 @@ const DynamicTimePicker = ({ dynamicFieldData: { section, field, fieldPosition }
   return (
     <div className="dynamic-form-field">
       <div className="dynamic-form-field-item">
-        <FormLabel>{ fieldState.label }</FormLabel>
+        <FormLabel>{fieldState.label}</FormLabel>
         <DatePicker
           datePickerType="single"
           onChange={handleDateChange}
@@ -130,15 +160,24 @@ const DynamicTimePicker = ({ dynamicFieldData: { section, field, fieldPosition }
           <DatePickerInput
             id="date-picker-single"
             placeholder="mm/dd/yyyy"
+            value={date}
+            labelText={__('Select Date')}
+            hideLabel
           />
           <TimePicker
             id="time-picker"
+            labelText={__('Select Time')}
+            hideLabel
             value={time}
             invalid={!isValid}
             invalidText="Enter a valid 12-hour time (e.g., 01:30)"
             onChange={handleTimeChange}
           >
-            <TimePickerSelect id="time-picker-select-1" onChange={handlePeriodChange}>
+            <TimePickerSelect
+              id="time-picker-select-1"
+              onChange={handlePeriodChange}
+              labelText={__('Select Period')}
+            >
               <SelectItem value="AM" text="AM" />
               <SelectItem value="PM" text="PM" />
             </TimePickerSelect>
