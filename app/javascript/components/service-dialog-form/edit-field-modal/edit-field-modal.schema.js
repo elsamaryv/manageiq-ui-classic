@@ -1,6 +1,6 @@
 // import { componentTypes } from '@data-driven-forms/react-form-renderer';
-// import { componentTypes } from '@@ddf';
-import { componentTypes } from '../component-types';
+import { componentTypes } from '@@ddf';
+// import { componentTypes } from '../component-types';
 import {
   textFieldComponent,
   textAreaComponent,
@@ -25,8 +25,9 @@ const fields = (tab, initialData) => tab.fields.map((item) => {
       return selectComponent(item, initialData);
     case componentTypes.DATE_PICKER:
       return datePickerComponent(item);
-    case componentTypes.DATE_TIME_PICKER:
-      return dateTimePickerComponent(item);
+    case 'date-time-picker':
+      debugger
+      return dateTimePickerComponent(item, initialData);
     default:
       return null;
   }
