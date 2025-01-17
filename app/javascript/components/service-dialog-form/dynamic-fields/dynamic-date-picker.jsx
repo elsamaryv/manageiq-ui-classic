@@ -13,6 +13,7 @@ const DynamicDatePicker = ({ dynamicFieldData: { section, field, fieldPosition }
 
   const [inputValues, setInputValues] = useState({});
   const inputId = `tab-${tabId}-section-${sectionId}-field-${fieldPosition}-date-picker`;
+  const editActionType = SD_ACTIONS.field.edit;
 
   const [fieldState, setFieldState] = useState({
     label: field.label || __('Datepicker'),
@@ -44,7 +45,7 @@ const DynamicDatePicker = ({ dynamicFieldData: { section, field, fieldPosition }
   ]);
 
   const fieldActions = (event, inputProps) => {
-    const type = (event === SD_ACTIONS.field.delete) ? SD_ACTIONS.field.delete : SD_ACTIONS.textAreaOnChange;
+    const type = (event === SD_ACTIONS.field.delete) ? SD_ACTIONS.field.delete : editActionType;
 
     setInputValues({
       ...inputValues,
@@ -63,6 +64,7 @@ const DynamicDatePicker = ({ dynamicFieldData: { section, field, fieldPosition }
     // date = updatedFields.value[0].toLocaleDateString('en-US');
     setFieldState((prevState) => ({ ...prevState, ...updatedFields }));
     // onFieldAction({ ...dynamicFieldData, field: { ...dynamicFieldData.field, ...updatedFields } });
+    onFieldAction({ event: undefined, type: editActionType, fieldPosition, inputProps: { ...field, ...updatedFields } });
   };
 
   const datePickerOptions = () => ({

@@ -36,9 +36,9 @@ const EditFieldModal = ({
 
   const onCancel = () => onModalHide();
 
-  const handleSubmit = (formValues) => {
+  const handleSubmit = (formValues, e) => {
     debugger
-    onSave(formValues);
+    onSave(e, formValues);
   };
 
   return (

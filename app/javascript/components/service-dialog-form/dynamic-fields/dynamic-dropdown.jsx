@@ -15,6 +15,7 @@ const DynamicDropdown = ({ dynamicFieldData: { section, field, fieldPosition }, 
   const [inputValues, setInputValues] = useState({});
 
   const inputId = `tab-${tabId}-section-${sectionId}-field-${fieldPosition}-dropdown`;
+  const editActionType = SD_ACTIONS.field.edit;
 
   // const defaultDropdownOptions = [
   //   // { value: 'option-0', description: 'Option 0' },
@@ -37,13 +38,14 @@ const DynamicDropdown = ({ dynamicFieldData: { section, field, fieldPosition }, 
     value: field.value || '',
   });
 
-  const handleFieldUpdate = (updatedFields) => {
+  const handleFieldUpdate = (event, updatedFields) => {
     setFieldState((prevState) => ({ ...prevState, ...updatedFields }));
     // onFieldAction({ ...dynamicFieldData, field: { ...dynamicFieldData.field, ...updatedFields } });
+    onFieldAction({ event, type: editActionType, fieldPosition, inputProps: { ...field, ...updatedFields } });
   };
 
   const fieldActions = (event, inputProps) => {
-    const type = (event === SD_ACTIONS.field.delete) ? SD_ACTIONS.field.delete : SD_ACTIONS.textAreaOnChange;
+    const type = (event === SD_ACTIONS.field.delete) ? SD_ACTIONS.field.delete : editActionType;
 
     setInputValues({
       ...inputValues,
