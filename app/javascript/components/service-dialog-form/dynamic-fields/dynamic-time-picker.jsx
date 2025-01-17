@@ -15,6 +15,7 @@ const DynamicTimePicker = ({ dynamicFieldData: { section, field, fieldPosition }
 
   const [inputValues, setInputValues] = useState({});
   const inputId = `tab-${tabId}-section-${sectionId}-field-${fieldPosition}-date-time-picker`;
+  const editActionType = SD_ACTIONS.field.edit;
 
   // Helper function to get the formatted current date
   const getCurrentDate = () => {
@@ -86,15 +87,16 @@ const DynamicTimePicker = ({ dynamicFieldData: { section, field, fieldPosition }
     period,
   });
 
-  const handleFieldUpdate = (updatedFields) => {
+  const handleFieldUpdate = (event, updatedFields) => {
     debugger
     // date = updatedFields.value[0].toLocaleDateString('en-US');
     setFieldState((prevState) => ({ ...prevState, ...updatedFields }));
     // onFieldAction({ ...dynamicFieldData, field: { ...dynamicFieldData.field, ...updatedFields } });
+    onFieldAction({ event, type: editActionType, fieldPosition, inputProps: { ...field, ...updatedFields } });
   };
 
   const fieldActions = (event, inputProps) => {
-    const type = (event === SD_ACTIONS.field.delete) ? SD_ACTIONS.field.delete : SD_ACTIONS.textAreaOnChange;
+    const type = (event === SD_ACTIONS.field.delete) ? SD_ACTIONS.field.delete : editActionType;
 
     setInputValues({
       ...inputValues,

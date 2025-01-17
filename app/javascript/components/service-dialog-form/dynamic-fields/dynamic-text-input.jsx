@@ -12,6 +12,7 @@ const DynamicTextInput = ({ dynamicFieldData: { section, field, fieldPosition },
   const { tabId, sectionId } = section;
   const [inputValues, setInputValues] = useState({});
   const inputId = `tab-${tabId}-section-${sectionId}-field-${fieldPosition}-text-input`;
+  const editActionType = SD_ACTIONS.field.edit;
 
   const [fieldState, setFieldState] = useState({
     label: field.label || __('Text Box'),
@@ -21,13 +22,14 @@ const DynamicTextInput = ({ dynamicFieldData: { section, field, fieldPosition },
     dynamic: field.dynamic || false,
   });
 
-  const handleFieldUpdate = (updatedFields) => {
+  const handleFieldUpdate = (event, updatedFields) => {
     setFieldState((prevState) => ({ ...prevState, ...updatedFields }));
     // onFieldAction({ ...dynamicFieldData, field: { ...dynamicFieldData.field, ...updatedFields } });
+    onFieldAction({ event, type: editActionType, fieldPosition, inputProps: { ...field, ...updatedFields } });
   };
 
   const fieldActions = (event, inputProps) => {
-    const type = (event === SD_ACTIONS.field.delete) ? SD_ACTIONS.field.delete : SD_ACTIONS.textAreaOnChange;
+    const type = (event === SD_ACTIONS.field.delete) ? SD_ACTIONS.field.delete : editActionType;
 
     setInputValues({
       ...inputValues,
@@ -101,7 +103,7 @@ const DynamicTextInput = ({ dynamicFieldData: { section, field, fieldPosition },
           placeholder={__('Default value')}
           visible={fieldState.visible}
           value={fieldState.value}
-          onChange={(e) => handleFieldUpdate({ value: e.target.value })}
+          onChange={(e) => handleFieldUpdate(e, { value: e.target.value })}
         />
       </div>
       <DynamicFieldActions
