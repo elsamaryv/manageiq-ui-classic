@@ -15,6 +15,7 @@ const DynamicRadioButton = ({ dynamicFieldData: { section, field, fieldPosition 
   const [inputValues, setInputValues] = useState({});
 
   const inputId = `tab-${tabId}-section-${sectionId}-field-${fieldPosition}-radio-button-group`;
+  const editActionType = SD_ACTIONS.field.edit;
 
   const [fieldState, setFieldState] = useState({
     label: field.label || __('Radio Button'),
@@ -25,9 +26,10 @@ const DynamicRadioButton = ({ dynamicFieldData: { section, field, fieldPosition 
     value: field.value || '',
   });
 
-  const handleFieldUpdate = (updatedFields) => {
+  const handleFieldUpdate = (event, updatedFields) => {
     setFieldState((prevState) => ({ ...prevState, ...updatedFields }));
     // onFieldAction({ ...dynamicFieldData, field: { ...dynamicFieldData.field, ...updatedFields } });
+    onFieldAction({ event, type: editActionType, fieldPosition, inputProps: { ...field, ...updatedFields } });
   };
 
   const handleSelectionChange = (selectedItem) => {
@@ -38,7 +40,7 @@ const DynamicRadioButton = ({ dynamicFieldData: { section, field, fieldPosition 
   };
 
   const fieldActions = (event, inputProps) => {
-    const type = (event === SD_ACTIONS.field.delete) ? SD_ACTIONS.field.delete : SD_ACTIONS.textAreaOnChange;
+    const type = (event === SD_ACTIONS.field.delete) ? SD_ACTIONS.field.delete : editActionType;
     // setFieldState((prevState) => ({ ...prevState, ...updatedFields }));
 
     setInputValues({

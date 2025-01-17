@@ -14,6 +14,7 @@ const DynamicCheckbox = ({ dynamicFieldData: { section, field, fieldPosition }, 
   const [inputValues, setInputValues] = useState({});
 
   const inputId = `tab-${tabId}-section-${sectionId}-field-${fieldPosition}-checkbox`;
+  const editActionType = SD_ACTIONS.field.edit;
 
   const [fieldState, setFieldState] = useState({
     label: field.label || __('Check Box'),
@@ -23,13 +24,13 @@ const DynamicCheckbox = ({ dynamicFieldData: { section, field, fieldPosition }, 
     checked: field.checked || false,
   });
 
-  const handleFieldUpdate = (updatedFields) => {
+  const handleFieldUpdate = (event, updatedFields) => {
     setFieldState((prevState) => ({ ...prevState, ...updatedFields }));
-    // onFieldAction({ ...dynamicFieldData, field: { ...dynamicFieldData.field, ...updatedFields } });
+    onFieldAction({ event, type: editActionType, fieldPosition, inputProps: { ...field, ...updatedFields } });
   };
 
   const fieldActions = (event, inputProps) => {
-    const type = (event === SD_ACTIONS.field.delete) ? SD_ACTIONS.field.delete : SD_ACTIONS.textAreaOnChange;
+    const type = (event === SD_ACTIONS.field.delete) ? SD_ACTIONS.field.delete : editActionType;
 
     setInputValues({
       ...inputValues,
@@ -92,7 +93,7 @@ const DynamicCheckbox = ({ dynamicFieldData: { section, field, fieldPosition }, 
           required={fieldState.required}
           visible={fieldState.visible}
           checked={fieldState.checked}
-          onChange={(e) => handleFieldUpdate({ checked: e })}
+          onChange={(e) => handleFieldUpdate(e, { checked: e })}
         />
       </div>
       <DynamicFieldActions
