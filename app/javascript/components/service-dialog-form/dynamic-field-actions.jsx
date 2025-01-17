@@ -60,8 +60,8 @@ const DynamicFieldActions = ({
         onModalApply={onModalApply}
         // initialData={editedFields}
         initialData={fieldProps}
-        onSave={(updatedFields) => {
-          updateFieldProps(updatedFields);
+        onSave={(e, updatedFields) => {
+          updateFieldProps(e, updatedFields);
           setState((state) => ({ ...state, showModal: false }));
         }}
         onDynamicSwitchToggle={onDynamicSwitchToggle}
