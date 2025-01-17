@@ -14,6 +14,7 @@ const DynamicTagControl = ({ dynamicFieldData: { section, field, fieldPosition }
   const [inputValues, setInputValues] = useState({});
 
   const inputId = `tab-${tabId}-section-${sectionId}-field-${fieldPosition}-tag-control`;
+  const editActionType = SD_ACTIONS.field.edit;
 
   const [fieldState, setFieldState] = useState({
     label: field.label || __('Tag Control'),
@@ -46,16 +47,18 @@ const DynamicTagControl = ({ dynamicFieldData: { section, field, fieldPosition }
     }
   }, [fieldState.categories.length]);
 
-  const handleFieldUpdate = (updatedFields) => {
+  const handleFieldUpdate = (event, updatedFields) => {
     setFieldState((prevState) => ({
       ...prevState,
       ...updatedFields, // update other fields
       categories: prevState.categories, // this is required to retain the options in the dropdown
     }));
+
+    onFieldAction({ event, type: editActionType, fieldPosition, inputProps: { ...field, ...updatedFields } });
   };
 
   const fieldActions = (event, inputProps) => {
-    const type = (event === SD_ACTIONS.field.delete) ? SD_ACTIONS.field.delete : SD_ACTIONS.textAreaOnChange;
+    const type = (event === SD_ACTIONS.field.delete) ? SD_ACTIONS.field.delete : editActionType;
 
     setInputValues({
       ...inputValues,
