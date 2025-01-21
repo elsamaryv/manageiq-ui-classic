@@ -26,7 +26,6 @@ const fields = (tab, initialData) => tab.fields.map((item) => {
     case componentTypes.DATE_PICKER:
       return datePickerComponent(item);
     case 'date-time-picker':
-      debugger
       return dateTimePickerComponent(item, initialData);
     default:
       return null;

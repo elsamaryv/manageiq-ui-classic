@@ -15,6 +15,9 @@ const DynamicTextArea = ({ dynamicFieldData: { section, field, fieldPosition }, 
 
   const inputId = `tab-${tabId}-section-${sectionId}-field-${fieldPosition}-text-area`;
   const editActionType = SD_ACTIONS.field.edit;
+  const refreshEnabledFields = section.fields
+    .filter((field) => field.showRefresh)
+    .map((field) => ({ value: field.label, label: field.label }));
 
   const [fieldState, setFieldState] = useState({
     label: field.label || __('Text Area'),
@@ -23,6 +26,7 @@ const DynamicTextArea = ({ dynamicFieldData: { section, field, fieldPosition }, 
     name: field.name || inputId,
     visible: field.visible || true,
     value: field.value || '',
+    fieldsToRefresh: refreshEnabledFields,
   });
 
   const handleFieldUpdate = (event, updatedFields) => {

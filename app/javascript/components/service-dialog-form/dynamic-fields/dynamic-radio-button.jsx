@@ -16,6 +16,9 @@ const DynamicRadioButton = ({ dynamicFieldData: { section, field, fieldPosition 
 
   const inputId = `tab-${tabId}-section-${sectionId}-field-${fieldPosition}-radio-button-group`;
   const editActionType = SD_ACTIONS.field.edit;
+  const refreshEnabledFields = section.fields
+    .filter((field) => field.showRefresh)
+    .map((field) => ({ value: field.label, label: field.label }));
 
   const [fieldState, setFieldState] = useState({
     label: field.label || __('Radio Button'),
@@ -24,6 +27,7 @@ const DynamicRadioButton = ({ dynamicFieldData: { section, field, fieldPosition 
     visible: field.visible || true,
     items: field.items || defaultRadioButtonOptions,
     value: field.value || '',
+    fieldsToRefresh: refreshEnabledFields,
   });
 
   const handleFieldUpdate = (event, updatedFields) => {
