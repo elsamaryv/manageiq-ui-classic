@@ -88,7 +88,6 @@ const DynamicTimePicker = ({ dynamicFieldData: { section, field, fieldPosition }
   });
 
   const handleFieldUpdate = (event, updatedFields) => {
-    debugger
     // date = updatedFields.value[0].toLocaleDateString('en-US');
     setFieldState((prevState) => ({ ...prevState, ...updatedFields }));
     // onFieldAction({ ...dynamicFieldData, field: { ...dynamicFieldData.field, ...updatedFields } });

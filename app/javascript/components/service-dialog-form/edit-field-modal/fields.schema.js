@@ -145,6 +145,8 @@ const selectOptions = (field, initialData) => {
       return initialData.categories;
     case 'subCategories':
       return initialData.subCategories;
+    case 'fieldsToRefresh':
+      return initialData.fieldsToRefresh;
     default:
       return assignProfiles;
   }
