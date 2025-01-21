@@ -14,12 +14,17 @@ const DynamicTextInput = ({ dynamicFieldData: { section, field, fieldPosition },
   const inputId = `tab-${tabId}-section-${sectionId}-field-${fieldPosition}-text-input`;
   const editActionType = SD_ACTIONS.field.edit;
 
+  const refreshEnabledFields = section.fields
+    .filter((field) => field.showRefresh)
+    .map((field) => ({ value: field.label, label: field.label }));
+
   const [fieldState, setFieldState] = useState({
     label: field.label || __('Text Box'),
     name: field.name || inputId,
     visible: field.visible || true,
     value: field.value || '',
     dynamic: field.dynamic || false,
+    fieldsToRefresh: refreshEnabledFields,
   });
 
   const handleFieldUpdate = (event, updatedFields) => {
