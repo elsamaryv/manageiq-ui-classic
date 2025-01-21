@@ -9,7 +9,6 @@ import {
 } from 'carbon-components-react';
 
 const CustomDateTimePicker = (field) => {
-  debugger
   const { initialData } = field;
   
   return (
