@@ -5,7 +5,7 @@ import {
 } from 'carbon-components-react';
 import { AddAlt16 } from '@carbon/icons-react';
 import {
-  dynamicComponents, defaultTabContents, defaultSectionContents, createNewTab, dragItems,
+  dynamicComponents, defaultTabContents, defaultSectionContents, createNewTab, dragItems, saveServiceDialog
 } from './data';
 import TabOptionsMenu from './tab-options-menu';
 import DynamicComponentChooser from './dynamic-component-chooser';
@@ -14,6 +14,7 @@ import DynamicSection from './dynamic-section';
 import {
   selectedTab, SD_ACTIONS, dropField, dropSection, dropComponent,
 } from './helper';
+import ServiceDialogWrapper from './service-dialog-wrapper';
 
 const ServiceDialogForm = () => {
   let dragEnterItem = useRef(); /** Stores the information of component where the dragged item is being hovered before release. */
@@ -182,6 +183,10 @@ const ServiceDialogForm = () => {
     setData({
       ...data,
     });
+
+    debugger
+
+    saveServiceDialog(data);
   };
 
   /** Function to handle the call back actions from section. */
@@ -291,14 +296,17 @@ const ServiceDialogForm = () => {
   );
 
   return (
-    <div className="drag-and-drop-wrapper">
-      <DynamicComponentChooser
-        list={data.list}
-        onDragStartComponent={(event, type) => onDragStartComponent(event, type)}
-      />
-      {
-        renderTabContents()
-      }
+    <div className="service-dialog-main-wrapper">
+      <ServiceDialogWrapper />
+      <div className="drag-and-drop-wrapper">
+        <DynamicComponentChooser
+          list={data.list}
+          onDragStartComponent={(event, type) => onDragStartComponent(event, type)}
+        />
+        {
+          renderTabContents()
+        }
+      </div>
     </div>
   );
 };
