@@ -2,6 +2,7 @@ import React from 'react';
 import {
   CheckboxChecked32, RadioButtonChecked32, Time32, StringText32, TextSmallCaps32, CaretDown32, Tag32, Calendar32,
 } from '@carbon/icons-react';
+import { formattedCatalogPayload } from './helper';
 
 export const dragItems = {
   COMPONENT: 'component',
@@ -64,4 +65,30 @@ export const tagControlCategories = async() => {
     console.error('Error fetching categories:', error);
     return [];
   }
+};
+
+// export const saveServiceDialog = () => {
+//   return API.post('/api/service_dialogs', {
+//     action: action,
+//     resource: data,
+//   }, {
+//     skipErrors: [400],
+//   });
+// };
+
+// data has formfields and list (as of now); no dialog related general info - this is needed
+export const saveServiceDialog = (data) => {
+  debugger
+  const payload = formattedCatalogPayload(data);
+
+  // const { result } = API.post('/api/service_dialogs', sample_create_payload(), {
+  //   skipErrors: [400],
+  // });
+
+  const { result } = API.post('/api/service_dialogs', payload, {
+    skipErrors: [400],
+  });
+
+  debugger
+  return result;
 };
