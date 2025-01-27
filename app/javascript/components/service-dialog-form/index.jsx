@@ -315,7 +315,6 @@ const ServiceDialogForm = () => {
   return (
     <form onSubmit={handleSubmit}>
       <div className="service-dialog-main-wrapper">
-        {/* <ServiceDialogWrapper /> */}
         <div className="service-dialog-info">
           <h2>{__('General')}</h2>
           <TextInput
