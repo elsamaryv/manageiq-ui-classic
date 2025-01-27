@@ -226,19 +226,6 @@ const ServiceDialogForm = () => {
         return deleteField(actionData);
       case SD_ACTIONS.field.edit:
         return handlePropertiesEdit(actionData);
-      // case SD_ACTIONS.textInputOnChange:
-      //   return console.log('textInputOnChange');
-      //   return handlePropertiesEdit(actionData);
-      // case SD_ACTIONS.textAreaOnChange:
-      //   return handlePropertiesEdit(actionData);
-      // case SD_ACTIONS.checkboxOnChange:
-      //   return console.log('checkboxOnChange');
-      // case SD_ACTIONS.radioButtonOnChange:
-      //   return console.log('radioButtonOnChange');
-      // case SD_ACTIONS.datePickerOnChange:
-      //   return console.log('datePickerOnChange');
-      // case SD_ACTIONS.dropdownOnChange:
-      //   return console.log('dropdownOnChange');
       default:
         return undefined;
     }
