@@ -7,7 +7,8 @@ export const createSchema = () => ({
       name: 'dialog_name',
       label: 'Dialog\'s name',
       className: 'dialog-name',
-      validate: [{ type: 'required' }],
+      // validate: [{ type: 'required' }],
+      validate: [{ type: 'customValidatorForNameField' }],
     },
     {
       component: componentTypes.TEXTAREA,

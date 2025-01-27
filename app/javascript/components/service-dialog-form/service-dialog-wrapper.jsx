@@ -4,14 +4,17 @@ import { createSchema } from './dialog-wrapper.schema';
 
 /** Component to wrap the service dialog form */
 const ServiceDialogWrapper = () => {
-  const onCancel = (formValues, e) => {
-    console.log(formValues);
-    console.log(e);
-  };
+  const customValidatorMapper = {
+    customValidatorForNameField: () => (value) => {
+      if (!value) {
+        return __('Required');
+      }
+      if (!value.match('^[a-zA-Z0-9_.-]*$')) {
+        return __('Name may contain only alphanumeric and _ . - characters');
+      }
 
-  const onSubmit = (formValues, e) => {
-    console.log(formValues);
-    console.log(e);
+      return false;
+    },
   };
 
   return (
@@ -20,11 +23,12 @@ const ServiceDialogWrapper = () => {
       <div>
         <MiqFormRenderer
           schema={createSchema()}
-          onSubmit={onSubmit}
-          onCancel={onCancel}
+          validatorMapper={customValidatorMapper}
+          showFormControls={false}
         />
       </div>
     </div>
   );
 };
+
 export default ServiceDialogWrapper;
