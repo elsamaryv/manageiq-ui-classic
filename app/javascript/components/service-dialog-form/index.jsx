@@ -302,8 +302,9 @@ const ServiceDialogForm = () => {
   return (
     <form onSubmit={handleSubmit}>
       <div className="service-dialog-main-wrapper">
+        <h2>{__('General')}</h2>
+        {/* Dialog General Info */}
         <div className="service-dialog-info">
-          <h2>{__('General')}</h2>
           <TextInput
             id="dialogName"
             className="dialog-name"
@@ -326,6 +327,7 @@ const ServiceDialogForm = () => {
             })}
           />
         </div>
+        {/* Component chooser and Drag and Drop section */}
         <div className="drag-and-drop-wrapper">
           <DynamicComponentChooser
             list={data.list}
@@ -335,6 +337,7 @@ const ServiceDialogForm = () => {
             renderTabContents()
           }
         </div>
+        {/* Form submit/cancel buttons */}
         <div className="custom-button-wrapper">
           <Button
             disabled={!isSubmitButtonEnabled}
