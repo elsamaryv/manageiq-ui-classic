@@ -32,12 +32,6 @@ export const SD_ACTIONS = {
   onDragEnterField: 'onDragEnterField',
   onDragStartField: 'onDragStartField',
   onDragStartSection: 'onDragStartSection',
-  // textInputOnChange: 'textInputOnChange',
-  // textAreaOnChange: 'textAreaOnChange',
-  // checkboxOnChange: 'checkboxOnChange',
-  // radioButtonOnChange: 'radioButtonOnChange',
-  // datePickerOnChange: 'datePickerOnChange',
-  // dropdownOnChange: 'dropdownOnChange',
 };
 
 /** Function to drop a field after its been dragged within a section */
