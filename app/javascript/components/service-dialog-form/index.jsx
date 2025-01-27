@@ -1,7 +1,7 @@
 /* eslint-disable radix */
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
-  Tabs, Tab, Button,
+  Tabs, Tab, Button, TextInput, TextArea,
 } from 'carbon-components-react';
 import { AddAlt16 } from '@carbon/icons-react';
 import {
@@ -14,17 +14,33 @@ import DynamicSection from './dynamic-section';
 import {
   selectedTab, SD_ACTIONS, dropField, dropSection, dropComponent,
 } from './helper';
-import ServiceDialogWrapper from './service-dialog-wrapper';
 
 const ServiceDialogForm = () => {
   let dragEnterItem = useRef(); /** Stores the information of component where the dragged item is being hovered before release. */
   let draggedItem = useRef(); /** Stores the information of component being dragged. */
-  let hoverItem = useRef(); /** Stores the tab and section position during the drop event. */
+  let hoverItem = useRef(); /** Stores the tab and section position during the drop event. */  
 
   const [data, setData] = useState({
     list: dynamicComponents,
     formFields: [defaultTabContents(0), createNewTab()],
   });
+
+  const [isSubmitButtonEnabled, setIsSubmitButtonEnabled] = useState(false);
+
+  const evaluateSubmitButton = () => {
+    // checks if any of the sections in any tabs has fields added
+    const hasFields = data.formFields.some((tab) =>
+      tab.sections.some((section) => section.fields.length > 0));
+
+    // checks if dialog label is present
+    const hasDialogLabel = (Object.prototype.hasOwnProperty.call(data, 'label') && data.label.trim() !== '');
+
+    setIsSubmitButtonEnabled(hasDialogLabel && hasFields);
+  };
+
+  useEffect(() => {
+    evaluateSubmitButton();
+  }, [data]);
 
   const onDragEnterSection = ({ section }) => {
     if (draggedItem.type === dragItems.SECTION) {
@@ -183,10 +199,6 @@ const ServiceDialogForm = () => {
     setData({
       ...data,
     });
-
-    debugger
-
-    saveServiceDialog(data);
   };
 
   /** Function to handle the call back actions from section. */
@@ -295,19 +307,64 @@ const ServiceDialogForm = () => {
     </div>
   );
 
+  const handleSubmit = () => {
+    debugger
+    saveServiceDialog(data);
+  };
+
   return (
-    <div className="service-dialog-main-wrapper">
-      <ServiceDialogWrapper />
-      <div className="drag-and-drop-wrapper">
-        <DynamicComponentChooser
-          list={data.list}
-          onDragStartComponent={(event, type) => onDragStartComponent(event, type)}
-        />
-        {
-          renderTabContents()
-        }
+    <form onSubmit={handleSubmit}>
+      <div className="service-dialog-main-wrapper">
+        {/* <ServiceDialogWrapper /> */}
+        <div className="service-dialog-info">
+          <h2>{__('General')}</h2>
+          <TextInput
+            id="dialogName"
+            className="dialog-name"
+            labelText={__('Dialog\'s name')}
+            value={data.label}
+            title={__('Search by Name within results')}
+            onChange={(event) => setData({
+              ...data,
+              label: event.target.value,
+            })}
+          />
+          <TextArea
+            id="dialogDescription"
+            className="dialog-description"
+            labelText={__('Dialog\'s description')}
+            value={data.description}
+            onChange={(event) => setData({
+              ...data,
+              description: event.target.value,
+            })}
+          />
+        </div>
+        <div className="drag-and-drop-wrapper">
+          <DynamicComponentChooser
+            list={data.list}
+            onDragStartComponent={(event, type) => onDragStartComponent(event, type)}
+          />
+          {
+            renderTabContents()
+          }
+        </div>
+        <div className="custom-button-wrapper">
+          <Button
+            disabled={!isSubmitButtonEnabled}
+            kind="primary"
+            className="btnRight"
+            type="submit"
+            variant="contained"
+          >
+            { __('Submit')}
+          </Button>
+          <Button variant="contained" type="button" onClick={console.log('this is on cancel')} kind="secondary">
+            { __('Cancel')}
+          </Button>
+        </div>
       </div>
-    </div>
+    </form>
   );
 };
 
