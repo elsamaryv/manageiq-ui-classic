@@ -19,6 +19,9 @@ const DynamicTextInput = ({ dynamicFieldData: { section, field, fieldPosition },
     .map((field) => ({ value: field.label, label: field.label }));
 
   const [fieldState, setFieldState] = useState({
+    type: 'DialogFieldTextBox',
+    // resourceType: 'DialogField',
+    position: fieldPosition,
     label: field.label || __('Text Box'),
     name: field.name || inputId,
     visible: field.visible || true,
@@ -29,8 +32,7 @@ const DynamicTextInput = ({ dynamicFieldData: { section, field, fieldPosition },
 
   const handleFieldUpdate = (event, updatedFields) => {
     setFieldState((prevState) => ({ ...prevState, ...updatedFields }));
-    // onFieldAction({ ...dynamicFieldData, field: { ...dynamicFieldData.field, ...updatedFields } });
-    onFieldAction({ event, type: editActionType, fieldPosition, inputProps: { ...field, ...updatedFields } });
+    onFieldAction({ event, type: editActionType, fieldPosition, inputProps: { ...fieldState, ...updatedFields } });
   };
 
   const fieldActions = (event, inputProps) => {
