@@ -127,147 +127,147 @@ export const SD_PROP_SHAPES = {
   tagControl: tagControlShape,
 };
 
-// const sampleCreatePayload = () => (
+const sampleCreatePayload = () => (
 
-//   {
-//     "action": "create",
-//     "resource": {
-//       "label": "A11",
-//       "buttons": "submit,cancel",
-//       "dialog_tabs": [
-//         {
-//           "label": "New tab",
-//           "position": 0,
-//           "dialog_groups": [
-//             {
-//               "label": "New section",
-//               "position": 0,
-//               "dialog_fields": [
-//                 {
-//                   "name": "text_box_1_1",
-//                   "description": "",
-//                   "type": "DialogFieldTextBox",
-//                   "display": "edit",
-//                   "display_method_options": {},
-//                   "read_only": false,
-//                   "required": false,
-//                   "required_method_options": {},
-//                   "default_value": "v1",
-//                   "values_method_options": {},
-//                   "label": "Text Box",
-//                   "position": 0,
-//                   "dynamic": false,
-//                   "show_refresh_button": false,
-//                   "load_values_on_init": true,
-//                   "auto_refresh": false,
-//                   "trigger_auto_refresh": false,
-//                   "reconfigurable": false,
-//                   "visible": true,
-//                   "options": {
-//                     "protected": false
-//                   },
-//                   "resource_action": {
-//                     "resource_type": "DialogField",
-//                     "ae_attributes": {}
-//                   },
-//                   "validator_type": false
-//                 },
-//                 {
-//                   "name": "dropdown_list_1",
-//                   "description": "",
-//                   "type": "DialogFieldDropDownList",
-//                   "display": "edit",
-//                   "display_method_options": {},
-//                   "read_only": false,
-//                   "required": false,
-//                   "required_method_options": {},
-//                   "default_value": "3",
-//                   "values_method_options": {},
-//                   "label": "Dropdown",
-//                   "position": 1,
-//                   "dynamic": false,
-//                   "show_refresh_button": false,
-//                   "load_values_on_init": true,
-//                   "auto_refresh": false,
-//                   "trigger_auto_refresh": false,
-//                   "reconfigurable": false,
-//                   "visible": true,
-//                   "options": {
-//                     "sort_by": "description",
-//                     "sort_order": "ascending",
-//                     "force_multi_value": false
-//                   },
-//                   "resource_action": {
-//                     "resource_type": "DialogField",
-//                     "ae_attributes": {}
-//                   },
-//                   "data_type": "string",
-//                   "values": [
-//                     [
-//                       "1",
-//                       "One"
-//                     ],
-//                     [
-//                       "2",
-//                       "Two"
-//                     ],
-//                     [
-//                       "3",
-//                       "Three"
-//                     ]
-//                   ]
-//                 },
-//                 {
-//                   "name": "radio_button_1",
-//                   "description": "",
-//                   "type": "DialogFieldRadioButton",
-//                   "display": "edit",
-//                   "display_method_options": {},
-//                   "read_only": false,
-//                   "required": false,
-//                   "required_method_options": {},
-//                   "default_value": "3",
-//                   "values_method_options": {},
-//                   "label": "Radio Button",
-//                   "position": 2,
-//                   "dynamic": false,
-//                   "show_refresh_button": false,
-//                   "load_values_on_init": true,
-//                   "auto_refresh": false,
-//                   "trigger_auto_refresh": false,
-//                   "reconfigurable": false,
-//                   "visible": true,
-//                   "options": {
-//                     "sort_by": "description",
-//                     "sort_order": "ascending"
-//                   },
-//                   "resource_action": {
-//                     "resource_type": "DialogField",
-//                     "ae_attributes": {}
-//                   },
-//                   "data_type": "string",
-//                   "values": [
-//                     [
-//                       "1",
-//                       "One"
-//                     ],
-//                     [
-//                       "2",
-//                       "Two"
-//                     ],
-//                     [
-//                       "3",
-//                       "Three",
-//                     ]
-//                   ]
-//                 }
-//               ]
-//             }
-//           ]
-//         }
-//       ]
-//     }
-// });
+  {
+    "action": "create",
+    "resource": {
+      "label": "11_A1234",
+      "buttons": "submit,cancel",
+      "dialog_tabs": [
+        {
+          "label": "New tab",
+          "position": 0,
+          "dialog_groups": [
+            {
+              "label": "New section",
+              "position": 0,
+              "dialog_fields": [
+                {
+                  "name": "text_box_1_1",
+                  "description": "",
+                  "type": "DialogFieldTextBox",
+                  "display": "edit",
+                  "display_method_options": {},
+                  "read_only": false,
+                  "required": false,
+                  "required_method_options": {},
+                  "default_value": "v1",
+                  "values_method_options": {},
+                  "label": "Text Box",
+                  "position": 0,
+                  "dynamic": false,
+                  "show_refresh_button": false,
+                  "load_values_on_init": true,
+                  "auto_refresh": false,
+                  "trigger_auto_refresh": false,
+                  "reconfigurable": false,
+                  "visible": true,
+                  "options": {
+                    "protected": false
+                  },
+                  "resource_action": {
+                    "resource_type": "DialogField",
+                    "ae_attributes": {}
+                  },
+                  "validator_type": false
+                },
+                {
+                  "name": "dropdown_list_1",
+                  "description": "",
+                  "type": "DialogFieldDropDownList",
+                  "display": "edit",
+                  "display_method_options": {},
+                  "read_only": false,
+                  "required": false,
+                  "required_method_options": {},
+                  "default_value": "3",
+                  "values_method_options": {},
+                  "label": "Dropdown",
+                  "position": 1,
+                  "dynamic": false,
+                  "show_refresh_button": false,
+                  "load_values_on_init": true,
+                  "auto_refresh": false,
+                  "trigger_auto_refresh": false,
+                  "reconfigurable": false,
+                  "visible": true,
+                  "options": {
+                    "sort_by": "description",
+                    "sort_order": "ascending",
+                    "force_multi_value": false
+                  },
+                  "resource_action": {
+                    "resource_type": "DialogField",
+                    "ae_attributes": {}
+                  },
+                  "data_type": "string",
+                  "values": [
+                    [
+                      "1",
+                      "One"
+                    ],
+                    [
+                      "2",
+                      "Two"
+                    ],
+                    [
+                      "3",
+                      "Three"
+                    ]
+                  ]
+                },
+                {
+                  "name": "radio_button_1",
+                  "description": "",
+                  "type": "DialogFieldRadioButton",
+                  "display": "edit",
+                  "display_method_options": {},
+                  "read_only": false,
+                  "required": false,
+                  "required_method_options": {},
+                  "default_value": "3",
+                  "values_method_options": {},
+                  "label": "Radio Button",
+                  "position": 2,
+                  "dynamic": false,
+                  "show_refresh_button": false,
+                  "load_values_on_init": true,
+                  "auto_refresh": false,
+                  "trigger_auto_refresh": false,
+                  "reconfigurable": false,
+                  "visible": true,
+                  "options": {
+                    "sort_by": "description",
+                    "sort_order": "ascending"
+                  },
+                  "resource_action": {
+                    "resource_type": "DialogField",
+                    "ae_attributes": {}
+                  },
+                  "data_type": "string",
+                  "values": [
+                    [
+                      "1",
+                      "One"
+                    ],
+                    [
+                      "2",
+                      "Two"
+                    ],
+                    [
+                      "3",
+                      "Three",
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+});
 
 // get details on the different fields in the catalog form
 // to do: loops over each of the fields in the section first ----
@@ -277,12 +277,96 @@ export const SD_PROP_SHAPES = {
 //   }));
 // };
 
-const getFieldsInfo = (fields) =>
-  fields.map(({ componentId: _componentId, ...rest }) => rest);
+const getOptions = (field) => {
+  const obj = {
+    protected: field.protected,
+    sort_by: field.sortBy,
+    sort_order: field.sortOrder,
+    // category_id:
+    // category_name:
+    // category_description:
+    force_single_value: field.singleValue,
+    force_multi_value: field.multiselect,
+    show_past_dates: field.showPastDates,
+  };
+
+  // Filter out keys with falsy values (empty strings, null, undefined, etc.)
+  const result = Object.fromEntries(
+    Object.entries(obj).filter(([_, value]) => value)
+  );
+
+  return result;
+};
+
+const getResourceAction = () => ({
+  // resource_type: field.resourceType,
+  resource_type: 'DialogField',
+  ae_attributes: {},
+});
+
+const parseFieldsInfo = (fields) => {
+  const result = fields.map((field) => {
+    const obj = {
+      name: field.name,
+      description: '',
+      type: field.type,
+      data_type: field.dataType,
+      notes: '',
+      notes_display: '',
+      // display: 'edit',
+      display_method: '',
+      display_method_options: {},
+      required: field.required || false,
+      required_method: '',
+      required_method_options: {},
+      default_value: field.value,
+      values: '',
+      values_method: '',
+      values_method_options: {},
+      options: getOptions(field),
+      label: field.label,
+      dialog_group_id: '',
+      position: field.position,
+      reconfigurable: field.reconfigurable || false,
+      dynamic: field.dynamic || false,
+      show_refresh_button: field.showRefresh || false,
+      load_values_on_init: field.loadOnInit || false,
+      read_only: field.readOnly || false,
+      auto_refresh: false,
+      trigger_auto_refresh: false,
+      visible: field.visible || false,
+      validator_type: field.validation || false,
+      validator_rule: field.validatorRule,
+      validator_message: field.validatorMessage,
+      // resource_action: getResourceAction(),
+      resource_action: {
+        resource_type: 'DialogField',
+        ae_attributes: {},
+      },
+    };
+
+    return Object.fromEntries(
+      Object.entries(obj).filter(([_, value]) => (value !== undefined && value !== ''))
+    );
+  });
+  return result;
+};
+
+
+
+const getFieldsInfo = (fields) => {
+  const formattedFields = parseFieldsInfo(fields);
+  debugger
+  // formattedFields.map(({ componentId: _componentId, ...rest }) => rest);
+  return formattedFields;
+};
+  
+
+// const getFieldsInfo = (fields) =>
+//   fields.map(({ componentId: _componentId, ...rest }) => rest);
 
 // get details on Sections
 const getSectionsInfo = (sections) => {
-  // debugger
   console.log('Sections::: ', sections);
   return sections.map((section) => ({
     label: section.title,
@@ -295,38 +379,60 @@ const getSectionsInfo = (sections) => {
 };
 
 // get details on tabs
+// const getTabsInfo = (tabs) => {
+//   console.log("Tabs::: ", tabs);
+//   return tabs.map((tab) => ({
+//     label: tab.name,
+//     position: tab.tabId,
+//     dialog_groups: getSectionsInfo(tab.sections),
+//   }));
+// };
+
+// const getTabsInfo = (tabs) => {
+//   console.log("Tabs::: ", tabs);
+//   return tabs.filter((tab) => tab.sections.filter((section) => section.dialog_groups.length > 0).length > 0).map((tab) => ({
+//     label: tab.name,
+//     position: tab.tabId,
+//     dialog_groups: getSectionsInfo(tab.sections),
+//   }));
+// };
+
 const getTabsInfo = (tabs) => {
   console.log("Tabs::: ", tabs);
-  return tabs.map((tab) => ({
-    label: tab.name,
-    position: tab.tabId,
-    dialog_groups: getSectionsInfo(tab.sections),
-  }));
+  return tabs
+    .map((tab) => ({
+      label: tab.name,
+      position: tab.tabId,
+      dialog_groups: getSectionsInfo(tab.sections),
+    }))
+    .filter((tabInfo) => tabInfo.dialog_groups.length > 0); // Filter out objects with empty dialog_groups
 };
 
 // get details on the dialog
+// const getDialogInfo = (data) => ({
+//   label: data.dialog && data.dialog.label,
+//   buttons: 'submit,cancel',
+//   dialog_tabs: getTabsInfo(data.formFields),
+// });
+
 const getDialogInfo = (data) => {
   // debugger
   return ({
-    label: data.dialog && data.dialog.label,
+    label: data.label,
+    description: data.description,
     buttons: 'submit,cancel',
     dialog_tabs: getTabsInfo(data.formFields),
   });
 };
 
 // get payload for create
-const payloadForCreate = (data) => {
-  // debugger
-
-  return ({
-    action: 'create',
-    resource: getDialogInfo(data),
-  });
-};
+const payloadForSave = (data) => ({
+  action: 'create',
+  resource: getDialogInfo(data),
+});
 
 export const formattedCatalogPayload = (data) => {
-  // return sampleCreatePayload();
-  const payload = payloadForCreate(data);
-  debugger
+  // const payload = sampleCreatePayload(data);
+  const payload = payloadForSave(data);
   return payload;
 };
