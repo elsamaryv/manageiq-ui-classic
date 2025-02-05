@@ -29,7 +29,7 @@ export const dynamicFields = {
   singleValue: { label: __('Single value'), name: 'singleValue', field: componentTypes.SWITCH },
   subCategories: { label: __('Entries'), name: 'subCategories', field: componentTypes.SELECT },
   visible: { label: __('Visible'), name: 'visible', field: componentTypes.SWITCH },
-  valueType: { label: __('Value type'), name: 'valueType', field: componentTypes.SELECT },
+  valueType: { label: __('Value type'), name: 'dataType', field: componentTypes.SELECT },
   validation: { label: __('Validation'), name: 'validation', field: componentTypes.SWITCH },
   validatorRule: {
     condition: { when: 'validation', is: true },

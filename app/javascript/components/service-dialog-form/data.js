@@ -67,28 +67,15 @@ export const tagControlCategories = async() => {
   }
 };
 
-// export const saveServiceDialog = () => {
-//   return API.post('/api/service_dialogs', {
-//     action: action,
-//     resource: data,
-//   }, {
-//     skipErrors: [400],
-//   });
-// };
-
 // data has formfields and list (as of now); no dialog related general info - this is needed
 export const saveServiceDialog = (data) => {
-  debugger
   const payload = formattedCatalogPayload(data);
+  // const payload = sample_create_payload();
 
-  // const { result } = API.post('/api/service_dialogs', sample_create_payload(), {
-  //   skipErrors: [400],
-  // });
-
+  debugger
   const { result } = API.post('/api/service_dialogs', payload, {
     skipErrors: [400],
   });
-
   debugger
   return result;
 };

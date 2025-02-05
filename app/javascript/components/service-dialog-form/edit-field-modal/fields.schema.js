@@ -133,7 +133,7 @@ export const defaultDropdownOptions = [
 
 const selectOptions = (field, initialData) => {
   switch (field.name) {
-    case 'valueType':
+    case 'dataType':
       return valueTypes;
     case 'sortOrder':
       return sortOrder;
