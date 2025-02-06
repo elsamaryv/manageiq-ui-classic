@@ -299,7 +299,6 @@ const getOptions = (field) => {
 };
 
 const getResourceAction = () => ({
-  // resource_type: field.resourceType,
   resource_type: 'DialogField',
   ae_attributes: {},
 });
@@ -338,11 +337,7 @@ const parseFieldsInfo = (fields) => {
       validator_type: field.validation || false,
       validator_rule: field.validatorRule,
       validator_message: field.validatorMessage,
-      // resource_action: getResourceAction(),
-      resource_action: {
-        resource_type: 'DialogField',
-        ae_attributes: {},
-      },
+      resource_action: getResourceAction(),
     };
 
     return Object.fromEntries(
