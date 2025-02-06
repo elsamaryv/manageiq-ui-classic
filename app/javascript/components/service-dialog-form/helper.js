@@ -319,7 +319,7 @@ const parseFieldsInfo = (fields) => {
       required: field.required || false,
       required_method: '',
       required_method_options: {},
-      default_value: field.value,
+      default_value: field.value || field.checked,
       values: '',
       values_method: '',
       values_method_options: {},
