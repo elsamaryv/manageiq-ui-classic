@@ -292,7 +292,7 @@ const getOptions = (field) => {
 
   // Filter out keys with falsy values (empty strings, null, undefined, etc.)
   const result = Object.fromEntries(
-    Object.entries(obj).filter(([_, value]) => value)
+    Object.entries(obj).filter(([_, value]) => (value !== undefined && value !== ''))
   );
 
   return result;
@@ -302,6 +302,8 @@ const getResourceAction = () => ({
   resource_type: 'DialogField',
   ae_attributes: {},
 });
+
+const getValues = (field) => (field.items.map((item) => [item.value, item.text]));
 
 const parseFieldsInfo = (fields) => {
   const result = fields.map((field) => {
@@ -319,7 +321,7 @@ const parseFieldsInfo = (fields) => {
       required_method: '',
       required_method_options: {},
       default_value: field.value || field.checked,
-      values: '',
+      values: getValues(field),
       values_method: '',
       values_method_options: {},
       options: getOptions(field),
