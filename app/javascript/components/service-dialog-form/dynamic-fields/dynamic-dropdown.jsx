@@ -28,20 +28,29 @@ const DynamicDropdown = ({ dynamicFieldData: { section, field, fieldPosition }, 
   //   { description: 'E', value: '5' },
   // ];
 
+  const refreshEnabledFields = section.fields
+    .filter((field) => field.showRefresh)
+    .map((field) => ({ value: field.label, label: field.label }));
+
   const [fieldState, setFieldState] = useState({
+    type: 'DialogFieldDropDownList',
+    position: fieldPosition,
     label: field.label || __('Selection Dropdown'),
     required: field.required || false,
     name: field.name || inputId,
     visible: field.visible || true,
     items: field.entries || defaultDropdownOptions,
     multiselect: field.multiselect || false,
-    value: field.value || '',
+    value: field.value || [],
+    fieldsToRefresh: refreshEnabledFields,
+    sortBy: field.sortBy || 'description',
+    sortOrder: field.sortOrder || 'ascending',
   });
 
   const handleFieldUpdate = (event, updatedFields) => {
     setFieldState((prevState) => ({ ...prevState, ...updatedFields }));
     // onFieldAction({ ...dynamicFieldData, field: { ...dynamicFieldData.field, ...updatedFields } });
-    onFieldAction({ event, type: editActionType, fieldPosition, inputProps: { ...field, ...updatedFields } });
+    onFieldAction({ event, type: editActionType, fieldPosition, inputProps: { ...fieldState, ...updatedFields } });
   };
 
   const fieldActions = (event, inputProps) => {
@@ -115,8 +124,7 @@ const DynamicDropdown = ({ dynamicFieldData: { section, field, fieldPosition }, 
   };
 
   const sortedItems = () => {
-    const sortBy = fieldState.sortBy || 'description';
-    const sortOrder = fieldState.sortOrder || 'ascending';
+    const { sortBy, sortOrder } = fieldState;
     const sortedArray = [...fieldState.items].sort((a, b) => {
       const valueA = a[sortBy] ? a[sortBy].toString() : '';
       const valueB = b[sortBy] ? b[sortBy].toString() : '';
@@ -129,9 +137,10 @@ const DynamicDropdown = ({ dynamicFieldData: { section, field, fieldPosition }, 
   };
 
   const handleSelectionChange = ({ selectedItems }) => {
+    const items = selectedItems.map((item) => item.value);
     setFieldState((prevState) => ({
       ...prevState,
-      value: selectedItems,
+      value: items,
     }));
   };
 
