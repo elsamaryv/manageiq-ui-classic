@@ -16,17 +16,24 @@ const DynamicCheckbox = ({ dynamicFieldData: { section, field, fieldPosition }, 
   const inputId = `tab-${tabId}-section-${sectionId}-field-${fieldPosition}-checkbox`;
   const editActionType = SD_ACTIONS.field.edit;
 
+  const refreshEnabledFields = section.fields
+    .filter((field) => field.showRefresh)
+    .map((field) => ({ value: field.label, label: field.label }));
+
   const [fieldState, setFieldState] = useState({
+    type: 'DialogFieldCheckBox',
+    position: fieldPosition,
     label: field.label || __('Check Box'),
     required: field.required || false,
     name: field.name || inputId,
     visible: field.visible || true,
     checked: field.checked || false,
+    fieldsToRefresh: refreshEnabledFields,
   });
 
   const handleFieldUpdate = (event, updatedFields) => {
     setFieldState((prevState) => ({ ...prevState, ...updatedFields }));
-    onFieldAction({ event, type: editActionType, fieldPosition, inputProps: { ...field, ...updatedFields } });
+    onFieldAction({ event, type: editActionType, fieldPosition, inputProps: { ...fieldState, ...updatedFields } });
   };
 
   const fieldActions = (event, inputProps) => {
