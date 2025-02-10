@@ -15,11 +15,17 @@ const DynamicDatePicker = ({ dynamicFieldData: { section, field, fieldPosition }
   const inputId = `tab-${tabId}-section-${sectionId}-field-${fieldPosition}-date-picker`;
   const editActionType = SD_ACTIONS.field.edit;
 
+  const refreshEnabledFields = section.fields
+    .filter((field) => field.showRefresh)
+    .map((field) => ({ value: field.label, label: field.label }));
+
   const [fieldState, setFieldState] = useState({
+    type: 'DialogFieldDateControl',
     label: field.label || __('Datepicker'),
     name: field.name || inputId,
     visible: field.visible || true,
-    value: field.defaultDatePickerValue || '',
+    value: field.value || '',
+    fieldsToRefresh: refreshEnabledFields,
   });
 
   // To reset tabs in Edit Modal based on 'dynamic' switch
@@ -60,11 +66,13 @@ const DynamicDatePicker = ({ dynamicFieldData: { section, field, fieldPosition }
     });
   };
 
-  const handleFieldUpdate = (updatedFields) => {
-    // date = updatedFields.value[0].toLocaleDateString('en-US');
+  const handleFieldUpdate = (event, updatedFields) => {
     setFieldState((prevState) => ({ ...prevState, ...updatedFields }));
-    // onFieldAction({ ...dynamicFieldData, field: { ...dynamicFieldData.field, ...updatedFields } });
-    onFieldAction({ event: undefined, type: editActionType, fieldPosition, inputProps: { ...field, ...updatedFields } });
+    onFieldAction({ event, type: editActionType, fieldPosition, inputProps: { ...fieldState, ...updatedFields } });
+  };
+
+  const handleOnChange = (updatedFields) => {
+    setFieldState((prevState) => ({ ...prevState, ...updatedFields }));
   };
 
   const datePickerOptions = () => ({
@@ -91,7 +99,7 @@ const DynamicDatePicker = ({ dynamicFieldData: { section, field, fieldPosition }
           datePickerType="single"
           dateFormat="m/d/Y"
           minDate={fieldState.showPastDates ? undefined : new Date().toLocaleDateString()}
-          onChange={(selectedDates, dateStr) => handleFieldUpdate({ value: dateStr })}
+          onChange={(selectedDates, dateStr) => handleOnChange({ value: dateStr })}
         >
           <DatePickerInput
             datePickerType="single"
