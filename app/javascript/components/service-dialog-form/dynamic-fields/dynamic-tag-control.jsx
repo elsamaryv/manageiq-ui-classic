@@ -27,6 +27,7 @@ const DynamicTagControl = ({ dynamicFieldData: { section, field, fieldPosition }
     name: field.name || inputId,
     visible: field.visible || true,
     categories: field.categories || [],
+    selectedCategory: [],
     subCategories: field.subCategories || [],
     fieldsToRefresh: refreshEnabledFields,
     sortBy: field.sortBy || 'description',
@@ -41,6 +42,10 @@ const DynamicTagControl = ({ dynamicFieldData: { section, field, fieldPosition }
           value: cat.id,
           key: cat.id,
           data: {
+            id: cat.id,
+            description: cat.description,
+            name: cat.name,
+            singleValue: cat.single_value,
             subCategories: cat.children.map((subCat) => ({
               id: subCat.id,
               label: __(subCat.description),
@@ -95,6 +100,7 @@ const DynamicTagControl = ({ dynamicFieldData: { section, field, fieldPosition }
     if (selectedCategory) {
       setFieldState((prevState) => ({
         ...prevState,
+        selectedCategory,
         subCategories: selectedCategory.data.subCategories,
       }));
     }
