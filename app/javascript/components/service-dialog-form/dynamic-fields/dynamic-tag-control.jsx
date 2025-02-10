@@ -16,12 +16,21 @@ const DynamicTagControl = ({ dynamicFieldData: { section, field, fieldPosition }
   const inputId = `tab-${tabId}-section-${sectionId}-field-${fieldPosition}-tag-control`;
   const editActionType = SD_ACTIONS.field.edit;
 
+  const refreshEnabledFields = section.fields
+    .filter((field) => field.showRefresh)
+    .map((field) => ({ value: field.label, label: field.label }));
+
   const [fieldState, setFieldState] = useState({
+    type: 'DialogFieldTagControl',
+    position: fieldPosition,
     label: field.label || __('Tag Control'),
     name: field.name || inputId,
     visible: field.visible || true,
     categories: field.categories || [],
     subCategories: field.subCategories || [],
+    fieldsToRefresh: refreshEnabledFields,
+    sortBy: field.sortBy || 'description',
+    sortOrder: field.sortOrder || 'ascending',
   });
 
   useEffect(() => {
@@ -39,6 +48,7 @@ const DynamicTagControl = ({ dynamicFieldData: { section, field, fieldPosition }
           },
         }));
 
+        debugger
         setFieldState((prevState) => ({
           ...prevState,
           categories: formattedCategories,
@@ -48,13 +58,14 @@ const DynamicTagControl = ({ dynamicFieldData: { section, field, fieldPosition }
   }, [fieldState.categories.length]);
 
   const handleFieldUpdate = (event, updatedFields) => {
+    debugger
     setFieldState((prevState) => ({
       ...prevState,
       ...updatedFields, // update other fields
       categories: prevState.categories, // this is required to retain the options in the dropdown
     }));
 
-    onFieldAction({ event, type: editActionType, fieldPosition, inputProps: { ...field, ...updatedFields } });
+    onFieldAction({ event, type: editActionType, fieldPosition, inputProps: { ...fieldState, ...updatedFields } });
   };
 
   const fieldActions = (event, inputProps) => {
@@ -80,6 +91,7 @@ const DynamicTagControl = ({ dynamicFieldData: { section, field, fieldPosition }
 
   const fetchSubCategories = (categoryValue) => {
     const selectedCategory = fieldState.categories.find((cat) => cat.value === categoryValue);
+    debugger
     if (selectedCategory) {
       setFieldState((prevState) => ({
         ...prevState,
@@ -119,6 +131,19 @@ const DynamicTagControl = ({ dynamicFieldData: { section, field, fieldPosition }
     return tabs;
   };
 
+  const sortedItems = () => {
+    const { sortBy, sortOrder } = fieldState;
+    const sortedArray = [...fieldState.subCategories].sort((a, b) => {
+      const valueA = a[sortBy] ? a[sortBy].toString() : '';
+      const valueB = b[sortBy] ? b[sortBy].toString() : '';
+      // Alphanumeric comparison using localeCompare
+      return sortOrder === 'ascending'
+        ? valueA.localeCompare(valueB, undefined, { numeric: true, sensitivity: 'base' })
+        : valueB.localeCompare(valueA, undefined, { numeric: true, sensitivity: 'base' });
+    });
+    return sortedArray;
+  };
+
   return (
     <div className="dynamic-form-field">
       <div className="dynamic-form-field-item">
@@ -127,7 +152,10 @@ const DynamicTagControl = ({ dynamicFieldData: { section, field, fieldPosition }
           labelText={fieldState.label}
           helperText={fieldState.helperText}
         >
-          {fieldState.subCategories.map((subcat) => (
+          {/* {fieldState.subCategories.map((subcat) => (
+            <SelectItem key={subcat.id} text={subcat.label} value={subcat.id} />
+          ))} */}
+          {sortedItems().map((subcat) => (
             <SelectItem key={subcat.id} text={subcat.label} value={subcat.id} />
           ))}
         </Select>
