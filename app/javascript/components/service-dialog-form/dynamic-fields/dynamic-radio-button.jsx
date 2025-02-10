@@ -21,6 +21,8 @@ const DynamicRadioButton = ({ dynamicFieldData: { section, field, fieldPosition 
     .map((field) => ({ value: field.label, label: field.label }));
 
   const [fieldState, setFieldState] = useState({
+    type: 'DialogFieldRadioButton',
+    position: fieldPosition,
     label: field.label || __('Radio Button'),
     required: field.required || false,
     name: field.name || inputId,
@@ -28,12 +30,13 @@ const DynamicRadioButton = ({ dynamicFieldData: { section, field, fieldPosition 
     items: field.items || defaultRadioButtonOptions,
     value: field.value || '',
     fieldsToRefresh: refreshEnabledFields,
+    sortBy: field.sortBy || 'description',
+    sortOrder: field.sortOrder || 'ascending',
   });
 
   const handleFieldUpdate = (event, updatedFields) => {
     setFieldState((prevState) => ({ ...prevState, ...updatedFields }));
-    // onFieldAction({ ...dynamicFieldData, field: { ...dynamicFieldData.field, ...updatedFields } });
-    onFieldAction({ event, type: editActionType, fieldPosition, inputProps: { ...field, ...updatedFields } });
+    onFieldAction({ event, type: editActionType, fieldPosition, inputProps: { ...fieldState, ...updatedFields } });
   };
 
   const handleSelectionChange = (selectedItem) => {
@@ -104,8 +107,7 @@ const DynamicRadioButton = ({ dynamicFieldData: { section, field, fieldPosition 
   };
 
   const sortedItems = () => {
-    const sortBy = fieldState.sortBy || 'description';
-    const sortOrder = fieldState.sortOrder || 'ascending';
+    const { sortBy, sortOrder } = fieldState;
     const sortedArray = [...fieldState.items].sort((a, b) => {
       const valueA = a[sortBy] ? a[sortBy].toString() : '';
       const valueB = b[sortBy] ? b[sortBy].toString() : '';
