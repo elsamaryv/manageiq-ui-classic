@@ -269,25 +269,30 @@ const sampleCreatePayload = () => (
     }
 });
 
-// get details on the different fields in the catalog form
-// to do: loops over each of the fields in the section first ----
-// const getFieldsInfo = (fields) => {
-//   fields.map((field) => ({
-
-//   }));
-// };
+// in the case of Tag Control component
+const getCategoryInfo = ({
+  selectedCategory: {
+    data: {
+      id, name, description, singleValue,
+    },
+  },
+}) => ({
+  category_id: id,
+  category_name: name,
+  category_description: description,
+  category_single_value: singleValue,
+});
 
 const getOptions = (field) => {
+  const categoryInfo = (field.selectedCategory && getCategoryInfo(field)) || {};
   const obj = {
     protected: field.protected,
     sort_by: field.sortBy,
     sort_order: field.sortOrder,
-    // category_id:
-    // category_name:
-    // category_description:
     force_single_value: field.singleValue,
     force_multi_value: field.multiselect,
     show_past_dates: field.showPastDates,
+    ...categoryInfo,
   };
 
   // Filter out keys with falsy values (empty strings, null, undefined, etc.)
@@ -309,6 +314,10 @@ const getDefaultValue = (field) => {
       return field.checked;
     case 'DialogFieldDateControl':
       return new Date(field.value).toISOString();
+    // case 'DialogFieldDateTimeControl': {
+    //   debugger
+    //   return new Date(field.value).toISOString();
+    // }
     default:
       return field.value;
   }
@@ -318,7 +327,6 @@ const getValues = (field) => field.items && field.items.map((item) => [item.valu
 
 const parseFieldsInfo = (fields) => {
   const result = fields.map((field) => {
-    debugger
     const obj = {
       name: field.name,
       description: '',
@@ -364,7 +372,6 @@ const parseFieldsInfo = (fields) => {
 
 const getFieldsInfo = (fields) => {
   const formattedFields = parseFieldsInfo(fields);
-  debugger
   // formattedFields.map(({ componentId: _componentId, ...rest }) => rest);
   return formattedFields;
 };
