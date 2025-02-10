@@ -21,6 +21,7 @@ const DynamicDatePicker = ({ dynamicFieldData: { section, field, fieldPosition }
 
   const [fieldState, setFieldState] = useState({
     type: 'DialogFieldDateControl',
+    position: fieldPosition,
     label: field.label || __('Datepicker'),
     name: field.name || inputId,
     visible: field.visible || true,
