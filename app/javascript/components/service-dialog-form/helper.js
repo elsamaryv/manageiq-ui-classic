@@ -303,10 +303,22 @@ const getResourceAction = () => ({
   ae_attributes: {},
 });
 
-const getValues = (field) => (field.items.map((item) => [item.value, item.text]));
+const getDefaultValue = (field) => {
+  switch (field.type) {
+    case 'DialogFieldCheckBox':
+      return field.checked;
+    case 'DialogFieldDateControl':
+      return new Date(field.value).toISOString();
+    default:
+      return field.value;
+  }
+};
+
+const getValues = (field) => field.items && field.items.map((item) => [item.value, item.text]);
 
 const parseFieldsInfo = (fields) => {
   const result = fields.map((field) => {
+    debugger
     const obj = {
       name: field.name,
       description: '',
@@ -320,7 +332,7 @@ const parseFieldsInfo = (fields) => {
       required: field.required || false,
       required_method: '',
       required_method_options: {},
-      default_value: field.value || field.checked,
+      default_value: getDefaultValue(field),
       values: getValues(field),
       values_method: '',
       values_method_options: {},
@@ -341,7 +353,6 @@ const parseFieldsInfo = (fields) => {
       validator_message: field.validatorMessage,
       resource_action: getResourceAction(),
     };
-
     return Object.fromEntries(
       Object.entries(obj).filter(([_, value]) => (value !== undefined && value !== ''))
     );
