@@ -1,7 +1,8 @@
 /* eslint-disable radix */
 import React, { useState, useRef, useEffect } from 'react';
+import MiqFormRenderer from '@@ddf';
 import {
-  Tabs, Tab, Button, TextInput, TextArea,
+  Tabs, Tab, Button, TextInput, TextArea, Modal, ModalBody,
 } from 'carbon-components-react';
 import { AddAlt16 } from '@carbon/icons-react';
 import {
@@ -14,6 +15,10 @@ import DynamicSection from './dynamic-section';
 import {
   selectedTab, SD_ACTIONS, dropField, dropSection, dropComponent,
 } from './helper';
+import EditTabModal from './edit-tab-modal';
+import EditSectionModal from './edit-section-modal';
+import { createSchema as SectionEditSchema } from './edit-section-modal/modal-fields.schema';
+
 
 const ServiceDialogForm = () => {
   let dragEnterItem = useRef(); /** Stores the information of component where the dragged item is being hovered before release. */
@@ -115,7 +120,7 @@ const ServiceDialogForm = () => {
    * Last item will always be 'Create new tab'.
    */
   const addTab = () => {
-    data.formFields.splice(1, 0, defaultTabContents(data.formFields.length - 1));
+    data.formFields.splice(-1, 0, defaultTabContents(data.formFields.length - 1));
     const newFormFields = data.formFields.sort((t1, t2) => t1.tabId - t2.tabId);
     setData({
       ...data,
@@ -133,10 +138,20 @@ const ServiceDialogForm = () => {
     });
   };
 
-  /** Function to edit a section */
-  const editSection = ({ tabId, sectionId }) => {
-    const section = selectedTab(data.formFields, tabId).sections;
-    console.log(section, sectionId);
+  const editSection = ({ section }) => {
+    debugger
+    return (
+      <EditSectionModal
+        sectionName={section.title}
+        // showModal={showTabEditModal}
+        showModal
+        onSave={(e, editedValues) => {
+        // setState((state) => ({ ...state, showModal: false }));
+          console.log("onSave triggered", editedValues);
+        }}
+        onModalHide={onModalHide}
+      />
+    );
   };
 
   /** Function to delete a section */
@@ -166,7 +181,27 @@ const ServiceDialogForm = () => {
     }
   };
 
-  const editTab = () => console.log('edit tab');
+  const [showTabEditModal, setShowTabEditModal] = useState(false);
+  
+  const onModalHide = () => setShowTabEditModal(false);
+  const onModalShow = () => {
+    setShowTabEditModal(true);
+  };
+
+  const renderEditTabModal = (tab) => {
+    debugger
+    return (
+      <EditTabModal
+        tabName={tab.name}
+        showModal={showTabEditModal}
+        onSave={(e, editedValues) => {
+        // setState((state) => ({ ...state, showModal: false }));
+          console.log("onSave triggered", editedValues);
+        }}
+        onModalHide={onModalHide}
+      />
+    );
+  };
 
   /** Function to delete a tab */
   const deleteTab = (tab) => {
@@ -180,7 +215,9 @@ const ServiceDialogForm = () => {
   const tabAction = (actionType, tab) => {
     switch (actionType) {
       case SD_ACTIONS.tab.edit:
-        return editTab(tab);
+        debugger
+        onModalShow();
+        renderEditTabModal(tab);
       case SD_ACTIONS.tab.delete:
         return deleteTab(tab);
       default:
@@ -275,12 +312,19 @@ const ServiceDialogForm = () => {
 
   /** Function to render the tabs from the tabLabels props */
   const renderTabs = () => data.formFields.map((tab, tabPosition) => (
-    <Tab key={`tab${tabPosition.toString()}`} label={tab.name} onClick={() => onTabSelect(tab.tabId)}>
-      <section className="dynamic-sections-wrapper">
-        {renderTabName(tab)}
-        {renderSections(tab)}
-        {renderAddSectionButton(tab.tabId)}
-      </section>
+    <Tab
+      key={`tab${tabPosition.toString()}`}
+      label={tab.name}
+      onClick={() => onTabSelect(tab.tabId)}
+    >
+      {tab.tabId !== 'new'
+      && (
+        <section className="dynamic-sections-wrapper">
+          {renderTabName(tab)}
+          {renderSections(tab)}
+          {renderAddSectionButton(tab.tabId)}
+        </section>
+      )}
 
     </Tab>
   ));
@@ -295,7 +339,6 @@ const ServiceDialogForm = () => {
   );
 
   const handleSubmit = () => {
-    debugger
     saveServiceDialog(data);
   };
 
