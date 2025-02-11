@@ -295,7 +295,7 @@ const getOptions = (field) => {
     ...categoryInfo,
   };
 
-  // Filter out keys with falsy values (empty strings, null, undefined, etc.)
+  // Filter out keys with empty strings, undefined values, and null values
   const result = Object.fromEntries(
     Object.entries(obj).filter(([_, value]) => (value !== undefined && value !== ''))
   );
