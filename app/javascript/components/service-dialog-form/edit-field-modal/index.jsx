@@ -14,16 +14,11 @@ import { createSchema } from './edit-field-modal.schema';
 
 const EditFieldModal = ({
   componentId, fieldConfiguration, showModal, onModalHide, onModalApply, initialData,
-  onSave, onDynamicSwitchToggle, onCategorySelect,
+  onSave, onDynamicSwitchToggle, onCategorySelect, onTimePickerChange,
 }) => {
   const component = dynamicComponents.find((item) => item.id === componentId);
 
-  // // custom component mapper
-  // const mapper = {
-  //   ...componentMapper,
-  //   // [componentTypes.DATE_TIME_PICKER]: CustomDateTimePicker,
-  //   'date-time-picker': CustomDateTimePicker,
-  // };
+  const [newFieldValues, setnewFieldValues] = useState();
 
   const handleFieldUpdates = ({ target }) => {
     if (target.name === 'dynamic') {
@@ -37,7 +32,18 @@ const EditFieldModal = ({
   const onCancel = () => onModalHide();
 
   const handleSubmit = (formValues, e) => {
-    onSave(e, formValues);
+    debugger
+    const newFormValues = { ...formValues, ...newFieldValues };
+    onSave(e, newFormValues);
+    // onSave(e, formValues);
+  };
+
+  const onChange = (data) => {
+    debugger
+    if (data != null && data.initialData.label === 'Timepicker') {
+      onTimePickerChange(data.value);
+      setnewFieldValues({ value: data.value });
+    }
   };
 
   return (
@@ -51,7 +57,7 @@ const EditFieldModal = ({
     >
       <ModalBody className="edit-field-modal-body">
         <MiqFormRenderer
-          schema={createSchema(fieldConfiguration, initialData)}
+          schema={createSchema(fieldConfiguration, initialData, onChange)}
           initialValues={initialData}
           // componentMapper={mapper}
           onSubmit={handleSubmit}

@@ -74,13 +74,14 @@ export const datePickerComponent = (field) => ({
 //   value: field.value,
 // });
 
-export const dateTimePickerComponent = (field, initialData) => ({
+export const dateTimePickerComponent = (field, initialData, onChange) => ({
   component: 'date-time-picker',
   id: field.name,
   name: field.name,
   label: field.label,
   value: field.value,
   initialData,
+  onChange,
 });
 
 const valueTypes = [
