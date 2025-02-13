@@ -314,10 +314,9 @@ const getDefaultValue = (field) => {
       return field.checked;
     case 'DialogFieldDateControl':
       return new Date(field.value).toISOString();
-    // case 'DialogFieldDateTimeControl': {
-    //   debugger
-    //   return new Date(field.value).toISOString();
-    // }
+    case 'DialogFieldDateTimeControl': {
+      return new Date(field.value).toISOString();
+    }
     default:
       return field.value;
   }
@@ -450,4 +449,24 @@ export const formattedCatalogPayload = (data) => {
   // const payload = sampleCreatePayload(data);
   const payload = payloadForSave(data);
   return payload;
+};
+
+// Get the formatted current date
+export const getCurrentDate = () => {
+  const now = new Date();
+  return now.toLocaleDateString('en-US', {
+    month: '2-digit',
+    day: '2-digit',
+    year: 'numeric',
+  });
+};
+
+// Get the current time and period
+export const getCurrentTimeAndPeriod = () => {
+  const now = new Date();
+  let hours = now.getHours();
+  const minutes = now.getMinutes().toString().padStart(2, '0');
+  const currentPeriod = hours >= 12 ? 'PM' : 'AM';
+  hours = hours % 12 || 12; // Convert 0 hours to 12 in 12-hour format
+  return { time: `${hours}:${minutes}`, period: currentPeriod };
 };
