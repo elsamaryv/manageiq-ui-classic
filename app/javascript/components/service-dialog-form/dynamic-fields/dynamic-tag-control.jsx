@@ -53,7 +53,6 @@ const DynamicTagControl = ({ dynamicFieldData: { section, field, fieldPosition }
           },
         }));
 
-        debugger
         setFieldState((prevState) => ({
           ...prevState,
           categories: formattedCategories,
@@ -63,7 +62,6 @@ const DynamicTagControl = ({ dynamicFieldData: { section, field, fieldPosition }
   }, [fieldState.categories.length]);
 
   const handleFieldUpdate = (event, updatedFields) => {
-    debugger
     setFieldState((prevState) => ({
       ...prevState,
       ...updatedFields, // update other fields
@@ -96,7 +94,6 @@ const DynamicTagControl = ({ dynamicFieldData: { section, field, fieldPosition }
 
   const fetchSubCategories = (categoryValue) => {
     const selectedCategory = fieldState.categories.find((cat) => cat.value === categoryValue);
-    debugger
     if (selectedCategory) {
       setFieldState((prevState) => ({
         ...prevState,

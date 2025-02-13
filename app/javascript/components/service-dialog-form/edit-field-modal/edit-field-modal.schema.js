@@ -11,7 +11,7 @@ import {
   dateTimePickerComponent,
 } from './fields.schema';
 
-const fields = (tab, initialData) => tab.fields.map((item) => {
+const fields = (tab, initialData, onChange) => tab.fields.map((item) => {
   switch (item.field) {
     case componentTypes.TEXT_FIELD:
       return textFieldComponent(item);
@@ -26,26 +26,26 @@ const fields = (tab, initialData) => tab.fields.map((item) => {
     case componentTypes.DATE_PICKER:
       return datePickerComponent(item);
     case 'date-time-picker':
-      return dateTimePickerComponent(item, initialData);
+      return dateTimePickerComponent(item, initialData, onChange);
     default:
       return null;
   }
 });
 
-const tabs = (configuration, initialData) => configuration.map((tab, tabIndex) => (
+const tabs = (configuration, initialData, onChange) => configuration.map((tab, tabIndex) => (
   {
     name: tabIndex,
     title: tab.name,
     description: tab.name,
-    fields: fields(tab, initialData),
+    fields: fields(tab, initialData, onChange),
   }));
 
-export const createSchema = (configuration, initialData) => ({
+export const createSchema = (configuration, initialData, onChange) => ({
   fields: [
     {
       component: 'tabs',
       name: 'tabs',
-      fields: tabs(configuration, initialData),
+      fields: tabs(configuration, initialData, onChange),
     },
   ],
 });
