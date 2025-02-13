@@ -72,10 +72,8 @@ export const saveServiceDialog = (data) => {
   const payload = formattedCatalogPayload(data);
   // const payload = sample_create_payload();
 
-  debugger
   const { result } = API.post('/api/service_dialogs', payload, {
     skipErrors: [400],
   });
-  debugger
   return result;
 };
