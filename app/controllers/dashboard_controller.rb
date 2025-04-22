@@ -450,6 +450,7 @@ class DashboardController < ApplicationController
     when :pass
       render :update do |page|
         page << javascript_prologue
+        # page << "sessionStorage.setItem('sessionActive', 'true');"
         page.redirect_to(validation.url)
       end
     when :fail
@@ -471,7 +472,7 @@ class DashboardController < ApplicationController
     clear_current_user
 
     user_validation_error = session[:user_validation_error]
-    session.clear
+    reset_session
     session[:auto_login] = false
     session[:user_validation_error] = user_validation_error if user_validation_error
 

@@ -6,6 +6,8 @@
 require('./miq_global.js');
 
 window.miqOnLoad = function() {
+  // miqCheckForActiveSession();
+
   // controller to be used in url in miqDropComplete method
   ManageIQ.widget.dashboardUrl = 'dashboard/widget_dd_done';
 
@@ -189,6 +191,22 @@ window.miqCalendarDateConversion = function(server_offset) {
 window.miqGetTZO = function() {
   if (miqDomElementExists('user_TZO')) {
     $('#user_TZO').val(moment().utcOffset() / 60);
+  }
+};
+
+// Set user's active session
+window.miqSetActiveSession = function() {
+  debugger
+  return sessionStorage.setItem('sessionActive', 'true');
+};
+
+// Get user's active session
+window.miqCheckForActiveSession = function() {
+  debugger
+  const sessionActive = sessionStorage.getItem('sessionActive');
+  if (sessionActive !== 'true') {
+    // Redirect to login page
+    window.location.href = '/';
   }
 };
 
