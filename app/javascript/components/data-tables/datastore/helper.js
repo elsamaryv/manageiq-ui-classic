@@ -97,14 +97,14 @@ const createRows = (data) => {
         text: __('Update'),
         kind: 'tertiary',
         size: 'md',
-        callback: 'editSubscription',
+        callback: 'editClassField',
       },
       {
         is_button: true,
         text: __('Delete'),
         kind: 'danger',
         size: 'md',
-        callback: 'deleteSubscription',
+        callback: 'deleteClassField',
       },
     ];
 

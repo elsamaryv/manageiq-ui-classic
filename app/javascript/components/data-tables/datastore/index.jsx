@@ -15,15 +15,19 @@ const Datastore = ({
     miqHeaders, miqRows, hasCheckbox, nodeTree,
   } = tableData(type, hasOptions, initialData, datastoreTypes, isEdit);
 
+  const [state, setState] = useState({
+    schemaRecords: miqRows.rowItems,
+  });
+
+  const [isModalOpen, setModalOpen] = useState(false);
+
   if (miqRows.merged) {
     miqHeaders.splice(0, 1);
   }
 
-  const [isModalOpen, setModalOpen] = useState(false);
-
   const handleModalClose = () => {
     setModalOpen(false);
-    setState((state) => ({ ...state, selectedSubscription: {} }));
+    // setState((state) => ({ ...state, selectedSubscription: {} }));
   };
 
   /** Function to find an item from initialData. */
@@ -91,12 +95,34 @@ const Datastore = ({
     updateSelection(selectedClickIds, selectedItemIds);
   };
 
+  const deleteClassField = (selectedRow) => {
+    const rowId = parseInt(selectedRow.id, 10);
+
+    setState((prevState) => ({
+      ...prevState,
+      schemaRecords: prevState.schemaRecords.filter((_, i) => i !== rowId),
+    }));
+  };
+
   /** Function to handle the cell event actions. */
   const onCellClick = (selectedRow, cellType, event) => {
     switch (cellType) {
       case CellAction.selectAll: onSelectAll(event); break;
       case CellAction.itemSelect: onItemSelect(findItem(selectedRow), event.target); break;
       case CellAction.itemClick: onItemClick(findItem(selectedRow)); break;
+      case CellAction.buttonCallback: {
+        switch (selectedRow.callbackAction) {
+          case 'editClassField':
+            editClassField(selectedRow);
+            break;
+          case 'deleteClassField':
+            deleteClassField(selectedRow);
+            break;
+          default:
+            break;
+        }
+        break;
+      }
       default: onItemClick(findItem(selectedRow)); break;
     }
   };
@@ -147,7 +173,7 @@ const Datastore = ({
         </>
       )}
       <MiqDataTable
-        rows={miqRows.rowItems}
+        rows={state.schemaRecords}
         headers={miqHeaders}
         onCellClick={(selectedRow, cellType, event) => onCellClick(selectedRow, cellType, event)}
         rowCheckBox={hasCheckbox}
