@@ -104,6 +104,21 @@ const Datastore = ({
     }));
   };
 
+  const editClassField = (selectedRow) => {
+    const rowId = parseInt(selectedRow.id, 10);
+    setModalOpen(true);
+    setState((state) => ({
+      ...state,
+      selectedRowId: rowId,
+      // form: {
+      //   type: 'replication',
+      //   className: 'replication_form',
+      //   action: 'edit',
+      // },
+      // selectedSubscription: subscriptions[rowId],
+    }));
+  };
+
   /** Function to handle the cell event actions. */
   const onCellClick = (selectedRow, cellType, event) => {
     switch (cellType) {
