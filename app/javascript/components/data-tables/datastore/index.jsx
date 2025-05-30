@@ -8,11 +8,11 @@ import MiqDataTable from '../../miq-data-table';
 import { CellAction } from '../../miq-data-table/helper';
 
 const Datastore = ({
-  type, initialData, hasOptions, datastoreTypes,
+  type, initialData, hasOptions, datastoreTypes, isEdit,
 }) => {
   const {
     miqHeaders, miqRows, hasCheckbox, nodeTree,
-  } = tableData(type, hasOptions, initialData, datastoreTypes);
+  } = tableData(type, hasOptions, initialData, datastoreTypes, isEdit);
 
   if (miqRows.merged) {
     miqHeaders.splice(0, 1);
@@ -111,6 +111,7 @@ Datastore.propTypes = {
   initialData: PropTypes.arrayOf(PropTypes.any).isRequired,
   hasOptions: PropTypes.bool,
   datastoreTypes: PropTypes.shape({}).isRequired,
+  isEdit: PropTypes.bool.isRequired,
 };
 
 Datastore.defaultProps = {

@@ -26,18 +26,29 @@ const commonHeaders = () => [
 const domainOverridesHeaders = () => [{ text: 'defaultKey_0', header_text: __('Domain') }];
 
 /** Function which returns the header data for table with type class_fields schema. */
-const schemaHeaders = () => [
-  { text: 'Name', header_text: __('Name') },
-  { text: 'Description', header_text: __('Description') },
-  { text: 'DefaultValue', header_text: __('Default Value') },
-  { text: 'Collect', header_text: __('Collect') },
-  { text: 'Message', header_text: __('Message') },
-  { text: 'OnEntry', header_text: __('On Entry') },
-  { text: 'OnExit', header_text: __('On Exit') },
-  { text: 'OnError', header_text: __('On Error') },
-  { text: 'MaxRetries', header_text: __('Max Retries') },
-  { text: 'MaxTime', header_text: __('Max Time') },
-];
+const schemaHeaders = (isEdit) => {
+  const headers = [
+    { text: 'Name', header_text: __('Name') },
+    { text: 'Description', header_text: __('Description') },
+    { text: 'DefaultValue', header_text: __('Default Value') },
+    { text: 'Collect', header_text: __('Collect') },
+    { text: 'Message', header_text: __('Message') },
+    { text: 'OnEntry', header_text: __('On Entry') },
+    { text: 'OnExit', header_text: __('On Exit') },
+    { text: 'OnError', header_text: __('On Error') },
+    { text: 'MaxRetries', header_text: __('Max Retries') },
+    { text: 'MaxTime', header_text: __('Max Time') },
+  ];
+
+  if (isEdit) {
+    headers.push(
+      { text: 'Edit', header_text: __('Edit') },
+      { text: 'Delete', header_text: __('Delete') }
+    );
+  }
+
+  return headers;
+};
 
 /** Function which returns the header data for table with type instant_fields. */
 const instantFieldHeaders = (hasOptions) => {
@@ -58,7 +69,7 @@ const instantFieldHeaders = (hasOptions) => {
 /** Function which returns the header items based on its type. */
 const datastoreHeaders = (type, hasOptions, {
   list, details, instances, methods, domain, schema, fields,
-}) => {
+}, isEdit) => {
   switch (type) {
     case list:
       return nsListHeaders(hasOptions);
@@ -69,7 +80,7 @@ const datastoreHeaders = (type, hasOptions, {
     case domain:
       return domainOverridesHeaders();
     case schema:
-      return schemaHeaders();
+      return schemaHeaders(isEdit);
     case fields:
       return instantFieldHeaders(hasOptions);
     default:
@@ -77,13 +88,44 @@ const datastoreHeaders = (type, hasOptions, {
   }
 };
 
+const createRows = (data) => {
+  const rowItems = Array.isArray(data) ? data.map((item) => {
+    const updatedCells = [
+      ...item.cells,
+      {
+        is_button: true,
+        text: __('Update'),
+        kind: 'tertiary',
+        size: 'md',
+        callback: 'editSubscription',
+      },
+      {
+        is_button: true,
+        text: __('Delete'),
+        kind: 'danger',
+        size: 'md',
+        callback: 'deleteSubscription',
+      },
+    ];
+
+    return {
+      ...item,
+      cells: updatedCells,
+    };
+  })
+    : [];
+
+  return rowItems;
+};
+
 /** Function which returns the data needed for table. */
-export const tableData = (type, hasOptions, initialData, datastoreTypes) => {
+export const tableData = (type, hasOptions, initialData, datastoreTypes, isEdit) => {
   const cBox = hasCheckbox(type, datastoreTypes);
   const nodeTree = type === datastoreTypes.domain ? 'x_show' : 'tree_select';
-  const columns = datastoreHeaders(type, hasOptions, datastoreTypes);
+  const columns = datastoreHeaders(type, hasOptions, datastoreTypes, isEdit);
   const { headerKeys, headerItems } = headerData(columns, cBox);
-  const miqRows = rowData(headerKeys, initialData, true);
+  const rows = isEdit ? createRows(initialData) : initialData;
+  const miqRows = rowData(headerKeys, rows, true);
   return {
     miqHeaders: headerItems, miqRows, hasCheckbox: cBox, nodeTree,
   };
