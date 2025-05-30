@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { Button } from 'carbon-components-react';
 import {
   tableData, addSelected, removeSelected,
 } from './helper';
@@ -92,15 +93,34 @@ const Datastore = ({
     }
   };
 
+  const renderAddFieldButton = () => (
+    <div className="custom-accordion-buttons">
+      <Button
+        kind="primary"
+        className="btnRight"
+        type="submit"
+        title={__('Click to add a new field')}
+        // onClick={() => onSelect('new')}
+        // onKeyPress={() => onSelect('new')}
+      >
+        {__('Add a Field')}
+      </Button>
+    </div>
+  );
+
   return (
-    <MiqDataTable
-      rows={miqRows.rowItems}
-      headers={miqHeaders}
-      onCellClick={(selectedRow, cellType, event) => onCellClick(selectedRow, cellType, event)}
-      rowCheckBox={hasCheckbox}
-      mode={`datastore-list ${type}`}
-      gridChecks={selectionIds}
-    />
+    <>
+      {isEdit && renderAddFieldButton()}
+
+      <MiqDataTable
+        rows={miqRows.rowItems}
+        headers={miqHeaders}
+        onCellClick={(selectedRow, cellType, event) => onCellClick(selectedRow, cellType, event)}
+        rowCheckBox={hasCheckbox}
+        mode={`datastore-list ${type}`}
+        gridChecks={selectionIds}
+      />
+    </>
   );
 };
 
