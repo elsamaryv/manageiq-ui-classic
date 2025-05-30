@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button } from 'carbon-components-react';
+import { Button, Modal, MiqFormRenderer } from 'carbon-components-react';
 import {
   tableData, addSelected, removeSelected,
 } from './helper';
@@ -18,6 +18,14 @@ const Datastore = ({
   if (miqRows.merged) {
     miqHeaders.splice(0, 1);
   }
+
+  const [isModalOpen, setModalOpen] = useState(false);
+
+  const handleModalClose = () => {
+    setModalOpen(false);
+    setState((state) => ({ ...state, selectedSubscription: {} }));
+  };
+
   /** Function to find an item from initialData. */
   const findItem = (item) => initialData.find((row) => row.id.toString() === item.id.toString());
 
@@ -100,7 +108,7 @@ const Datastore = ({
         className="btnRight"
         type="submit"
         title={__('Click to add a new field')}
-        // onClick={() => onSelect('new')}
+        onClick={() => setModalOpen(true)}
         // onKeyPress={() => onSelect('new')}
       >
         {__('Add a Field')}
@@ -110,8 +118,34 @@ const Datastore = ({
 
   return (
     <>
-      {isEdit && renderAddFieldButton()}
+      {isEdit && (
+        <>
+          {renderAddFieldButton()}
 
+          <Modal
+            open={isModalOpen}
+            // modalHeading={selectedSubscription && Object.keys(selectedSubscription).length
+            //   ? `Edit ${selectedSubscription.dbname}`
+            //   : 'Add Subscription'}
+            modalHeading="ABCDEF"
+            onRequestClose={handleModalClose}
+            passiveModal
+          >
+            {/* <MiqFormRenderer
+              // schema={createSubscriptionSchema()}
+              schema={{}}
+              componentMapper={componentMapper}
+              initialValues={initialData || {}}
+              onSubmit={onModalSubmit}
+              onCancel={handleModalClose}
+              canReset
+              buttonsLabels={{
+                submitLabel: __('Create'),
+              }}
+            /> */}
+          </Modal>
+        </>
+      )}
       <MiqDataTable
         rows={miqRows.rowItems}
         headers={miqHeaders}
