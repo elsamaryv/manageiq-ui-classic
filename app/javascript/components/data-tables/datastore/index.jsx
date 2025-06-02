@@ -1,16 +1,19 @@
 /* eslint-disable no-undef */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, MiqFormRenderer } from 'carbon-components-react';
+import { Button, Modal } from 'carbon-components-react';
+import MiqFormRenderer from '@@ddf';
 import {
   tableData, addSelected, removeSelected,
 } from './helper';
 import MiqDataTable from '../../miq-data-table';
 import { CellAction } from '../../miq-data-table/helper';
+import createClassFieldsSchema from './modal-form.schema';
 
 const Datastore = ({
-  type, initialData, hasOptions, datastoreTypes, isEdit,
+  type, initialData, hasOptions, datastoreTypes, isEdit, aeTypeOptions, dTypeOptions, aeClassId,
 }) => {
+  debugger
   const {
     miqHeaders, miqRows, hasCheckbox, nodeTree,
   } = tableData(type, hasOptions, initialData, datastoreTypes, isEdit);
@@ -28,6 +31,41 @@ const Datastore = ({
   const handleModalClose = () => {
     setModalOpen(false);
     // setState((state) => ({ ...state, selectedSubscription: {} }));
+  };
+
+  const onModalSubmit = (values) => {
+    // if (replicationType === 'global') {
+    //   if (form.action === 'add') {
+    //     const newSubscription = {
+    //       dbname: values.dbname,
+    //       host: values.host,
+    //       user: values.user,
+    //       password: values.password,
+    //       port: values.port,
+    //     };
+
+    //     setState((state) => ({
+    //       ...state,
+    //       subscriptions: [...state.subscriptions, newSubscription],
+    //     }));
+    //   } else if (form.action === 'edit') {
+    //     const editedSub = {
+    //       dbname: values.dbname,
+    //       host: values.host,
+    //       password: values.password,
+    //       port: values.port,
+    //       user: values.user,
+    //     };
+
+    //     setState((prev) => ({
+    //       ...prev,
+    //       subscriptions: prev.subscriptions.map((subscription, i) =>
+    //         (i === selectedRowId ? editedSub : subscription)),
+    //     }));
+    //   }
+    // }
+
+    handleModalClose();
   };
 
   /** Function to find an item from initialData. */
@@ -159,34 +197,36 @@ const Datastore = ({
 
   return (
     <>
-      {isEdit && (
-        <>
-          {renderAddFieldButton()}
+      <div>
+        {isEdit && (
+          <>
+            {renderAddFieldButton()}
 
-          <Modal
-            open={isModalOpen}
-            // modalHeading={selectedSubscription && Object.keys(selectedSubscription).length
-            //   ? `Edit ${selectedSubscription.dbname}`
-            //   : 'Add Subscription'}
-            modalHeading="ABCDEF"
-            onRequestClose={handleModalClose}
-            passiveModal
-          >
-            {/* <MiqFormRenderer
-              // schema={createSubscriptionSchema()}
-              schema={{}}
-              componentMapper={componentMapper}
-              initialValues={initialData || {}}
-              onSubmit={onModalSubmit}
-              onCancel={handleModalClose}
-              canReset
-              buttonsLabels={{
-                submitLabel: __('Create'),
-              }}
-            /> */}
-          </Modal>
-        </>
-      )}
+            <Modal
+              open={isModalOpen}
+              // modalHeading={selectedSubscription && Object.keys(selectedSubscription).length
+              //   ? `Edit ${selectedSubscription.dbname}`
+              //   : 'Add Subscription'}
+              modalHeading="ABCDEF"
+              onRequestClose={handleModalClose}
+              passiveModal
+            >
+              <MiqFormRenderer
+                schema={createClassFieldsSchema(aeClassId, aeTypeOptions, dTypeOptions)}
+                // schema={{}}
+                // componentMapper={componentMapper}
+                // initialValues={initialData || {}}
+                onSubmit={onModalSubmit}
+                onCancel={handleModalClose}
+                canReset
+                buttonsLabels={{
+                  submitLabel: __('Save'),
+                }}
+              />
+            </Modal>
+          </>
+        )}
+      </div>
       <MiqDataTable
         rows={state.schemaRecords}
         headers={miqHeaders}
@@ -195,6 +235,23 @@ const Datastore = ({
         mode={`datastore-list ${type}`}
         gridChecks={selectionIds}
       />
+
+      {isEdit && (
+        <MiqFormRenderer
+          // schema={createSchema(subscriptions, setState, setModalOpen, replicationType, isSubscriptionModified)}
+          // componentMapper={componentMapper}
+          // onSubmit={onSave}
+          // onCancel={onCancel}
+          onSubmit={() => {}}
+          onCancel={() => {}}
+          canReset
+          buttonsLabels={{
+            submitLabel: __('Save'),
+          }}
+        />
+      )}
+
+
     </>
   );
 };
@@ -207,8 +264,13 @@ Datastore.propTypes = {
   hasOptions: PropTypes.bool,
   datastoreTypes: PropTypes.shape({}).isRequired,
   isEdit: PropTypes.bool.isRequired,
+  aeTypeOptions: PropTypes.arrayOf(PropTypes.any),
+  dTypeOptions: PropTypes.arrayOf(PropTypes.any),
+  aeClassId: PropTypes.number.isRequired,
 };
 
 Datastore.defaultProps = {
   hasOptions: false,
+  aeTypeOptions: [],
+  dTypeOptions: [],
 };

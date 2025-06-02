@@ -4,14 +4,14 @@
       / Show Schema
       %h3= _('Schema')
       - if @ae_class.ae_fields.present?
-        = render :partial => 'datastore_list', :locals => {:type => MiqAeClassHelper::DATASTORE_TYPES[:schema], :data => @ae_class.ae_fields, :is_new => !@in_a_form_fields}
+        = render :partial => 'datastore_list', :locals => {:type => MiqAeClassHelper::DATASTORE_TYPES[:schema], :data => @ae_class.ae_fields}
       - else
         = render :partial => "layouts/info_msg",
                  :locals  => {:message => _("No schema found")}
 
     - else
       - if @ae_class.ae_fields.present?
-        = render :partial => 'datastore_list', :locals => {:type => MiqAeClassHelper::DATASTORE_TYPES[:schema], :data => @ae_class.ae_fields, :is_new => !@in_a_form_fields}
+        = render :partial => 'datastore_list', :locals => {:type => MiqAeClassHelper::DATASTORE_TYPES[:schema], :data => @ae_class.ae_fields}
       - else
         = render :partial => "layouts/info_msg",
                  :locals  => {:message => _("No schema found")}

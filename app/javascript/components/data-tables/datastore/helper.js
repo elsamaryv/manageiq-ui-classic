@@ -1,4 +1,6 @@
 import { headerData, rowData } from '../../miq-data-table/helper';
+// import miqFlash from '../../helpers/miq-flash';
+// import miqFlashClear from '../../helpers/miq-flash-clear';
 
 const hasCheckbox = (type, { domain, schema, fields }) => ![domain, schema, fields].includes(type);
 
@@ -147,3 +149,28 @@ export const removeSelected = (array, item) => {
   }
   return array;
 };
+
+export const transformSelectOptions = (array) =>
+  array.map(([label, value, extraProps]) => ({
+    label,
+    value,
+    ...extraProps,
+  }));
+
+export const handleSchemaFieldChange = (aeClassId, event) => {
+  debugger
+
+  http.post(`/miq_ae_class/fields_form_field_changed/${aeClassId}`, event, {
+    skipErrors: [400],
+  })
+    .then((response) => {
+      debugger
+      // if (replicationType === 'global') {
+      //   handleModalClose();
+      // }
+      // handleSaveResponse(response.message);
+    })
+    .catch(() => {
+      // miqFlash('error', __('Something went wrong'));
+    });
+  };
