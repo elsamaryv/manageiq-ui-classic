@@ -885,15 +885,15 @@ class MiqAeClassController < ApplicationController
       page << javascript_prologue
       unless %w[up down].include?(params[:button])
         if params[:field_datatype] == "password"
-          page << javascript_hide("field_default_value")
-          page << javascript_show("field_password_value")
-          page << "$('#field_password_value').val('');"
+          # page << javascript_hide("field_default_value")
+          # page << javascript_show("field_password_value")
+          # page << "$('#field_password_value').val('');"
           session[:field_data][:default_value] =
             @edit[:new_field][:default_value] = ''
         elsif params[:field_datatype]
-          page << javascript_hide("field_password_value")
-          page << javascript_show("field_default_value")
-          page << "$('#field_default_value').val('');"
+          # page << javascript_hide("field_password_value")
+          # page << javascript_show("field_default_value")
+          # page << "$('#field_default_value').val('');"
           session[:field_data][:default_value] =
             @edit[:new_field][:default_value] = ''
         end
@@ -904,19 +904,20 @@ class MiqAeClassController < ApplicationController
           def_field = "fields_default_value_" << f[1].to_s
           pwd_field = "fields_password_value_" << f[1].to_s
           if @edit[:new][:fields][f[1].to_i]['datatype'] == "password"
-            page << javascript_hide(def_field)
-            page << javascript_show(pwd_field)
-            page << "$('##{pwd_field}').val('');"
+            # page << javascript_hide(def_field)
+            # page << javascript_show(pwd_field)
+            # page << "$('##{pwd_field}').val('');"
           else
-            page << javascript_hide(pwd_field)
-            page << javascript_show(def_field)
-            page << "$('##{def_field}').val('');"
+            # page << javascript_hide(pwd_field)
+            # page << javascript_show(def_field)
+            # page << "$('##{def_field}').val('');"
           end
           @edit[:new][:fields][f[1].to_i]['default_value'] = nil
         end
       end
-      page << javascript_for_miq_button_visibility_changed(@changed)
+      # page << javascript_for_miq_button_visibility_changed(@changed)
     end
+    render json: { message: 'Field updated successfully' }, status: :ok
   end
 
   # AJAX driven routine to check for changes in ANY field on the form

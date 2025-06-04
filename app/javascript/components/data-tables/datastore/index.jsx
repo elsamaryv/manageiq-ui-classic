@@ -20,6 +20,7 @@ const Datastore = ({
 
   const [state, setState] = useState({
     schemaRecords: miqRows.rowItems,
+    // selectedRowId: 100,
   });
 
   const [isModalOpen, setModalOpen] = useState(false);
@@ -159,6 +160,7 @@ const Datastore = ({
 
   /** Function to handle the cell event actions. */
   const onCellClick = (selectedRow, cellType, event) => {
+    setState((state) => ({ ...state, selectedRowId: selectedRow.id }));
     switch (cellType) {
       case CellAction.selectAll: onSelectAll(event); break;
       case CellAction.itemSelect: onItemSelect(findItem(selectedRow), event.target); break;
@@ -212,7 +214,7 @@ const Datastore = ({
               passiveModal
             >
               <MiqFormRenderer
-                schema={createClassFieldsSchema(aeClassId, aeTypeOptions, dTypeOptions)}
+                schema={createClassFieldsSchema(aeClassId, aeTypeOptions, dTypeOptions, state.selectedRowId)}
                 // schema={{}}
                 // componentMapper={componentMapper}
                 // initialValues={initialData || {}}

@@ -160,17 +160,24 @@ export const transformSelectOptions = (array) =>
 export const handleSchemaFieldChange = (aeClassId, event) => {
   debugger
 
-  http.post(`/miq_ae_class/fields_form_field_changed/${aeClassId}`, event, {
-    skipErrors: [400],
-  })
-    .then((response) => {
-      debugger
-      // if (replicationType === 'global') {
-      //   handleModalClose();
-      // }
-      // handleSaveResponse(response.message);
-    })
-    .catch(() => {
-      // miqFlash('error', __('Something went wrong'));
-    });
+  const data = {
+    [event.target.name]: event.target.value,
+    id: aeClassId,
   };
+
+  http.post(`/miq_ae_class/fields_form_field_changed/${aeClassId}`, data, {
+    skipErrors: [400],
+  }).then((response) => {
+    debugger
+    console.log(response);
+    // if (replicationType === 'global') {
+    //   handleModalClose();
+    // }
+    // handleSaveResponse(response.message);
+  }).catch((error) => {
+    console.error('Error:', error);
+    console.error('Response:', error.response);
+    console.log('somethign went wrogn')
+    // miqFlash('error', __('Something went wrong'));
+  });
+};
