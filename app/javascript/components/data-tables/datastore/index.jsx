@@ -13,13 +13,13 @@ import createClassFieldsSchema from './modal-form.schema';
 const Datastore = ({
   type, initialData, hasOptions, datastoreTypes, isEdit, aeTypeOptions, dTypeOptions, aeClassId,
 }) => {
-  debugger
   const {
     miqHeaders, miqRows, hasCheckbox, nodeTree,
   } = tableData(type, hasOptions, initialData, datastoreTypes, isEdit);
 
   const [state, setState] = useState({
     schemaRecords: miqRows.rowItems,
+    // schemaRecords: handleMiqRows(initialData),
     // selectedRowId: 100,
   });
 
@@ -34,7 +34,29 @@ const Datastore = ({
     // setState((state) => ({ ...state, selectedSubscription: {} }));
   };
 
+  const handleOnAddFieldClick = () => {
+    setModalOpen(true);
+    setState((state) => ({ ...state, selectedRowId: undefined }));
+  };
+
   const onModalSubmit = (values) => {
+    debugger
+
+    http.post(`/miq_ae_class/field_accept?button=accept`, values, {
+      skipErrors: [400],
+    }).then((response) => {
+      debugger
+      console.log(response);
+
+      // if (values) {
+      setState((prevState) => ({
+        ...prevState,
+        schemaRecords: [...prevState.schemaRecords, values],
+      }));
+      // }
+    }).catch((error) => {
+      console.error('Response:', error.response);
+    });
     // if (replicationType === 'global') {
     //   if (form.action === 'add') {
     //     const newSubscription = {
@@ -189,7 +211,8 @@ const Datastore = ({
         className="btnRight"
         type="submit"
         title={__('Click to add a new field')}
-        onClick={() => setModalOpen(true)}
+        onClick={handleOnAddFieldClick}
+        // onClick={() => setModalOpen(true)}
         // onKeyPress={() => onSelect('new')}
       >
         {__('Add a Field')}
@@ -214,7 +237,8 @@ const Datastore = ({
               passiveModal
             >
               <MiqFormRenderer
-                schema={createClassFieldsSchema(aeClassId, aeTypeOptions, dTypeOptions, state.selectedRowId)}
+                schema={createClassFieldsSchema(aeClassId, aeTypeOptions, dTypeOptions, state.selectedRowId,
+                  state.schemaRecords[state.selectedRowId])}
                 // schema={{}}
                 // componentMapper={componentMapper}
                 // initialValues={initialData || {}}

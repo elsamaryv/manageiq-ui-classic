@@ -881,8 +881,8 @@ class MiqAeClassController < ApplicationController
 
     fields_get_form_vars
     @changed = (@edit[:new] != @edit[:current])
-    render :update do |page|
-      page << javascript_prologue
+    # render :update do |page|
+      # page << javascript_prologue
       unless %w[up down].include?(params[:button])
         if params[:field_datatype] == "password"
           # page << javascript_hide("field_default_value")
@@ -916,8 +916,8 @@ class MiqAeClassController < ApplicationController
         end
       end
       # page << javascript_for_miq_button_visibility_changed(@changed)
-    end
-    render json: { message: 'Field updated successfully' }, status: :ok
+    # end
+    render :json => {:message => 'Field updated successfully'}, :status => 200
   end
 
   # AJAX driven routine to check for changes in ANY field on the form

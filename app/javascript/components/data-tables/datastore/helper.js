@@ -170,9 +170,6 @@ export const handleSchemaFieldChange = (aeClassId, event) => {
   }).then((response) => {
     debugger
     console.log(response);
-    // if (replicationType === 'global') {
-    //   handleModalClose();
-    // }
     // handleSaveResponse(response.message);
   }).catch((error) => {
     console.error('Error:', error);
