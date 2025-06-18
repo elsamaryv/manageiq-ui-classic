@@ -28,24 +28,24 @@ const commonHeaders = () => [
 const domainOverridesHeaders = () => [{ text: 'defaultKey_0', header_text: __('Domain') }];
 
 /** Function which returns the header data for table with type class_fields schema. */
-const schemaHeaders = (isEdit) => {
+export const schemaHeaders = (isEdit = false) => {
   const headers = [
-    { text: 'Name', header_text: __('Name') },
-    { text: 'Description', header_text: __('Description') },
-    { text: 'DefaultValue', header_text: __('Default Value') },
-    { text: 'Collect', header_text: __('Collect') },
-    { text: 'Message', header_text: __('Message') },
-    { text: 'OnEntry', header_text: __('On Entry') },
-    { text: 'OnExit', header_text: __('On Exit') },
-    { text: 'OnError', header_text: __('On Error') },
-    { text: 'MaxRetries', header_text: __('Max Retries') },
-    { text: 'MaxTime', header_text: __('Max Time') },
+    { name: 'name', text: 'Name', header_text: __('Name') },
+    { name: 'description', text: 'Description', header_text: __('Description') },
+    { name: 'default_value', text: 'DefaultValue', header_text: __('Default Value') },
+    { name: 'collect', text: 'Collect', header_text: __('Collect') },
+    { name: 'message', text: 'Message', header_text: __('Message') },
+    { name: 'on_entry', text: 'OnEntry', header_text: __('On Entry') },
+    { name: 'on_exit', text: 'OnExit', header_text: __('On Exit') },
+    { name: 'on_error', text: 'OnError', header_text: __('On Error') },
+    { name: 'max_entries', text: 'MaxRetries', header_text: __('Max Retries') },
+    { name: 'max_time', text: 'MaxTime', header_text: __('Max Time') },
   ];
 
   if (isEdit) {
     headers.push(
-      { text: 'Edit', header_text: __('Edit') },
-      { text: 'Delete', header_text: __('Delete') }
+      { name: 'edit', text: 'Edit', header_text: __('Edit') },
+      { name: 'delete', text: 'Delete', header_text: __('Delete') }
     );
   }
 
@@ -90,7 +90,7 @@ const datastoreHeaders = (type, hasOptions, {
   }
 };
 
-const createRows = (data) => {
+export const createEditableRows = (data) => {
   const rowItems = Array.isArray(data) ? data.map((item) => {
     const updatedCells = [
       ...item.cells,
@@ -126,8 +126,7 @@ export const tableData = (type, hasOptions, initialData, datastoreTypes, isEdit)
   const nodeTree = type === datastoreTypes.domain ? 'x_show' : 'tree_select';
   const columns = datastoreHeaders(type, hasOptions, datastoreTypes, isEdit);
   const { headerKeys, headerItems } = headerData(columns, cBox);
-  const rows = isEdit ? createRows(initialData) : initialData;
-  const miqRows = rowData(headerKeys, rows, true);
+  const miqRows = rowData(headerKeys, initialData, true);
   return {
     miqHeaders: headerItems, miqRows, hasCheckbox: cBox, nodeTree,
   };

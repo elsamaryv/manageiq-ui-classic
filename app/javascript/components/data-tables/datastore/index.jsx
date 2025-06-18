@@ -1,14 +1,12 @@
 /* eslint-disable no-undef */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal } from 'carbon-components-react';
-import MiqFormRenderer from '@@ddf';
 import {
   tableData, addSelected, removeSelected,
 } from './helper';
+import { ClassFieldsEditor } from './class-fields-editor';
 import MiqDataTable from '../../miq-data-table';
 import { CellAction } from '../../miq-data-table/helper';
-import createClassFieldsSchema from './modal-form.schema';
 
 const Datastore = ({
   type, initialData, hasOptions, datastoreTypes, isEdit, aeTypeOptions, dTypeOptions, aeClassId,
@@ -19,77 +17,11 @@ const Datastore = ({
 
   const [state, setState] = useState({
     schemaRecords: miqRows.rowItems,
-    // schemaRecords: handleMiqRows(initialData),
-    // selectedRowId: 100,
   });
-
-  const [isModalOpen, setModalOpen] = useState(false);
 
   if (miqRows.merged) {
     miqHeaders.splice(0, 1);
   }
-
-  const handleModalClose = () => {
-    setModalOpen(false);
-    // setState((state) => ({ ...state, selectedSubscription: {} }));
-  };
-
-  const handleOnAddFieldClick = () => {
-    setModalOpen(true);
-    setState((state) => ({ ...state, selectedRowId: undefined }));
-  };
-
-  const onModalSubmit = (values) => {
-    debugger
-
-    http.post(`/miq_ae_class/field_accept?button=accept`, values, {
-      skipErrors: [400],
-    }).then((response) => {
-      debugger
-      console.log(response);
-
-      // if (values) {
-      setState((prevState) => ({
-        ...prevState,
-        schemaRecords: [...prevState.schemaRecords, values],
-      }));
-      // }
-    }).catch((error) => {
-      console.error('Response:', error.response);
-    });
-    // if (replicationType === 'global') {
-    //   if (form.action === 'add') {
-    //     const newSubscription = {
-    //       dbname: values.dbname,
-    //       host: values.host,
-    //       user: values.user,
-    //       password: values.password,
-    //       port: values.port,
-    //     };
-
-    //     setState((state) => ({
-    //       ...state,
-    //       subscriptions: [...state.subscriptions, newSubscription],
-    //     }));
-    //   } else if (form.action === 'edit') {
-    //     const editedSub = {
-    //       dbname: values.dbname,
-    //       host: values.host,
-    //       password: values.password,
-    //       port: values.port,
-    //       user: values.user,
-    //     };
-
-    //     setState((prev) => ({
-    //       ...prev,
-    //       subscriptions: prev.subscriptions.map((subscription, i) =>
-    //         (i === selectedRowId ? editedSub : subscription)),
-    //     }));
-    //   }
-    // }
-
-    handleModalClose();
-  };
 
   /** Function to find an item from initialData. */
   const findItem = (item) => initialData.find((row) => row.id.toString() === item.id.toString());
@@ -156,30 +88,6 @@ const Datastore = ({
     updateSelection(selectedClickIds, selectedItemIds);
   };
 
-  const deleteClassField = (selectedRow) => {
-    const rowId = parseInt(selectedRow.id, 10);
-
-    setState((prevState) => ({
-      ...prevState,
-      schemaRecords: prevState.schemaRecords.filter((_, i) => i !== rowId),
-    }));
-  };
-
-  const editClassField = (selectedRow) => {
-    const rowId = parseInt(selectedRow.id, 10);
-    setModalOpen(true);
-    setState((state) => ({
-      ...state,
-      selectedRowId: rowId,
-      // form: {
-      //   type: 'replication',
-      //   className: 'replication_form',
-      //   action: 'edit',
-      // },
-      // selectedSubscription: subscriptions[rowId],
-    }));
-  };
-
   /** Function to handle the cell event actions. */
   const onCellClick = (selectedRow, cellType, event) => {
     setState((state) => ({ ...state, selectedRowId: selectedRow.id }));
@@ -187,97 +95,44 @@ const Datastore = ({
       case CellAction.selectAll: onSelectAll(event); break;
       case CellAction.itemSelect: onItemSelect(findItem(selectedRow), event.target); break;
       case CellAction.itemClick: onItemClick(findItem(selectedRow)); break;
-      case CellAction.buttonCallback: {
-        switch (selectedRow.callbackAction) {
-          case 'editClassField':
-            editClassField(selectedRow);
-            break;
-          case 'deleteClassField':
-            deleteClassField(selectedRow);
-            break;
-          default:
-            break;
-        }
-        break;
-      }
       default: onItemClick(findItem(selectedRow)); break;
     }
   };
 
-  const renderAddFieldButton = () => (
-    <div className="custom-accordion-buttons">
-      <Button
-        kind="primary"
-        className="btnRight"
-        type="submit"
-        title={__('Click to add a new field')}
-        onClick={handleOnAddFieldClick}
-        // onClick={() => setModalOpen(true)}
-        // onKeyPress={() => onSelect('new')}
-      >
-        {__('Add a Field')}
-      </Button>
-    </div>
-  );
+  const renderEditView = () => {
+    switch (type) {
+      case 'class_fields':
+        return (
+          <ClassFieldsEditor
+            aeClassId={aeClassId}
+            initialData={initialData}
+            aeTypeOptions={aeTypeOptions}
+            dTypeOptions={dTypeOptions}
+          />
+        );
+
+      default:
+        return null;
+    }
+  };
 
   return (
     <>
-      <div>
-        {isEdit && (
-          <>
-            {renderAddFieldButton()}
-
-            <Modal
-              open={isModalOpen}
-              // modalHeading={selectedSubscription && Object.keys(selectedSubscription).length
-              //   ? `Edit ${selectedSubscription.dbname}`
-              //   : 'Add Subscription'}
-              modalHeading="ABCDEF"
-              onRequestClose={handleModalClose}
-              passiveModal
-            >
-              <MiqFormRenderer
-                schema={createClassFieldsSchema(aeClassId, aeTypeOptions, dTypeOptions, state.selectedRowId,
-                  state.schemaRecords[state.selectedRowId])}
-                // schema={{}}
-                // componentMapper={componentMapper}
-                // initialValues={initialData || {}}
-                onSubmit={onModalSubmit}
-                onCancel={handleModalClose}
-                canReset
-                buttonsLabels={{
-                  submitLabel: __('Save'),
-                }}
-              />
-            </Modal>
-          </>
-        )}
-      </div>
-      <MiqDataTable
-        rows={state.schemaRecords}
-        headers={miqHeaders}
-        onCellClick={(selectedRow, cellType, event) => onCellClick(selectedRow, cellType, event)}
-        rowCheckBox={hasCheckbox}
-        mode={`datastore-list ${type}`}
-        gridChecks={selectionIds}
-      />
-
-      {isEdit && (
-        <MiqFormRenderer
-          // schema={createSchema(subscriptions, setState, setModalOpen, replicationType, isSubscriptionModified)}
-          // componentMapper={componentMapper}
-          // onSubmit={onSave}
-          // onCancel={onCancel}
-          onSubmit={() => {}}
-          onCancel={() => {}}
-          canReset
-          buttonsLabels={{
-            submitLabel: __('Save'),
-          }}
-        />
+      {isEdit ? (
+        renderEditView()
+      ) : (
+        <>
+          <MiqDataTable
+            rows={state.schemaRecords}
+            headers={miqHeaders}
+            onCellClick={(selectedRow, cellType, event) =>
+              onCellClick(selectedRow, cellType, event)}
+            rowCheckBox={hasCheckbox}
+            mode={`datastore-list ${type}`}
+            gridChecks={selectionIds}
+          />
+        </>
       )}
-
-
     </>
   );
 };
