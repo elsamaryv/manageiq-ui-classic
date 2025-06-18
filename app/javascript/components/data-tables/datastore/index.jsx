@@ -104,7 +104,7 @@ const Datastore = ({
       case 'class_fields':
         return (
           <ClassFieldsEditor
-            aeClassId={aeClassId}
+            // aeClassId={aeClassId}
             initialData={initialData}
             aeTypeOptions={aeTypeOptions}
             dTypeOptions={dTypeOptions}

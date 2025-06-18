@@ -38,7 +38,7 @@ export const schemaHeaders = (isEdit = false) => {
     { name: 'on_entry', text: 'OnEntry', header_text: __('On Entry') },
     { name: 'on_exit', text: 'OnExit', header_text: __('On Exit') },
     { name: 'on_error', text: 'OnError', header_text: __('On Error') },
-    { name: 'max_entries', text: 'MaxRetries', header_text: __('Max Retries') },
+    { name: 'max_retries', text: 'MaxRetries', header_text: __('Max Retries') },
     { name: 'max_time', text: 'MaxTime', header_text: __('Max Time') },
   ];
 

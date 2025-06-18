@@ -6,10 +6,11 @@ import { schemaHeaders, createEditableRows } from './helper';
 import MiqDataTable from '../../miq-data-table';
 import createClassFieldsSchema from './modal-form.schema';
 import { CellAction } from '../../miq-data-table/helper';
+// import miqRedirectBack from '../../helpers/miq-redirect-back';
 
 export const ClassFieldsEditor = (props) => {
   const {
-    aeClassId, initialData, aeTypeOptions, dTypeOptions 
+    initialData, aeTypeOptions, dTypeOptions,
   } = props;
 
   const fieldData = createEditableRows(initialData);
@@ -92,7 +93,7 @@ export const ClassFieldsEditor = (props) => {
     // setModalOpen(false);
     setState((state) => ({ ...state, isModalOpen: false }));
   };
-
+  
   const renderAddFieldButton = () => (
     <div className="custom-accordion-buttons">
       <Button
@@ -109,25 +110,79 @@ export const ClassFieldsEditor = (props) => {
     </div>
   );
 
-  const onModalSubmit = (values) => {
-    debugger
+  const formatFieldValues = (field) => {
+    if (!field || typeof field !== 'object') return [];
 
+    const row = {
+      id: field.id || state.rows.length,
+      name: { text: field.name, icon: field.icons },
+      aetype: { text: field.aetype },
+      datatype: { text: field.datatype },
+      default_value: { text: field.default_value },
+      display_name: { text: field.display_name },
+      description: { text: field.description },
+      substitute: { text: field.substitute },
+      collect: { text: field.collect },
+      message: { text: field.message },
+      on_entry: { text: field.on_entry },
+      on_exit: { text: field.on_exit },
+      on_error: { text: field.on_error },
+      max_retries: { text: field.max_retries },
+      max_time: { text: field.max_time },
+      edit: {
+        is_button: true,
+        text: __('Update'),
+        kind: 'tertiary',
+        size: 'md',
+        callback: 'editSubscription',
+      },
+      delete: {
+        is_button: true,
+        text: __('Delete'),
+        kind: 'danger',
+        size: 'md',
+        callback: 'deleteSubscription',
+      },
+    };
+
+    return row;
+  };
+
+  const onModalSubmit = (values) => {
     http.post(`/miq_ae_class/field_accept?button=accept`, values, {
       skipErrors: [400],
-    }).then((response) => {
-      debugger
-      console.log(response);
-
-      setState((prevState) => ({
-        ...prevState,
-        schemaRecords: [...prevState.schemaRecords, values],
-      }));
-      // }
+    }).then(() => {
+      const data = formatFieldValues(values);
+      // const clonedData = JSON.parse(JSON.stringify(data));
+      // setState((prevState) => ({
+      //   ...prevState,
+      //   rows: [...prevState.rows, data],
+      // }));
+      setState((prevState) => {
+        debugger;
+        return {
+          ...prevState,
+          rows: [...prevState.rows, data],
+        };
+      });
     }).catch((error) => {
-      console.error('Response:', error.response);
+      console.error('Response:', error);
     });
 
     handleModalClose();
+  };
+
+  // const onCancel = () => {
+  //   debugger
+  //   miqSparkleOn();
+  //   const message = __('Edit of schema field was cancelled by the user');
+  //   miqRedirectBack(message, 'warning', '/miq_ae_class/explorer');
+  // };
+
+  const onCancel = () => {
+    miqSparkleOn();
+    // miqAjaxButton(`/miq_ae_class/explorer`);
+    window.location.reload();
   };
 
   return (
@@ -136,13 +191,12 @@ export const ClassFieldsEditor = (props) => {
 
       <Modal
         open={state.isModalOpen}
-        modalHeading="ABCDEF"
+        modalHeading="Edit"
         onRequestClose={handleModalClose}
         passiveModal
       >
         <MiqFormRenderer
           schema={createClassFieldsSchema(
-            aeClassId,
             aeTypeOptions,
             dTypeOptions,
             state.selectedRowId,
@@ -165,12 +219,12 @@ export const ClassFieldsEditor = (props) => {
           { key: 'on_entry', header: __('On Entry') },
           { key: 'on_exit', header: __('On Exit') },
           { key: 'on_error', header: __('On Error') },
-          { key: 'max_entries', header: __('Max Retries') },
+          { key: 'max_retries', header: __('Max Retries') },
           { key: 'max_time', header: __('Max Time') },
           { key: 'edit', header: __('Edit') },
           { key: 'delete', header: __('Delete') },
         ]}
-        rows={transformedRows()}
+        rows={state.rows}
         size="md"
         sortable={false}
         onCellClick={(selectedRow, cellType, event) =>
@@ -179,7 +233,7 @@ export const ClassFieldsEditor = (props) => {
       <>
         <MiqFormRenderer
           onSubmit={() => {}}
-          onCancel={() => {}}
+          onCancel={onCancel}
           canReset
           buttonsLabels={{ submitLabel: __('Save') }}
         />
@@ -189,7 +243,7 @@ export const ClassFieldsEditor = (props) => {
 };
 
 ClassFieldsEditor.propTypes = {
-  aeClassId: PropTypes.number.isRequired,
+  // aeClassId: PropTypes.number.isRequired,
   initialData: PropTypes.arrayOf(PropTypes.any).isRequired,
   aeTypeOptions: PropTypes.arrayOf(PropTypes.any),
   dTypeOptions: PropTypes.arrayOf(PropTypes.any),
