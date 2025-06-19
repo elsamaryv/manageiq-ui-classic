@@ -191,7 +191,7 @@ export const ClassFieldsEditor = (props) => {
 
       <Modal
         open={state.isModalOpen}
-        modalHeading="Edit"
+        modalHeading={state.selectedRowId === undefined ? __('Add New Field') : __('Edit Field')}
         onRequestClose={handleModalClose}
         passiveModal
       >
@@ -206,7 +206,7 @@ export const ClassFieldsEditor = (props) => {
           onSubmit={onModalSubmit}
           onCancel={handleModalClose}
           canReset
-          buttonsLabels={{ submitLabel: __('Accept') }}
+          buttonsLabels={{ submitLabel: __('Save') }}
         />
       </Modal>
 
