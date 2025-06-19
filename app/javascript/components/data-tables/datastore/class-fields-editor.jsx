@@ -148,28 +148,28 @@ export const ClassFieldsEditor = (props) => {
   };
 
   const onModalSubmit = (values) => {
-    if (state.selectedRowId !== undefined) {
-      // Edit a field
-      const data = formatFieldValues(values, state.selectedRowId);
+    const isEdit = state.selectedRowId !== undefined;
+    const data = formatFieldValues(values, isEdit ? state.selectedRowId : state.rows.length);
+
+    const updateState = (newData) => {
       setState((prevState) => ({
         ...prevState,
-        rows: prevState.rows.map((field) => (field.id === data.id ? data : field)),
+        rows: isEdit
+          ? prevState.rows.map((field) => (field.id === newData.id ? newData : field))
+          : [...prevState.rows, newData],
       }));
-    } else {
-      // Add a field
-      http.post(`/miq_ae_class/field_accept?button=accept`, values, {
-        skipErrors: [400],
-      }).then(() => {
-        const data = formatFieldValues(values, state.rows.length);
-        setState((prevState) => ({
-          ...prevState,
-          rows: [...prevState.rows, data],
-        }));
-      }).catch((error) => {
-      });
-    }
+      handleModalClose();
+    };
 
-    handleModalClose();
+    if (isEdit) {
+      updateState(data);
+    } else {
+      http.post(`/miq_ae_class/field_accept?button=accept`, values, { skipErrors: [400] })
+        .then(() => updateState(data))
+        .catch((error) => {
+          console.error('Failed to save new field:', error);
+        });
+    }
   };
 
   // const onCancel = () => {
