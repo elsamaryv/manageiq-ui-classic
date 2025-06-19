@@ -15,6 +15,8 @@ export const ClassFieldsEditor = (props) => {
 
   const fieldData = createEditableRows(initialData);
 
+  debugger
+
   const transformedRows = () => {
     const rowItems = [];
     const headers = schemaHeaders(true);
@@ -109,12 +111,12 @@ export const ClassFieldsEditor = (props) => {
     </div>
   );
 
-  const formatFieldValues = (field, id) => {
+  const formatFieldValues = (field, id, data = {}) => {
     if (!field || typeof field !== 'object') return [];
 
     const row = {
       id: (field.id || id).toString(),
-      name: { text: field.name, icon: field.icons },
+      name: { text: field.name, icon: data.icons || [] },
       aetype: { text: field.aetype },
       datatype: { text: field.datatype },
       default_value: { text: field.default_value || '' },
@@ -149,7 +151,6 @@ export const ClassFieldsEditor = (props) => {
 
   const onModalSubmit = (values) => {
     const isEdit = state.selectedRowId !== undefined;
-    const data = formatFieldValues(values, isEdit ? state.selectedRowId : state.rows.length);
 
     const updateState = (newData) => {
       setState((prevState) => ({
@@ -162,10 +163,14 @@ export const ClassFieldsEditor = (props) => {
     };
 
     if (isEdit) {
+      const data = formatFieldValues(values, state.selectedRowId);
       updateState(data);
     } else {
       http.post(`/miq_ae_class/field_accept?button=accept`, values, { skipErrors: [400] })
-        .then(() => updateState(data))
+        .then((response) => {
+          const data = formatFieldValues(values, state.rows.length, response.data);
+          updateState(data);
+        })
         .catch((error) => {
           console.error('Failed to save new field:', error);
         });

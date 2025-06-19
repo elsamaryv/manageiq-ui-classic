@@ -1,4 +1,5 @@
 require "rexml/document"
+require 'byebug'
 class MiqAeClassController < ApplicationController
   include MiqAeClassHelper
   include AutomateTreeHelper
@@ -1456,17 +1457,22 @@ class MiqAeClassController < ApplicationController
 
   # AJAX driven routine to select a classification entry
   def field_accept
+    # byebug
     assert_privileges('miq_ae_field_edit')
     fields_get_form_vars
     @changed = (@edit[:new] != @edit[:current])
     @combo_xml = build_type_options
     @dtype_combo_xml = build_dtype_options
-    render :update do |page|
-      page << javascript_prologue
-      page.replace("class_fields_div", :partial => "class_fields")
-      page << javascript_for_miq_button_visibility(@changed)
-      page << "miqSparkle(false);"
-    end
+    # render :update do |page|
+    #   page << javascript_prologue
+    #   page.replace("class_fields_div", :partial => "class_fields")
+    #   page << javascript_for_miq_button_visibility(@changed)
+    #   page << "miqSparkle(false);"
+    # end
+    render :json => {
+      :message => 'Accepted',
+      :data => {:icons => [ae_field_fonticon(params[:aetype]), ae_field_fonticon(params[:datatype])]}
+    }
   end
 
   # AJAX driven routine to delete a classification entry
@@ -2390,18 +2396,20 @@ class MiqAeClassController < ApplicationController
         end
       end
     elsif params[:button] == "accept"
-      if session[:field_data][:name].blank? || session[:field_data][:aetype].blank?
-        field = session[:field_data][:name].blank? ? "Name" : "Type"
-        field += " and Type" if field == "Name" && session[:field_data][:aetype].blank?
-        add_flash(_("%{field} is required") % {:field => field}, :error)
-        return
-      end
+      # if session[:field_data][:name].blank? || session[:field_data][:aetype].blank?
+      #   field = session[:field_data][:name].blank? ? "Name" : "Type"
+      #   field += " and Type" if field == "Name" && session[:field_data][:aetype].blank?
+      #   add_flash(_("%{field} is required") % {:field => field}, :error)
+      #   return
+      # end
       new_fields = {}
       field_attributes.each do |field_attribute|
-        new_fields[field_attribute] = @edit[:new_field][field_attribute.to_sym]
+        # new_fields[field_attribute] = @edit[:new_field][field_attribute.to_sym]
+        # new_fields[field_attribute] = params[:field][field_attribute.to_sym]
+        new_fields[field_attribute] = params[field_attribute.to_sym]
       end
       @edit[:new][:fields].push(new_fields)
-      @edit[:new_field] = session[:field_data] = {}
+      # @edit[:new_field] = session[:field_data] = {}
     end
   end
 

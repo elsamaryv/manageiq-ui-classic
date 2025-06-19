@@ -3,6 +3,7 @@ import { transformSelectOptions, handleSchemaFieldChange } from './helper';
 
 const createClassFieldsSchema = (aeTypeOptions, dTypeOptions, selectedRowId, schemaField = {}) => {
   const classField = schemaField;
+  console.log("Classfield -- ", classField);
   // const getFieldName = (fname, index) =>
   // (typeof index !== 'undefined' ? `fields_${fname}_${index}` : `field_${fname}`);
 
@@ -24,10 +25,10 @@ const createClassFieldsSchema = (aeTypeOptions, dTypeOptions, selectedRowId, sch
       classField
       && typeof classField === 'object'
       && Object.keys(classField).length > 0
-      && classField.Name
-      && 'icon' in classField.Name
+      && classField.name
+      && 'icon' in classField.name
     ) {
-      return classField.Name.icon[index];
+      return classField.name.icon[index];
     }
     return '';
   };
