@@ -45,15 +45,14 @@ export const ClassFieldsEditor = (props) => {
   };
 
   const deleteClassField = (selectedRow) => {
-    const rowId = parseInt(selectedRow.id, 10);
-
-    // setState((prevState) => ({
-    //   ...prevState,
-    //   schemaRecords: prevState.schemaRecords.filter((_, i) => i !== rowId),
-    // }));
+    setState((prevState) => ({
+      ...prevState,
+      rows: prevState.rows.filter((field) => field.id !== selectedRow.id),
+    }));
   };
 
   const editClassField = (selectedRow) => {
+    debugger
     const rowId = parseInt(selectedRow.id, 10);
     setState((state) => ({
       ...state,
@@ -111,37 +110,38 @@ export const ClassFieldsEditor = (props) => {
   );
 
   const formatFieldValues = (field) => {
+    debugger 
     if (!field || typeof field !== 'object') return [];
 
     const row = {
-      id: field.id || state.rows.length,
+      id: (field.id || state.rows.length).toString(),
       name: { text: field.name, icon: field.icons },
       aetype: { text: field.aetype },
       datatype: { text: field.datatype },
-      default_value: { text: field.default_value },
-      display_name: { text: field.display_name },
-      description: { text: field.description },
+      default_value: { text: field.default_value || '' },
+      display_name: { text: field.display_name || '' },
+      description: { text: field.description || '' },
       substitute: { text: field.substitute },
-      collect: { text: field.collect },
-      message: { text: field.message },
-      on_entry: { text: field.on_entry },
-      on_exit: { text: field.on_exit },
-      on_error: { text: field.on_error },
-      max_retries: { text: field.max_retries },
-      max_time: { text: field.max_time },
+      collect: { text: field.collect || '' },
+      message: { text: field.message || '' },
+      on_entry: { text: field.on_entry || '' },
+      on_exit: { text: field.on_exit || '' },
+      on_error: { text: field.on_error || '' },
+      max_retries: { text: field.max_retries || '' },
+      max_time: { text: field.max_time || '' },
       edit: {
         is_button: true,
         text: __('Update'),
         kind: 'tertiary',
         size: 'md',
-        callback: 'editSubscription',
+        callback: 'editClassField',
       },
       delete: {
         is_button: true,
         text: __('Delete'),
         kind: 'danger',
         size: 'md',
-        callback: 'deleteSubscription',
+        callback: 'deleteClassField',
       },
     };
 
