@@ -1,5 +1,5 @@
 import { componentTypes, validatorTypes } from '@@ddf';
-import { transformSelectOptions, handleSchemaFieldChange } from './helper';
+import { transformSelectOptions, handleSchemaFieldChange } from '../helper';
 
 const createClassFieldsSchema = (aeTypeOptions, dTypeOptions, selectedRowId, schemaField = {}) => {
   const classField = schemaField;

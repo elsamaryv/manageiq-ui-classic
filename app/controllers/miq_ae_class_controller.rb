@@ -1442,8 +1442,8 @@ class MiqAeClassController < ApplicationController
   def field_select
     assert_privileges('miq_ae_field_edit')
     fields_get_form_vars
-    @combo_xml = build_type_options
-    @dtype_combo_xml = build_dtype_options
+    # @combo_xml = build_type_options
+    # @dtype_combo_xml = build_dtype_options
     session[:field_data] = {}
     @edit[:new_field][:substitute] = session[:field_data][:substitute] = true
     @changed = (@edit[:new] != @edit[:current])
@@ -1461,14 +1461,15 @@ class MiqAeClassController < ApplicationController
     assert_privileges('miq_ae_field_edit')
     fields_get_form_vars
     @changed = (@edit[:new] != @edit[:current])
-    @combo_xml = build_type_options
-    @dtype_combo_xml = build_dtype_options
+    # @combo_xml = build_type_options
+    # @dtype_combo_xml = build_dtype_options
     # render :update do |page|
     #   page << javascript_prologue
     #   page.replace("class_fields_div", :partial => "class_fields")
     #   page << javascript_for_miq_button_visibility(@changed)
     #   page << "miqSparkle(false);"
     # end
+    # byebug
     render :json => {
       :message => 'Accepted',
       :data => {:icons => [ae_field_fonticon(params[:aetype]), ae_field_fonticon(params[:datatype])]}
@@ -2396,14 +2397,19 @@ class MiqAeClassController < ApplicationController
         end
       end
     elsif params[:button] == "accept"
+      # byebug
       # if session[:field_data][:name].blank? || session[:field_data][:aetype].blank?
-      #   field = session[:field_data][:name].blank? ? "Name" : "Type"
-      #   field += " and Type" if field == "Name" && session[:field_data][:aetype].blank?
-      #   add_flash(_("%{field} is required") % {:field => field}, :error)
-      #   return
-      # end
+      if params[:name].blank? || params[:aetype].blank?
+        # field = session[:field_data][:name].blank? ? "Name" : "Type"
+        # field += " and Type" if field == "Name" && session[:field_data][:aetype].blank?
+        field = params[:name].blank? ? "Name" : "Type"
+        field += " and Type" if field == "Name" && params[:aetype].blank?
+        add_flash(_("%{field} is required") % {:field => field}, :error)
+        return
+      end
       new_fields = {}
       field_attributes.each do |field_attribute|
+        # byebug
         # new_fields[field_attribute] = @edit[:new_field][field_attribute.to_sym]
         # new_fields[field_attribute] = params[:field][field_attribute.to_sym]
         new_fields[field_attribute] = params[field_attribute.to_sym]

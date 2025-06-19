@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import {
   tableData, addSelected, removeSelected,
 } from './helper';
-import { ClassFieldsEditor } from './class-fields-editor';
+import { ClassFieldsEditor } from './schema/class-fields-editor';
 import MiqDataTable from '../../miq-data-table';
 import { CellAction } from '../../miq-data-table/helper';
 

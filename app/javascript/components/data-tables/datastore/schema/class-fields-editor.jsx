@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal } from 'carbon-components-react';
 import MiqFormRenderer from '@@ddf';
-import { schemaHeaders, createEditableRows } from './helper';
-import MiqDataTable from '../../miq-data-table';
+import { schemaHeaders, createEditableRows } from '../helper';
+import MiqDataTable from '../../../miq-data-table';
 import createClassFieldsSchema from './modal-form.schema';
-import { CellAction } from '../../miq-data-table/helper';
+import { CellAction } from '../../../miq-data-table/helper';
 // import miqRedirectBack from '../../helpers/miq-redirect-back';
 
 export const ClassFieldsEditor = (props) => {
@@ -177,6 +177,10 @@ export const ClassFieldsEditor = (props) => {
     }
   };
 
+  const onSchemaSave = (values) => {
+    debugger
+  };
+
   // const onCancel = () => {
   //   debugger
   //   miqSparkleOn();
@@ -211,7 +215,7 @@ export const ClassFieldsEditor = (props) => {
           onSubmit={onModalSubmit}
           onCancel={handleModalClose}
           canReset
-          buttonsLabels={{ submitLabel: __('Save') }}
+          buttonsLabels={{ submitLabel: __('Acc/savw') }}
         />
       </Modal>
 
@@ -238,7 +242,7 @@ export const ClassFieldsEditor = (props) => {
       />
       <>
         <MiqFormRenderer
-          onSubmit={() => {}}
+          onSubmit={onSchemaSave}
           onCancel={onCancel}
           canReset
           buttonsLabels={{ submitLabel: __('Save') }}
