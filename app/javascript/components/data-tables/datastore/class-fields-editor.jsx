@@ -38,10 +38,26 @@ export const ClassFieldsEditor = (props) => {
     isModalOpen: false,
     selectedRowId: undefined,
     rows: transformedRows(),
+    formKey: true, // for remounting
   });
 
   const handleOnAddFieldClick = () => {
-    setState((state) => ({ ...state, selectedRowId: undefined, isModalOpen: true }));
+    setState((state) => ({
+      ...state,
+      selectedRowId: undefined,
+      isModalOpen: true,
+      formKey: !state.formKey,
+    }));
+  };
+
+  const editClassField = (selectedRow) => {
+    const rowId = selectedRow.id;
+    setState((state) => ({
+      ...state,
+      selectedRowId: rowId,
+      isModalOpen: true,
+      formKey: !state.formKey,
+    }));
   };
 
   const deleteClassField = (selectedRow) => {
@@ -51,23 +67,7 @@ export const ClassFieldsEditor = (props) => {
     }));
   };
 
-  const editClassField = (selectedRow) => {
-    debugger
-    const rowId = parseInt(selectedRow.id, 10);
-    setState((state) => ({
-      ...state,
-      selectedRowId: rowId,
-      isModalOpen: true,
-      // form: {
-      //   type: 'replication',
-      //   className: 'replication_form',
-      //   action: 'edit',
-      // },
-      // selectedSubscription: subscriptions[rowId],
-    }));
-  };
-
-  const onCellClick = (selectedRow, cellType, event) => {
+  const onCellClick = (selectedRow, cellType) => {
     setState((state) => ({ ...state, selectedRowId: selectedRow.id }));
     switch (cellType) {
       case CellAction.buttonCallback: {
@@ -92,7 +92,7 @@ export const ClassFieldsEditor = (props) => {
     // setModalOpen(false);
     setState((state) => ({ ...state, isModalOpen: false }));
   };
-  
+
   const renderAddFieldButton = () => (
     <div className="custom-accordion-buttons">
       <Button
@@ -109,12 +109,11 @@ export const ClassFieldsEditor = (props) => {
     </div>
   );
 
-  const formatFieldValues = (field) => {
-    debugger 
+  const formatFieldValues = (field, id) => {
     if (!field || typeof field !== 'object') return [];
 
     const row = {
-      id: (field.id || state.rows.length).toString(),
+      id: (field.id || id).toString(),
       name: { text: field.name, icon: field.icons },
       aetype: { text: field.aetype },
       datatype: { text: field.datatype },
@@ -149,25 +148,26 @@ export const ClassFieldsEditor = (props) => {
   };
 
   const onModalSubmit = (values) => {
-    http.post(`/miq_ae_class/field_accept?button=accept`, values, {
-      skipErrors: [400],
-    }).then(() => {
-      const data = formatFieldValues(values);
-      // const clonedData = JSON.parse(JSON.stringify(data));
-      // setState((prevState) => ({
-      //   ...prevState,
-      //   rows: [...prevState.rows, data],
-      // }));
-      setState((prevState) => {
-        debugger;
-        return {
+    if (state.selectedRowId !== undefined) {
+      // Edit a field
+      const data = formatFieldValues(values, state.selectedRowId);
+      setState((prevState) => ({
+        ...prevState,
+        rows: prevState.rows.map((field) => (field.id === data.id ? data : field)),
+      }));
+    } else {
+      // Add a field
+      http.post(`/miq_ae_class/field_accept?button=accept`, values, {
+        skipErrors: [400],
+      }).then(() => {
+        const data = formatFieldValues(values, state.rows.length);
+        setState((prevState) => ({
           ...prevState,
           rows: [...prevState.rows, data],
-        };
+        }));
+      }).catch((error) => {
       });
-    }).catch((error) => {
-      console.error('Response:', error);
-    });
+    }
 
     handleModalClose();
   };
@@ -196,6 +196,7 @@ export const ClassFieldsEditor = (props) => {
         passiveModal
       >
         <MiqFormRenderer
+          key={state.formKey}
           schema={createClassFieldsSchema(
             aeTypeOptions,
             dTypeOptions,
