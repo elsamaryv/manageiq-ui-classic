@@ -502,6 +502,7 @@ class MiqAeClassController < ApplicationController
     @in_a_form = true
     @in_a_form_fields = true
     session[:changed] = @changed = false
+    @hide_bottom_bar = true
     replace_right_cell
   end
 
