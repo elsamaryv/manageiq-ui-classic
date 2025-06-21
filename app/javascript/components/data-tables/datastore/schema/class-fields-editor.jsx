@@ -1,21 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal } from 'carbon-components-react';
+import { Modal } from 'carbon-components-react';
 import MiqFormRenderer from '@@ddf';
 import { schemaHeaders, createEditableRows } from '../helper';
-import MiqDataTable from '../../../miq-data-table';
 import createClassFieldsSchema from './modal-form.schema';
-import { CellAction } from '../../../miq-data-table/helper';
 // import miqRedirectBack from '../../helpers/miq-redirect-back';
+import createSchemaEditSchema from './class-fields-schema';
+import mapper from '../../../../forms/mappers/componentMapper';
+import { SchemaTableComponent } from './schema-table';
 
 export const ClassFieldsEditor = (props) => {
   const {
     initialData, aeTypeOptions, dTypeOptions,
   } = props;
 
-  const fieldData = createEditableRows(initialData);
+  const componentMapper = {
+    ...mapper,
+    'schema-table': SchemaTableComponent,
+  };
 
-  debugger
+  const fieldData = createEditableRows(initialData);
 
   const transformedRows = () => {
     const rowItems = [];
@@ -41,75 +45,34 @@ export const ClassFieldsEditor = (props) => {
     selectedRowId: undefined,
     rows: transformedRows(),
     formKey: true, // for remounting
+    isSchemaModified: false,
   });
 
-  const handleOnAddFieldClick = () => {
-    setState((state) => ({
-      ...state,
-      selectedRowId: undefined,
-      isModalOpen: true,
-      formKey: !state.formKey,
-    }));
-  };
+  useEffect(() => {
+    setState((state) => ({ ...state, isSchemaModified: !state.isSchemaModified }));
+  }, [state.rows]);
 
-  const editClassField = (selectedRow) => {
-    const rowId = selectedRow.id;
-    setState((state) => ({
-      ...state,
-      selectedRowId: rowId,
-      isModalOpen: true,
-      formKey: !state.formKey,
-    }));
-  };
+  // const editClassField = (selectedRow) => {
+  //   const rowId = selectedRow.id;
+  //   setState((state) => ({
+  //     ...state,
+  //     selectedRowId: rowId,
+  //     isModalOpen: true,
+  //     formKey: !state.formKey,
+  //   }));
+  // };
 
-  const deleteClassField = (selectedRow) => {
-    setState((prevState) => ({
-      ...prevState,
-      rows: prevState.rows.filter((field) => field.id !== selectedRow.id),
-    }));
-  };
-
-  const onCellClick = (selectedRow, cellType) => {
-    setState((state) => ({ ...state, selectedRowId: selectedRow.id }));
-    switch (cellType) {
-      case CellAction.buttonCallback: {
-        switch (selectedRow.callbackAction) {
-          case 'editClassField':
-            editClassField(selectedRow);
-            break;
-          case 'deleteClassField':
-            deleteClassField(selectedRow);
-            break;
-          default:
-            break;
-        }
-        break;
-      }
-      // default: onItemClick(findItem(selectedRow)); break;
-      default: break;
-    }
-  };
+  // const deleteClassField = (selectedRow) => {
+  //   setState((prevState) => ({
+  //     ...prevState,
+  //     rows: prevState.rows.filter((field) => field.id !== selectedRow.id),
+  //   }));
+  // };
 
   const handleModalClose = () => {
     // setModalOpen(false);
     setState((state) => ({ ...state, isModalOpen: false }));
   };
-
-  const renderAddFieldButton = () => (
-    <div className="custom-accordion-buttons">
-      <Button
-        kind="primary"
-        className="btnRight"
-        type="submit"
-        title={__('Click to add a new field')}
-        onClick={handleOnAddFieldClick}
-        // onClick={() => setModalOpen(true)}
-        // onKeyPress={() => onSelect('new')}
-      >
-        {__('Add a Field')}
-      </Button>
-    </div>
-  );
 
   const formatFieldValues = (field, id, data = {}) => {
     if (!field || typeof field !== 'object') return [];
@@ -194,9 +157,19 @@ export const ClassFieldsEditor = (props) => {
     window.location.reload();
   };
 
+  debugger
+
   return (
     <>
-      {renderAddFieldButton()}
+
+      <MiqFormRenderer
+        schema={createSchemaEditSchema(state.rows, setState, state.isSchemaModified)}
+        componentMapper={componentMapper}
+        onSubmit={onSchemaSave}
+        onCancel={onCancel}
+        canReset
+        buttonsLabels={{ submitLabel: __('Save') }}
+      />
 
       <Modal
         open={state.isModalOpen}
@@ -218,36 +191,6 @@ export const ClassFieldsEditor = (props) => {
           buttonsLabels={{ submitLabel: __('Acc/savw') }}
         />
       </Modal>
-
-      <MiqDataTable
-        headers={[
-          { key: 'name', header: __('Name') },
-          { key: 'description', header: __('Description') },
-          { key: 'default_value', header: __('Default Value') },
-          { key: 'collect', header: __('Collect') },
-          { key: 'message', header: __('Message') },
-          { key: 'on_entry', header: __('On Entry') },
-          { key: 'on_exit', header: __('On Exit') },
-          { key: 'on_error', header: __('On Error') },
-          { key: 'max_retries', header: __('Max Retries') },
-          { key: 'max_time', header: __('Max Time') },
-          { key: 'edit', header: __('Edit') },
-          { key: 'delete', header: __('Delete') },
-        ]}
-        rows={state.rows}
-        size="md"
-        sortable={false}
-        onCellClick={(selectedRow, cellType, event) =>
-          onCellClick(selectedRow, cellType, event)}
-      />
-      <>
-        <MiqFormRenderer
-          onSubmit={onSchemaSave}
-          onCancel={onCancel}
-          canReset
-          buttonsLabels={{ submitLabel: __('Save') }}
-        />
-      </>
     </>
   );
 };
@@ -257,7 +200,6 @@ ClassFieldsEditor.propTypes = {
   initialData: PropTypes.arrayOf(PropTypes.any).isRequired,
   aeTypeOptions: PropTypes.arrayOf(PropTypes.any),
   dTypeOptions: PropTypes.arrayOf(PropTypes.any),
-  // onCellClick: PropTypes.func.isRequired,
 };
 
 ClassFieldsEditor.defaultProps = {

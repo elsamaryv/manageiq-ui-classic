@@ -3,7 +3,7 @@ import { transformSelectOptions, handleSchemaFieldChange } from '../helper';
 
 const createClassFieldsSchema = (aeTypeOptions, dTypeOptions, selectedRowId, schemaField = {}) => {
   const classField = schemaField;
-  console.log("Classfield -- ", classField);
+  // console.log("Classfield -- ", classField);
   // const getFieldName = (fname, index) =>
   // (typeof index !== 'undefined' ? `fields_${fname}_${index}` : `field_${fname}`);
 
