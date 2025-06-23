@@ -59,7 +59,7 @@ export const ClassFieldsEditor = (props) => {
     setState((state) => ({ ...state, isModalOpen: false }));
   };
 
-  const formatFieldValues = (field, id, data = {}) => {
+  const formatFieldValues = (field, id) => {
     if (!field || typeof field !== 'object') return [];
     const getFieldName = () => `${field.display_name} (${field.name})`;
     const getIconForValue = () => {
@@ -69,7 +69,9 @@ export const ClassFieldsEditor = (props) => {
       const dtypeMatch = dTypeOptions.find((option) => option[1] === field.datatype);
       const dTypeIcon = (dtypeMatch && dtypeMatch[2] && dtypeMatch[2]['data-icon']) || '';
 
-      return [aeTypeIcon, dTypeIcon];
+      const subIcon = (field.substitute) ? 'pficon pficon-ok' : 'pficon pficon-close';
+
+      return [aeTypeIcon, dTypeIcon, subIcon];
     };
 
     const row = {
@@ -128,8 +130,8 @@ export const ClassFieldsEditor = (props) => {
       updateState(data);
     } else {
       http.post(`/miq_ae_class/field_accept?button=accept`, values, { skipErrors: [400] })
-        .then((response) => {
-          const data = formatFieldValues(values, state.rows.length, response.data);
+        .then(() => {
+          const data = formatFieldValues(values, state.rows.length);
           updateState(data);
         })
         .catch((error) => {
@@ -153,7 +155,6 @@ export const ClassFieldsEditor = (props) => {
         }
         return row;
       });
-      debugger
 
       return {
         ...prevState,
@@ -215,7 +216,6 @@ export const ClassFieldsEditor = (props) => {
   };
 
   // const onCancel = () => {
-  //   debugger
   //   miqSparkleOn();
   //   const message = __('Edit of schema field was cancelled by the user');
   //   miqRedirectBack(message, 'warning', '/miq_ae_class/explorer');
@@ -234,9 +234,7 @@ export const ClassFieldsEditor = (props) => {
       }).catch((error) => {
         console.error('Failed to cancel schema updates:', error);
       });
-  }
-
-  // debugger
+  };
 
   return (
     <>

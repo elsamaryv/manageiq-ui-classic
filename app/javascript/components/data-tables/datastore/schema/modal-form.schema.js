@@ -4,15 +4,7 @@ import { transformSelectOptions } from '../helper';
 const createClassFieldsSchema = (aeClassId, selectedRowId, aeTypeOptions,
   dTypeOptions, schemaField = {}, handleSchemaFieldChange, updateFieldValueInState) => {
   const classField = schemaField;
-
-  // const formatName = () => {
-  //   const fullName = classField.name.text;
-  //   const match = fullName.match(/^(.+?)\s*\(([^)]+)\)$/);
-  //   return {
-  //     display_name: match[1],
-  //     name: match[2],
-  //   };
-  // };
+  console.log("Class field -- ", classField);
 
   const formatName = () => {
     const fullName = classField.name.text;
@@ -30,29 +22,6 @@ const createClassFieldsSchema = (aeClassId, selectedRowId, aeTypeOptions,
     };
   };
 
-  const getInitialValue = (field, defaultVal = '') => {
-    if (
-      classField
-      && typeof classField === 'object'
-      && Object.keys(classField).length > 0
-    ) {
-      if (selectedRowId) {
-        if (field === 'name' || field === 'display_name') {
-          // debugger
-          const formatted = formatName();
-          return formatted[field] || defaultVal;
-        }
-      }
-
-      if (classField[field] && 'text' in classField[field]) {
-        return classField[field].text || defaultVal;
-      }
-    }
-
-    return defaultVal;
-  };
-
-
   const getIcons = (index) => {
     if (
       classField
@@ -61,9 +30,46 @@ const createClassFieldsSchema = (aeClassId, selectedRowId, aeTypeOptions,
       && classField.name
       && 'icon' in classField.name
     ) {
-      return classField.name.icon[index];
+      let icons = classField.name.icon;
+      if (icons.length === 2) {
+        // icons come in the order [aetype, dtype, substitute]
+        // aetype and substitute will be present always; so rearrange index 1 and 2
+        icons = [icons[0], '', icons[1]];
+      }
+      return icons[index];
     }
     return '';
+  };
+
+  const getInitialValue = (field, defaultVal = '') => {
+    if (
+      classField
+      && typeof classField === 'object'
+      && Object.keys(classField).length > 0
+    ) {
+      if (selectedRowId) {
+        if (field === 'name' || field === 'display_name') {
+          const formatted = formatName();
+          return formatted[field] || defaultVal;
+        }
+        if (field === 'substitute') {
+          if (classField[field] && 'text' in classField[field]) {
+            return classField[field].text !== undefined && classField[field].text !== null
+              ? classField[field].text
+              : defaultVal;
+          }
+          const icon = getIcons(2);
+          return icon === 'pficon pficon-ok';
+        }
+        return classField[field].text || defaultVal;
+      }
+
+      if (classField[field] && 'text' in classField[field]) {
+        return classField[field].text || defaultVal;
+      }
+    }
+
+    return defaultVal;
   };
 
   const getType = (options, icon) => {
@@ -175,8 +181,7 @@ const createClassFieldsSchema = (aeClassId, selectedRowId, aeTypeOptions,
         label: __('Sub'),
         initialValue: getInitialValue('substitute', true),
         ...(selectedRowId && {
-          onChange: (e) => {
-            const val = e.target.value;
+          onChange: (val) => {
             updateFieldValueInState('substitute', val);
             handleSchemaFieldChange(aeClassId, val, 'substitute');
           },

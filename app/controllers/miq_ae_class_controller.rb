@@ -1481,7 +1481,7 @@ class MiqAeClassController < ApplicationController
     # byebug
     render :json => {
       :message => 'Accepted',
-      :data => {:icons => [ae_field_fonticon(params[:aetype]), ae_field_fonticon(params[:datatype])]}
+      :status => 200,
     }
   end
 
