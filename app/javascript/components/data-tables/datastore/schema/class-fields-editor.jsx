@@ -55,34 +55,29 @@ export const ClassFieldsEditor = (props) => {
     setState((state) => ({ ...state, isSchemaModified: !state.isSchemaModified }));
   }, [state.rows]);
 
-  // const editClassField = (selectedRow) => {
-  //   const rowId = selectedRow.id;
-  //   setState((state) => ({
-  //     ...state,
-  //     selectedRowId: rowId,
-  //     isModalOpen: true,
-  //     formKey: !state.formKey,
-  //   }));
-  // };
-
-  // const deleteClassField = (selectedRow) => {
-  //   setState((prevState) => ({
-  //     ...prevState,
-  //     rows: prevState.rows.filter((field) => field.id !== selectedRow.id),
-  //   }));
-  // };
-
   const handleModalClose = () => {
-    // setModalOpen(false);
     setState((state) => ({ ...state, isModalOpen: false }));
   };
 
   const formatFieldValues = (field, id, data = {}) => {
     if (!field || typeof field !== 'object') return [];
+    const getFieldName = () => `${field.display_name} (${field.name})`;
+    const getIconForValue = () => {
+      const aeMatch = aeTypeOptions.find((option) => option[1] === field.aetype);
+      const aeTypeIcon = (aeMatch && aeMatch[2] && aeMatch[2]['data-icon']) || '';
+
+      const dtypeMatch = dTypeOptions.find((option) => option[1] === field.datatype);
+      const dTypeIcon = (dtypeMatch && dtypeMatch[2] && dtypeMatch[2]['data-icon']) || '';
+
+      return [aeTypeIcon, dTypeIcon];
+    };
 
     const row = {
       id: (field.id || id).toString(),
-      name: { text: field.name, icon: data.icons || [] },
+      name: {
+        text: getFieldName(),
+        icon: getIconForValue() || [],
+      },
       aetype: { text: field.aetype },
       datatype: { text: field.datatype },
       default_value: { text: field.default_value || '' },
@@ -146,8 +141,7 @@ export const ClassFieldsEditor = (props) => {
   const updateFieldValueInState = (fieldName, newValue) => {
     // Update existing field in rows
     setState((prevState) => {
-      debugger
-      const updatedRows = prevState.rows.map((row) => {
+      const updatedRow = prevState.rows.map((row) => {
         if (row.id === prevState.selectedRowId) {
           return {
             ...row,
@@ -159,11 +153,11 @@ export const ClassFieldsEditor = (props) => {
         }
         return row;
       });
+      debugger
 
       return {
         ...prevState,
-        rows: updatedRows,
-        isSchemaModified: !prevState.isSchemaModified,
+        rows: updatedRow,
       };
     });
   };
@@ -212,7 +206,6 @@ export const ClassFieldsEditor = (props) => {
   };
 
   const onSchemaSave = (values) => {
-    debugger
     http.post(`/miq_ae_class/update_fields/${aeClassId}?button=save`, { skipErrors: [400] })
       .then((response) => {
         console.log(response);
@@ -237,7 +230,6 @@ export const ClassFieldsEditor = (props) => {
   const onCancel = () => {
     http.post(`/miq_ae_class/update_fields/${aeClassId}?button=cancel`, { skipErrors: [400] })
       .then((response) => {
-        debugger
         console.log(response);
       }).catch((error) => {
         console.error('Failed to cancel schema updates:', error);

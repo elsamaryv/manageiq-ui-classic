@@ -4,18 +4,54 @@ import { transformSelectOptions } from '../helper';
 const createClassFieldsSchema = (aeClassId, selectedRowId, aeTypeOptions,
   dTypeOptions, schemaField = {}, handleSchemaFieldChange, updateFieldValueInState) => {
   const classField = schemaField;
+
+  // const formatName = () => {
+  //   const fullName = classField.name.text;
+  //   const match = fullName.match(/^(.+?)\s*\(([^)]+)\)$/);
+  //   return {
+  //     display_name: match[1],
+  //     name: match[2],
+  //   };
+  // };
+
+  const formatName = () => {
+    const fullName = classField.name.text;
+    const match = fullName.match(/^(.+?)\s*\(([^)]+)\)$/);
+
+    if (classField.display_name && classField.display_name.text) {
+      return {
+        display_name: classField.display_name.text,
+        name: (match && match[2]) || fullName,
+      };
+    }
+    return {
+      display_name: (match && match[1]) || '',
+      name: (match && match[2]) || fullName,
+    };
+  };
+
   const getInitialValue = (field, defaultVal = '') => {
     if (
       classField
       && typeof classField === 'object'
       && Object.keys(classField).length > 0
-      && classField[field]
-      && 'text' in classField[field]
     ) {
-      return classField[field].text;
+      if (selectedRowId) {
+        if (field === 'name' || field === 'display_name') {
+          // debugger
+          const formatted = formatName();
+          return formatted[field] || defaultVal;
+        }
+      }
+
+      if (classField[field] && 'text' in classField[field]) {
+        return classField[field].text || defaultVal;
+      }
     }
+
     return defaultVal;
   };
+
 
   const getIcons = (index) => {
     if (
@@ -35,7 +71,7 @@ const createClassFieldsSchema = (aeClassId, selectedRowId, aeTypeOptions,
       (item) => item[2] && item[2]['data-icon'] === icon
     );
 
-    return match ? match[1] : null;
+    return match ? match[1] : '';
   };
 
   return {
