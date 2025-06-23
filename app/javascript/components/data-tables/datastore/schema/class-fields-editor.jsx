@@ -144,39 +144,8 @@ export const ClassFieldsEditor = (props) => {
   };
 
   // const handleSchemaFieldChange = (aeClassId, val, fieldName) => {
-  //   let fname;
-
-  //   if (state.selectedRowId) {
-  //     if (fieldName === 'datatype' || fieldName === 'aetype') {
-  //       fname = `fields_${fieldName}${state.selectedRowId}`;
-  //     } else {
-  //       fname = `fields_${fieldName}_${state.selectedRowId}`;
-  //     }
-  //   } else {
-  //     fname = `field_${fieldName}`;
-  //   }
-
-  //   const data = {
-  //     [fname]: val,
-  //     id: aeClassId,
-  //   };
-
-  //   http.post(`/miq_ae_class/fields_form_field_changed/${aeClassId}`, data, {
-  //     skipErrors: [400],
-  //   }).then((response) => {
-  //     debugger
-  //     console.log(response);
-  //     // return val;
-  //   }).catch((error) => {
-  //     console.error('Error:', error);
-  //     console.error('Response:', error.response);
-  //     console.log('somethign went wrogn')
-  //     // miqFlash('error', __('Something went wrong'));
-  //   });
-  // };
-
   const updateFieldValueInState = (fieldName, newValue) => {
-    debugger
+    // Update existing field in rows
     setState((prevState) => {
       debugger
       const updatedRows = prevState.rows.map((row) => {
@@ -199,41 +168,6 @@ export const ClassFieldsEditor = (props) => {
       };
     });
   };
-
-
-  // const handleSchemaFieldChange = useMemo(() => (
-  //   debounce((aeClassId, val, fieldName) => {
-  //     // updateFieldValueInState(fieldName, val);
-  //     let fname;
-
-  //     if (state.selectedRowId) {
-  //       if (fieldName === 'datatype' || fieldName === 'aetype') {
-  //         fname = `fields_${fieldName}${state.selectedRowId}`;
-  //       } else {
-  //         fname = `fields_${fieldName}_${state.selectedRowId}`;
-  //       }
-  //     } else {
-  //       fname = `field_${fieldName}`;
-  //     }
-
-  //     const data = {
-  //       [fname]: val,
-  //       id: aeClassId,
-  //     };
-
-  //     http.post(`/miq_ae_class/fields_form_field_changed/${aeClassId}`, data, {
-  //       skipErrors: [400],
-  //     }).then((response) => {
-  //       console.log(response);
-  //       // updateFieldValueInState(fieldName, val);
-  //     }).catch((error) => {
-  //       console.error('Error:', error);
-  //       console.error('Response:', error.response);
-  //       console.log('Something went wrong');
-  //     });
-  //   }, 500)
-  // ), [aeClassId, state.selectedRowId]);
-
 
   const handleSchemaFieldChange = useCallback(
     debounce((aeClassId, val, fieldName) => {
@@ -258,7 +192,6 @@ export const ClassFieldsEditor = (props) => {
         skipErrors: [400],
       }).then((response) => {
         console.log(response);
-        // updateFieldValueInState(fieldName, val);
       }).catch((error) => {
         console.error('Error:', error);
         console.error('Response:', error.response);
@@ -337,6 +270,7 @@ export const ClassFieldsEditor = (props) => {
           key={state.formKey}
           schema={createClassFieldsSchema(
             aeClassId,
+            state.selectedRowId,
             aeTypeOptions,
             dTypeOptions,
             state.rows[state.selectedRowId],

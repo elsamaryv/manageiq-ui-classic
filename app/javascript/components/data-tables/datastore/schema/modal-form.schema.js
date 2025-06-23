@@ -1,7 +1,8 @@
 import { componentTypes, validatorTypes } from '@@ddf';
 import { transformSelectOptions } from '../helper';
 
-const createClassFieldsSchema = (aeClassId, aeTypeOptions, dTypeOptions, schemaField = {}, handleSchemaFieldChange, updateFieldValueInState) => {
+const createClassFieldsSchema = (aeClassId, selectedRowId, aeTypeOptions,
+  dTypeOptions, schemaField = {}, handleSchemaFieldChange, updateFieldValueInState) => {
   const classField = schemaField;
   const getInitialValue = (field, defaultVal = '') => {
     if (
@@ -47,11 +48,13 @@ const createClassFieldsSchema = (aeClassId, aeTypeOptions, dTypeOptions, schemaF
         isRequired: true,
         validate: [{ type: validatorTypes.REQUIRED }],
         initialValue: getInitialValue('name'),
-        onChange: (e) => {
-          const val = e.target.value;
-          updateFieldValueInState('name', val);
-          handleSchemaFieldChange(aeClassId, val, 'name');
-        },
+        ...(selectedRowId && {
+          onChange: (e) => {
+            const val = e.target.value;
+            updateFieldValueInState('name', val);
+            handleSchemaFieldChange(aeClassId, val, 'name');
+          },
+        }),
       },
       {
         component: componentTypes.SELECT,
@@ -64,7 +67,12 @@ const createClassFieldsSchema = (aeClassId, aeTypeOptions, dTypeOptions, schemaF
         options: transformSelectOptions(aeTypeOptions),
         includeEmpty: true,
         initialValue: getType(aeTypeOptions, getIcons(0)),
-        onChange: (val) => handleSchemaFieldChange(aeClassId, val, 'aetype'),
+        ...(selectedRowId && {
+          onChange: (val) => {
+            updateFieldValueInState('aetype', val);
+            handleSchemaFieldChange(aeClassId, val, 'aetype');
+          },
+        }),
       },
       {
         component: componentTypes.SELECT,
@@ -75,7 +83,12 @@ const createClassFieldsSchema = (aeClassId, aeTypeOptions, dTypeOptions, schemaF
         options: transformSelectOptions(dTypeOptions),
         includeEmpty: true,
         initialValue: getType(dTypeOptions, getIcons(1)),
-        onChange: (val) => handleSchemaFieldChange(aeClassId, val, 'datatype'),
+        ...(selectedRowId && {
+          onChange: (val) => {
+            updateFieldValueInState('datatype', val);
+            handleSchemaFieldChange(aeClassId, val, 'datatype');
+          },
+        }),
       },
       {
         component: componentTypes.TEXT_FIELD,
@@ -83,11 +96,13 @@ const createClassFieldsSchema = (aeClassId, aeTypeOptions, dTypeOptions, schemaF
         id: 'default_value',
         label: __('Default Value'),
         initialValue: getInitialValue('default_value'),
-        onChange: (e) => {
-          const val = e.target.value;
-          updateFieldValueInState('default_value', val);
-          handleSchemaFieldChange(aeClassId, val, 'default_value');
-        },
+        ...(selectedRowId && {
+          onChange: (e) => {
+            const val = e.target.value;
+            updateFieldValueInState('default_value', val);
+            handleSchemaFieldChange(aeClassId, val, 'default_value');
+          },
+        }),
       },
       {
         component: componentTypes.TEXT_FIELD,
@@ -95,11 +110,13 @@ const createClassFieldsSchema = (aeClassId, aeTypeOptions, dTypeOptions, schemaF
         id: 'display_name',
         label: __('Display Name'),
         initialValue: getInitialValue('display_name'),
-        onChange: (e) => {
-          const val = e.target.value;
-          updateFieldValueInState('display_name', val);
-          handleSchemaFieldChange(aeClassId, val, 'display_name');
-        },
+        ...(selectedRowId && {
+          onChange: (e) => {
+            const val = e.target.value;
+            updateFieldValueInState('display_name', val);
+            handleSchemaFieldChange(aeClassId, val, 'display_name');
+          },
+        }),
       },
       {
         component: componentTypes.TEXT_FIELD,
@@ -107,11 +124,13 @@ const createClassFieldsSchema = (aeClassId, aeTypeOptions, dTypeOptions, schemaF
         id: 'description',
         label: __('Description'),
         initialValue: getInitialValue('description'),
-        onChange: (e) => {
-          const val = e.target.value;
-          updateFieldValueInState('description', val);
-          handleSchemaFieldChange(aeClassId, val, 'description');
-        },
+        ...(selectedRowId && {
+          onChange: (e) => {
+            const val = e.target.value;
+            updateFieldValueInState('description', val);
+            handleSchemaFieldChange(aeClassId, val, 'description');
+          },
+        }),
       },
       {
         component: componentTypes.CHECKBOX,
@@ -119,11 +138,13 @@ const createClassFieldsSchema = (aeClassId, aeTypeOptions, dTypeOptions, schemaF
         id: 'substitute',
         label: __('Sub'),
         initialValue: getInitialValue('substitute', true),
-        onChange: (e) => {
-          const val = e.target.value;
-          updateFieldValueInState('substitute', val);
-          handleSchemaFieldChange(aeClassId, val, 'substitute');
-        },
+        ...(selectedRowId && {
+          onChange: (e) => {
+            const val = e.target.value;
+            updateFieldValueInState('substitute', val);
+            handleSchemaFieldChange(aeClassId, val, 'substitute');
+          },
+        }),
       },
       {
         component: componentTypes.TEXT_FIELD,
@@ -131,11 +152,13 @@ const createClassFieldsSchema = (aeClassId, aeTypeOptions, dTypeOptions, schemaF
         id: 'collect',
         label: __('Collect'),
         initialValue: getInitialValue('collect'),
-        onChange: (e) => {
-          const val = e.target.value;
-          updateFieldValueInState('collect', val);
-          handleSchemaFieldChange(aeClassId, val, 'collect');
-        },
+        ...(selectedRowId && {
+          onChange: (e) => {
+            const val = e.target.value;
+            updateFieldValueInState('collect', val);
+            handleSchemaFieldChange(aeClassId, val, 'collect');
+          },
+        }),
       },
       {
         component: componentTypes.TEXT_FIELD,
@@ -143,11 +166,13 @@ const createClassFieldsSchema = (aeClassId, aeTypeOptions, dTypeOptions, schemaF
         id: 'message',
         label: __('Message'),
         initialValue: getInitialValue('message', 'create'),
-        onChange: (e) => {
-          const val = e.target.value;
-          updateFieldValueInState('message', val);
-          handleSchemaFieldChange(aeClassId, val, 'message');
-        },
+        ...(selectedRowId && {
+          onChange: (e) => {
+            const val = e.target.value;
+            updateFieldValueInState('message', val);
+            handleSchemaFieldChange(aeClassId, val, 'message');
+          },
+        }),
       },
       {
         component: componentTypes.TEXT_FIELD,
@@ -155,11 +180,13 @@ const createClassFieldsSchema = (aeClassId, aeTypeOptions, dTypeOptions, schemaF
         id: 'on_entry',
         label: __('On Entry'),
         initialValue: getInitialValue('on_entry'),
-        onChange: (e) => {
-          const val = e.target.value;
-          updateFieldValueInState('on_entry', val);
-          handleSchemaFieldChange(aeClassId, val, 'on_entry');
-        },
+        ...(selectedRowId && {
+          onChange: (e) => {
+            const val = e.target.value;
+            updateFieldValueInState('on_entry', val);
+            handleSchemaFieldChange(aeClassId, val, 'on_entry');
+          },
+        }),
       },
       {
         component: componentTypes.TEXT_FIELD,
@@ -167,11 +194,13 @@ const createClassFieldsSchema = (aeClassId, aeTypeOptions, dTypeOptions, schemaF
         id: 'on_exit',
         label: __('On Exit'),
         initialValue: getInitialValue('on_exit'),
-        onChange: (e) => {
-          const val = e.target.value;
-          updateFieldValueInState('on_exit', val);
-          handleSchemaFieldChange(aeClassId, val, 'on_exit');
-        },
+        ...(selectedRowId && {
+          onChange: (e) => {
+            const val = e.target.value;
+            updateFieldValueInState('on_exit', val);
+            handleSchemaFieldChange(aeClassId, val, 'on_exit');
+          },
+        }),
       },
       {
         component: componentTypes.TEXT_FIELD,
@@ -179,11 +208,13 @@ const createClassFieldsSchema = (aeClassId, aeTypeOptions, dTypeOptions, schemaF
         id: 'on_error',
         label: __('On Error'),
         initialValue: getInitialValue('on_error'),
-        onChange: (e) => {
-          const val = e.target.value;
-          updateFieldValueInState('on_error', val);
-          handleSchemaFieldChange(aeClassId, val, 'on_error');
-        },
+        ...(selectedRowId && {
+          onChange: (e) => {
+            const val = e.target.value;
+            updateFieldValueInState('on_error', val);
+            handleSchemaFieldChange(aeClassId, val, 'on_error');
+          },
+        }),
       },
       {
         component: componentTypes.TEXT_FIELD,
@@ -191,11 +222,13 @@ const createClassFieldsSchema = (aeClassId, aeTypeOptions, dTypeOptions, schemaF
         id: 'max_retries',
         label: __('Max Retries'),
         initialValue: getInitialValue('max_retries'),
-        onChange: (e) => {
-          const val = e.target.value;
-          updateFieldValueInState('max_retries', val);
-          handleSchemaFieldChange(aeClassId, val, 'max_retries');
-        },
+        ...(selectedRowId && {
+          onChange: (e) => {
+            const val = e.target.value;
+            updateFieldValueInState('max_retries', val);
+            handleSchemaFieldChange(aeClassId, val, 'max_retries');
+          },
+        }),
       },
       {
         component: componentTypes.TEXT_FIELD,
@@ -203,11 +236,13 @@ const createClassFieldsSchema = (aeClassId, aeTypeOptions, dTypeOptions, schemaF
         id: 'max_time',
         label: __('Max Time'),
         initialValue: getInitialValue('max_time'),
-        onChange: (e) => {
-          const val = e.target.value;
-          updateFieldValueInState('max_time', val);
-          handleSchemaFieldChange(aeClassId, val, 'max_time');
-        },
+        ...(selectedRowId && {
+          onChange: (e) => {
+            const val = e.target.value;
+            updateFieldValueInState('max_time', val);
+            handleSchemaFieldChange(aeClassId, val, 'max_time');
+          },
+        }),
       },
     ],
   };
