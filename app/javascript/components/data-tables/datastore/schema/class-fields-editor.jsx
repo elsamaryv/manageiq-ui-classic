@@ -143,7 +143,6 @@ export const ClassFieldsEditor = (props) => {
     }
   };
 
-  // const handleSchemaFieldChange = (aeClassId, val, fieldName) => {
   const updateFieldValueInState = (fieldName, newValue) => {
     // Update existing field in rows
     setState((prevState) => {
@@ -280,7 +279,7 @@ export const ClassFieldsEditor = (props) => {
           onSubmit={onModalSubmit}
           onCancel={handleModalClose}
           // canReset
-          buttonsLabels={{ submitLabel: __('Acc/savw') }}
+          buttonsLabels={{ submitLabel: __('Save') }}
         />
       </Modal>
     </>
