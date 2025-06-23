@@ -1,7 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, {
+  useState, useEffect, useMemo, useCallback,
+} from 'react';
 import PropTypes from 'prop-types';
 import { Modal } from 'carbon-components-react';
 import MiqFormRenderer from '@@ddf';
+import debounce from 'lodash/debounce';
 import { schemaHeaders, createEditableRows } from '../helper';
 import createClassFieldsSchema from './modal-form.schema';
 // import miqRedirectBack from '../../helpers/miq-redirect-back';
@@ -11,7 +14,7 @@ import { SchemaTableComponent } from './schema-table';
 
 export const ClassFieldsEditor = (props) => {
   const {
-    initialData, aeTypeOptions, dTypeOptions,
+    aeClassId, initialData, aeTypeOptions, dTypeOptions,
   } = props;
 
   const componentMapper = {
@@ -140,8 +143,150 @@ export const ClassFieldsEditor = (props) => {
     }
   };
 
+  // const handleSchemaFieldChange = (aeClassId, val, fieldName) => {
+  //   let fname;
+
+  //   if (state.selectedRowId) {
+  //     if (fieldName === 'datatype' || fieldName === 'aetype') {
+  //       fname = `fields_${fieldName}${state.selectedRowId}`;
+  //     } else {
+  //       fname = `fields_${fieldName}_${state.selectedRowId}`;
+  //     }
+  //   } else {
+  //     fname = `field_${fieldName}`;
+  //   }
+
+  //   const data = {
+  //     [fname]: val,
+  //     id: aeClassId,
+  //   };
+
+  //   http.post(`/miq_ae_class/fields_form_field_changed/${aeClassId}`, data, {
+  //     skipErrors: [400],
+  //   }).then((response) => {
+  //     debugger
+  //     console.log(response);
+  //     // return val;
+  //   }).catch((error) => {
+  //     console.error('Error:', error);
+  //     console.error('Response:', error.response);
+  //     console.log('somethign went wrogn')
+  //     // miqFlash('error', __('Something went wrong'));
+  //   });
+  // };
+
+  const updateFieldValueInState = (fieldName, newValue) => {
+    debugger
+    setState((prevState) => {
+      debugger
+      const updatedRows = prevState.rows.map((row) => {
+        if (row.id === prevState.selectedRowId) {
+          return {
+            ...row,
+            [fieldName]: {
+              ...row[fieldName],
+              text: newValue,
+            },
+          };
+        }
+        return row;
+      });
+
+      return {
+        ...prevState,
+        rows: updatedRows,
+        isSchemaModified: !prevState.isSchemaModified,
+      };
+    });
+  };
+
+
+  // const handleSchemaFieldChange = useMemo(() => (
+  //   debounce((aeClassId, val, fieldName) => {
+  //     // updateFieldValueInState(fieldName, val);
+  //     let fname;
+
+  //     if (state.selectedRowId) {
+  //       if (fieldName === 'datatype' || fieldName === 'aetype') {
+  //         fname = `fields_${fieldName}${state.selectedRowId}`;
+  //       } else {
+  //         fname = `fields_${fieldName}_${state.selectedRowId}`;
+  //       }
+  //     } else {
+  //       fname = `field_${fieldName}`;
+  //     }
+
+  //     const data = {
+  //       [fname]: val,
+  //       id: aeClassId,
+  //     };
+
+  //     http.post(`/miq_ae_class/fields_form_field_changed/${aeClassId}`, data, {
+  //       skipErrors: [400],
+  //     }).then((response) => {
+  //       console.log(response);
+  //       // updateFieldValueInState(fieldName, val);
+  //     }).catch((error) => {
+  //       console.error('Error:', error);
+  //       console.error('Response:', error.response);
+  //       console.log('Something went wrong');
+  //     });
+  //   }, 500)
+  // ), [aeClassId, state.selectedRowId]);
+
+
+  const handleSchemaFieldChange = useCallback(
+    debounce((aeClassId, val, fieldName) => {
+      let fname;
+
+      if (state.selectedRowId) {
+        if (fieldName === 'datatype' || fieldName === 'aetype') {
+          fname = `fields_${fieldName}${state.selectedRowId}`;
+        } else {
+          fname = `fields_${fieldName}_${state.selectedRowId}`;
+        }
+      } else {
+        fname = `field_${fieldName}`;
+      }
+
+      const data = {
+        [fname]: val,
+        id: aeClassId,
+      };
+
+      http.post(`/miq_ae_class/fields_form_field_changed/${aeClassId}`, data, {
+        skipErrors: [400],
+      }).then((response) => {
+        console.log(response);
+        // updateFieldValueInState(fieldName, val);
+      }).catch((error) => {
+        console.error('Error:', error);
+        console.error('Response:', error.response);
+        console.log('Something went wrong');
+      });
+    }, 500),
+    [aeClassId, state.selectedRowId]
+  );
+
+
+
+  const onSchemaReset = () => {
+    http.post(`/miq_ae_class/update_fields/${aeClassId}?button=reset`, { skipErrors: [400] })
+      .then((response) => {
+        console.log(response);
+      }).catch((error) => {
+        console.error('Failed to reset schema:', error);
+      });
+  };
+
   const onSchemaSave = (values) => {
     debugger
+    http.post(`/miq_ae_class/update_fields/${aeClassId}?button=save`, { skipErrors: [400] })
+      .then((response) => {
+        console.log(response);
+      }).catch((error) => {
+        console.error('Failed to reset schema:', error);
+      });
   };
 
   // const onCancel = () => {
@@ -151,13 +296,23 @@ export const ClassFieldsEditor = (props) => {
   //   miqRedirectBack(message, 'warning', '/miq_ae_class/explorer');
   // };
 
-  const onCancel = () => {
-    miqSparkleOn();
-    // miqAjaxButton(`/miq_ae_class/explorer`);
-    window.location.reload();
-  };
+  // const onCancel = () => {
+  //   miqSparkleOn();
+  //   // miqAjaxButton(`/miq_ae_class/explorer`);
+  //   window.location.reload();
+  // };
 
-  debugger
+  const onCancel = () => {
+    http.post(`/miq_ae_class/update_fields/${aeClassId}?button=cancel`, { skipErrors: [400] })
+      .then((response) => {
+        debugger
+        console.log(response);
+      }).catch((error) => {
+        console.error('Failed to cancel schema updates:', error);
+      });
+  }
+
+  // debugger
 
   return (
     <>
@@ -168,6 +323,7 @@ export const ClassFieldsEditor = (props) => {
         onSubmit={onSchemaSave}
         onCancel={onCancel}
         canReset
+        onReset={onSchemaReset}
         buttonsLabels={{ submitLabel: __('Save') }}
       />
 
@@ -180,14 +336,16 @@ export const ClassFieldsEditor = (props) => {
         <MiqFormRenderer
           key={state.formKey}
           schema={createClassFieldsSchema(
+            aeClassId,
             aeTypeOptions,
             dTypeOptions,
-            state.selectedRowId,
-            state.rows[state.selectedRowId]
+            state.rows[state.selectedRowId],
+            handleSchemaFieldChange,
+            updateFieldValueInState,
           )}
           onSubmit={onModalSubmit}
           onCancel={handleModalClose}
-          canReset
+          // canReset
           buttonsLabels={{ submitLabel: __('Acc/savw') }}
         />
       </Modal>
@@ -196,7 +354,7 @@ export const ClassFieldsEditor = (props) => {
 };
 
 ClassFieldsEditor.propTypes = {
-  // aeClassId: PropTypes.number.isRequired,
+  aeClassId: PropTypes.number.isRequired,
   initialData: PropTypes.arrayOf(PropTypes.any).isRequired,
   aeTypeOptions: PropTypes.arrayOf(PropTypes.any),
   dTypeOptions: PropTypes.arrayOf(PropTypes.any),

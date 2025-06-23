@@ -155,25 +155,3 @@ export const transformSelectOptions = (array) =>
     value,
     ...extraProps,
   }));
-
-export const handleSchemaFieldChange = (aeClassId, event) => {
-  debugger
-
-  const data = {
-    [event.target.name]: event.target.value,
-    id: aeClassId,
-  };
-
-  http.post(`/miq_ae_class/fields_form_field_changed/${aeClassId}`, data, {
-    skipErrors: [400],
-  }).then((response) => {
-    debugger
-    console.log(response);
-    // handleSaveResponse(response.message);
-  }).catch((error) => {
-    console.error('Error:', error);
-    console.error('Response:', error.response);
-    console.log('somethign went wrogn')
-    // miqFlash('error', __('Something went wrong'));
-  });
-};

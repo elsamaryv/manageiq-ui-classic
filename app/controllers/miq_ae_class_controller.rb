@@ -881,6 +881,8 @@ class MiqAeClassController < ApplicationController
     assert_privileges('miq_ae_field_edit')
     return unless load_edit("aefields_edit__#{params[:id]}", "replace_cell__explorer")
 
+    # byebug
+
     fields_get_form_vars
     @changed = (@edit[:new] != @edit[:current])
     # render :update do |page|
@@ -1143,17 +1145,20 @@ class MiqAeClassController < ApplicationController
     return unless load_edit("aefields_edit__#{params[:id]}", "replace_cell__explorer")
 
     fields_get_form_vars
-    @changed = (@edit[:new] != @edit[:current])
+    # @changed = (@edit[:new] != @edit[:current])
     case params[:button]
     when "cancel"
       @sb[:action] = session[:edit] = nil # clean out the saved info
       add_flash(_("Edit of schema for Automate Class \"%{name}\" was cancelled by the user") % {:name => @ae_class.name})
       @in_a_form = false
       replace_right_cell
+      # render :json => {:status => 200}
     when "save"
+      # byebug
       ae_class = find_record_with_rbac(MiqAeClass, params[:id])
       begin
         MiqAeClass.transaction do
+          # byebug
           set_field_vars(ae_class)
           ae_class.ae_fields.destroy(MiqAeField.where(:id => @edit[:fields_to_delete]))
           ae_class.ae_fields.each { |fld| fld.default_value = nil if fld.default_value == "" }
@@ -1162,22 +1167,24 @@ class MiqAeClassController < ApplicationController
       rescue StandardError => bang
         add_flash(_("Error during 'save': %{error_message}") % {:error_message => bang.message}, :error)
         session[:changed] = @changed = true
-        javascript_flash
+        # javascript_flash
       else
         add_flash(_("Schema for Automate Class \"%{name}\" was saved") % {:name => ae_class.name})
         AuditEvent.success(build_saved_audit(ae_class, @edit))
         @sb[:action] = session[:edit] = nil # clean out the saved info
-        @in_a_form = false
+        # @in_a_form = false
         replace_right_cell(:replace_trees => [:ae])
         nil
       end
     when "reset"
       fields_set_form_vars
-      session[:changed] = @changed = false
+      # session[:changed] = @changed = false
+      session[:changed] = false
       add_flash(_("All changes have been reset"), :warning)
       @button = "reset"
       @in_a_form = true
       replace_right_cell
+      # render :json => {:status => 200}
     else
       @changed = session[:changed] = (@edit[:new] != @edit[:current])
       replace_right_cell(:replace_trees => [:ae])
@@ -1442,18 +1449,19 @@ class MiqAeClassController < ApplicationController
   # AJAX driven routine to select a classification entry
   def field_select
     assert_privileges('miq_ae_field_edit')
-    fields_get_form_vars
+    fields_get_form_vars # nothing in particular handled here
     # @combo_xml = build_type_options
     # @dtype_combo_xml = build_dtype_options
     session[:field_data] = {}
     @edit[:new_field][:substitute] = session[:field_data][:substitute] = true
-    @changed = (@edit[:new] != @edit[:current])
-    render :update do |page|
-      page << javascript_prologue
-      page.replace("class_fields_div", :partial => "class_fields")
-      page << javascript_for_miq_button_visibility(@changed)
-      page << "miqSparkle(false);"
-    end
+    # @changed = (@edit[:new] != @edit[:current])
+    # render :update do |page|
+    #   page << javascript_prologue
+    #   page.replace("class_fields_div", :partial => "class_fields")
+    #   page << javascript_for_miq_button_visibility(@changed)
+    #   page << "miqSparkle(false);"
+    # end
+    render :json => {:status => 200}
   end
 
   # AJAX driven routine to select a classification entry
@@ -1481,21 +1489,22 @@ class MiqAeClassController < ApplicationController
   def field_delete
     assert_privileges('miq_ae_field_edit')
     fields_get_form_vars
-    @combo_xml       = build_type_options
-    @dtype_combo_xml = build_dtype_options
+    # @combo_xml       = build_type_options
+    # @dtype_combo_xml = build_dtype_options
 
     if params.key?(:id) && @edit[:fields_to_delete].exclude?(params[:id])
       @edit[:fields_to_delete].push(params[:id])
     end
 
     @edit[:new][:fields].delete_at(params[:arr_id].to_i)
-    @changed = (@edit[:new] != @edit[:current])
-    render :update do |page|
-      page << javascript_prologue
-      page.replace("class_fields_div", :partial => "class_fields")
-      page << javascript_for_miq_button_visibility(@changed)
-      page << "miqSparkle(false);"
-    end
+    # @changed = (@edit[:new] != @edit[:current])
+    # render :update do |page|
+    #   page << javascript_prologue
+    #   page.replace("class_fields_div", :partial => "class_fields")
+    #   page << javascript_for_miq_button_visibility(@changed)
+    #   page << "miqSparkle(false);"
+    # end
+    render :json => {:status => 200}
   end
 
   # AJAX driven routine to select a classification entry
