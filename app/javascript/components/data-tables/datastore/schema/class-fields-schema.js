@@ -18,12 +18,12 @@ const createSchemaEditSchema = (rows, setState, isSchemaModified) => {
   };
 
   const handleFieldDelete = (index) => {
-    const rowId = parseInt(index, 10);
-    http.post(`/miq_ae_class/field_delete?arr_id=${rowId}`, { skipErrors: [400] })
+    // const rowId = parseInt(index, 10);
+    http.post(`/miq_ae_class/field_delete?arr_id=${index}`, { skipErrors: [400] })
       .then(() => {
         setState((prev) => ({
           ...prev,
-          rows: prev.rows.filter((field) => field.id !== rowId),
+          rows: prev.rows.filter((field) => field.id !== index),
         }));
       })
       .catch((error) => {
