@@ -81,8 +81,8 @@ export const ClassFieldsEditor = (props) => {
     debugger
 
     const row = {
-      id: field.id,
-      row_id: rowId.toString(),
+      id: rowId.toString(),
+      field_id: field.id,
       name: {
         text: getFieldName(),
         icon: getIconForValue() || [],
