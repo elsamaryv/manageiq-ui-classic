@@ -4,7 +4,6 @@ import { transformSelectOptions } from '../helper';
 const createClassFieldsSchema = (aeClassId, selectedRowId, aeTypeOptions,
   dTypeOptions, schemaField = {}, handleSchemaFieldChange, updateFieldValueInState) => {
   const classField = schemaField;
-  console.log("Class field -- ", classField);
 
   const formatName = () => {
     const fullName = classField.name.text;
@@ -122,8 +121,8 @@ const createClassFieldsSchema = (aeClassId, selectedRowId, aeTypeOptions,
         id: 'datatype',
         label: __('Data Type'),
         placeholder: __('<Choose>'),
-        options: transformSelectOptions(dTypeOptions),
         includeEmpty: true,
+        options: transformSelectOptions(dTypeOptions),
         initialValue: getType(dTypeOptions, getIcons(1)),
         ...(selectedRowId && {
           onChange: (val) => {

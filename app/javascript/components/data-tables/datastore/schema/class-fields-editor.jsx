@@ -28,18 +28,20 @@ export const ClassFieldsEditor = (props) => {
     const rowItems = [];
     const headers = schemaHeaders(true);
     fieldData.forEach(({
-      cells, id, clickable, clickId,
+      // eslint-disable-next-line camelcase
+      id, field_id, cells, clickable,
     }) => {
       const reducedItems = cells.reduce((result, item, index) => {
         result[headers[index].name] = item;
         result.id = id;
-        if (clickId) result.clickId = clickId;
+        // eslint-disable-next-line camelcase
+        result.field_id = field_id;
         result.clickable = clickable;
         return result;
       }, {});
-      // reducedItems.id = id;
       rowItems.push(reducedItems);
     });
+
     return rowItems;
   };
 
@@ -59,9 +61,11 @@ export const ClassFieldsEditor = (props) => {
     setState((state) => ({ ...state, isModalOpen: false }));
   };
 
-  const formatFieldValues = (field, id) => {
+  const formatFieldValues = (field, rowId) => {
     if (!field || typeof field !== 'object') return [];
-    const getFieldName = () => `${field.display_name} (${field.name})`;
+
+    const getFieldName = () => ((field.display_name) ? `${field.display_name} (${field.name})` : `${field.name}`);
+
     const getIconForValue = () => {
       const aeMatch = aeTypeOptions.find((option) => option[1] === field.aetype);
       const aeTypeIcon = (aeMatch && aeMatch[2] && aeMatch[2]['data-icon']) || '';
@@ -74,8 +78,11 @@ export const ClassFieldsEditor = (props) => {
       return [aeTypeIcon, dTypeIcon, subIcon];
     };
 
+    debugger
+
     const row = {
-      id: (field.id || id).toString(),
+      id: field.id,
+      row_id: rowId.toString(),
       name: {
         text: getFieldName(),
         icon: getIconForValue() || [],
