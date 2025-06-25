@@ -76,7 +76,7 @@ const createClassFieldsSchema = (aeClassId, selectedRowId, aeTypeOptions,
       (item) => item[2] && item[2]['data-icon'] === icon
     );
 
-    return match ? match[1] : '';
+    return match ? match[1] : null;
   };
 
   return {
