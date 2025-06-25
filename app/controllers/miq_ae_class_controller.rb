@@ -881,8 +881,6 @@ class MiqAeClassController < ApplicationController
     assert_privileges('miq_ae_field_edit')
     return unless load_edit("aefields_edit__#{params[:id]}", "replace_cell__explorer")
 
-    # byebug
-
     fields_get_form_vars
     @changed = (@edit[:new] != @edit[:current])
     # render :update do |page|
@@ -1466,7 +1464,6 @@ class MiqAeClassController < ApplicationController
 
   # AJAX driven routine to select a classification entry
   def field_accept
-    # byebug
     assert_privileges('miq_ae_field_edit')
     fields_get_form_vars
     @changed = (@edit[:new] != @edit[:current])
@@ -1478,7 +1475,6 @@ class MiqAeClassController < ApplicationController
     #   page << javascript_for_miq_button_visibility(@changed)
     #   page << "miqSparkle(false);"
     # end
-    # byebug
     render :json => {
       :message => 'Accepted',
       :status => 200,
@@ -2370,12 +2366,11 @@ class MiqAeClassController < ApplicationController
     if params[:item].blank? && !%w[accept save].include?(params[:button]) && params["action"] != "field_delete"
       field_data = session[:field_data]
       new_field = @edit[:new_field]
-
       field_attributes.each do |field|
         field_name = "field_#{field}".to_sym
         field_sym = field.to_sym
         if field == "substitute"
-          field_data[field_sym] = new_field[field_sym] = params[field_name] == "1" if params[field_name]
+          field_data[field_sym] = new_field[field_sym] = params[field_name] if params.key?(field_name)
         elsif params[field_name]
           field_data[field_sym] = new_field[field_sym] = params[field_name]
         end
@@ -2394,7 +2389,7 @@ class MiqAeClassController < ApplicationController
         field_attributes.each do |field|
           field_name = "fields_#{field}_#{i}"
           if field == "substitute"
-            fld[field] = params[field_name] == "1" if params[field_name]
+            fld[field] = params[field_name] if params.key?(field_name)
           elsif %w[aetype datatype].include?(field)
             var_name = "fields_#{field}#{i}"
             fld[field] = params[var_name.to_sym] if params[var_name.to_sym]
@@ -2419,7 +2414,6 @@ class MiqAeClassController < ApplicationController
       end
       new_fields = {}
       field_attributes.each do |field_attribute|
-        # byebug
         # new_fields[field_attribute] = @edit[:new_field][field_attribute.to_sym]
         # new_fields[field_attribute] = params[:field][field_attribute.to_sym]
         new_fields[field_attribute] = params[field_attribute.to_sym]
