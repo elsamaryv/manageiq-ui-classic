@@ -10,6 +10,7 @@ const createClassFieldsSchema = (aeClassId, selectedRowId, aeTypeOptions,
     const match = fullName.match(/^(.+?)\s*\(([^)]+)\)$/);
 
     if (classField.display_name && classField.display_name.text) {
+    if (classField.display_name && 'text' in classField.display_name) {
       return {
         display_name: classField.display_name.text,
         name: (match && match[2]) || fullName,
