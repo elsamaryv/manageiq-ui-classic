@@ -60,6 +60,9 @@ const createClassFieldsSchema = (aeClassId, selectedRowId, aeTypeOptions,
           const icon = getIcons(2);
           return icon === 'pficon pficon-ok';
         }
+        if (field === 'message') {
+          return classField[field].text;
+        }
         return classField[field].text || defaultVal;
       }
 
