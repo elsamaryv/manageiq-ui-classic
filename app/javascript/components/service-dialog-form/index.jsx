@@ -182,25 +182,12 @@ const ServiceDialogForm = () => {
   };
 
   const [showTabEditModal, setShowTabEditModal] = useState(false);
+  const [selTab, setSelTab] = useState(null);
+
   
   const onModalHide = () => setShowTabEditModal(false);
   const onModalShow = () => {
     setShowTabEditModal(true);
-  };
-
-  const renderEditTabModal = (tab) => {
-    debugger
-    return (
-      <EditTabModal
-        tabName={tab.name}
-        showModal={showTabEditModal}
-        onSave={(e, editedValues) => {
-        // setState((state) => ({ ...state, showModal: false }));
-          console.log("onSave triggered", editedValues);
-        }}
-        onModalHide={onModalHide}
-      />
-    );
   };
 
   /** Function to delete a tab */
@@ -215,9 +202,9 @@ const ServiceDialogForm = () => {
   const tabAction = (actionType, tab) => {
     switch (actionType) {
       case SD_ACTIONS.tab.edit:
-        debugger
-        onModalShow();
-        renderEditTabModal(tab);
+        setSelTab(tab);
+        setShowTabEditModal(true);
+        break;
       case SD_ACTIONS.tab.delete:
         return deleteTab(tab);
       default:
@@ -391,10 +378,25 @@ const ServiceDialogForm = () => {
           >
             { __('Submit')}
           </Button>
-          <Button variant="contained" type="button" onClick={console.log('this is on cancel')} kind="secondary">
+          <Button variant="contained" type="button" onClick={() => console.log('this is on cancel')} kind="secondary">
             { __('Cancel')}
           </Button>
         </div>
+        {showTabEditModal && selTab && (
+          <EditTabModal
+            tabName={selTab.name}
+            showModal={showTabEditModal}
+            onSave={(e, editedValues) => {
+              console.log("onSave triggered", editedValues);
+              setShowTabEditModal(false);
+              setSelTab(null);
+            }}
+            onModalHide={() => {
+              setShowTabEditModal(false);
+              setSelTab(null);
+            }}
+          />
+        )}
       </div>
     </form>
   );
