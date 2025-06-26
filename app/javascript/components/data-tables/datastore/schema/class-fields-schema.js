@@ -19,8 +19,10 @@ const createSchemaEditSchema = (rows, setState, isSchemaModified) => {
 
   const handleFieldDelete = (index) => {
     const field = rows.find((field) => field.id === index);
-    const fId = field.field_id || null;
-    http.post(`/miq_ae_class/field_delete/${fId}?arr_id=${index}`, { skipErrors: [400] })
+    const arrId = rows.findIndex((field) => field.id === index);
+    const fId = field.field_id;
+    const url = `/miq_ae_class/field_delete${fId ? `/${fId}` : ''}?arr_id=${arrId}`;
+    http.post(url, { skipErrors: [400] })
       .then(() => {
         setState((prev) => ({
           ...prev,
