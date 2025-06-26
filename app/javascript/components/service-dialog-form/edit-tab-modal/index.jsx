@@ -16,22 +16,22 @@ const EditTabModal = ({
     onSave(e, formValues);
   };
 
+  debugger
+
   return (
     <Modal
       open={showModal}
-      modalHeading={__(`Edit this ${tabName}`)}
+      modalHeading={__(`Edit this ${tabName || ''}`)}
       onRequestClose={onModalHide}
       passiveModal // Required to hide the save and cancel buttons on the Modal
       className="edit-tab-modal"
       // onChange={handleFieldUpdates}
     >
-      <ModalBody className="edit-tab-modal-body">
-        <MiqFormRenderer
-          schema={createSchema()}
-          onSubmit={handleSubmit}
-          onCancel={onCancel}
-        />
-      </ModalBody>
+      <MiqFormRenderer
+        schema={createSchema()}
+        onSubmit={handleSubmit}
+        onCancel={onCancel}
+      />
     </Modal>
   );
 };
