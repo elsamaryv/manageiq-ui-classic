@@ -5,30 +5,29 @@ import { Modal, ModalBody } from 'carbon-components-react';
 import { createSchema } from './tab.schema';
 
 const EditTabModal = ({
-  tabName, showModal, onSave, onModalHide,
+  tabInfo, usedTabNames, showModal, onSave, onModalHide,
 }) => {
-  console.log("EditTabModal is being executed!");
-  debugger
-  
   const onCancel = () => onModalHide();
 
   const handleSubmit = (formValues, e) => {
     onSave(e, formValues);
   };
 
-  debugger
-
   return (
     <Modal
       open={showModal}
-      modalHeading={__(`Edit this ${tabName || ''}`)}
+      modalHeading={__(`Edit this ${tabInfo.name || ''}`)}
       onRequestClose={onModalHide}
       passiveModal // Required to hide the save and cancel buttons on the Modal
       className="edit-tab-modal"
       // onChange={handleFieldUpdates}
     >
       <MiqFormRenderer
-        schema={createSchema()}
+        schema={createSchema(usedTabNames, tabInfo.name)}
+        initialValues={{
+          tab_name: tabInfo.name,
+          tab_description: tabInfo.description,
+        }}
         onSubmit={handleSubmit}
         onCancel={onCancel}
       />
@@ -37,7 +36,11 @@ const EditTabModal = ({
 };
 
 EditTabModal.propTypes = {
-  tabName: PropTypes.string.isRequired,
+  tabInfo: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    description: PropTypes.string,
+  }).isRequired,
+  usedTabNames: PropTypes.arrayOf(PropTypes.string).isRequired,
   showModal: PropTypes.bool.isRequired,
   onSave: PropTypes.func.isRequired,
   onModalHide: PropTypes.func.isRequired,
