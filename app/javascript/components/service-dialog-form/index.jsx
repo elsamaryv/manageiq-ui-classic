@@ -17,7 +17,7 @@ import {
 } from './helper';
 import EditTabModal from './edit-tab-modal';
 import EditSectionModal from './edit-section-modal';
-import { createSchema as SectionEditSchema } from './edit-section-modal/modal-fields.schema';
+import { createSchema as SectionEditSchema } from './edit-section-modal/section.schema';
 
 
 const ServiceDialogForm = () => {
@@ -128,6 +128,8 @@ const ServiceDialogForm = () => {
     });
   };
 
+  const getTab = (id) => data.formFields.find((t) => t.tabId === id);
+
   /** Function to add a section */
   const addSection = (tabPosition) => {
     const { sections } = selectedTab(data.formFields, tabPosition);
@@ -136,22 +138,6 @@ const ServiceDialogForm = () => {
       ...data,
       formFields: [...data.formFields],
     });
-  };
-
-  const editSection = ({ section }) => {
-    debugger
-    return (
-      <EditSectionModal
-        sectionName={section.title}
-        // showModal={showTabEditModal}
-        showModal
-        onSave={(e, editedValues) => {
-        // setState((state) => ({ ...state, showModal: false }));
-          console.log("onSave triggered", editedValues);
-        }}
-        onModalHide={onModalHide}
-      />
-    );
   };
 
   /** Function to delete a section */
@@ -181,13 +167,16 @@ const ServiceDialogForm = () => {
     }
   };
 
-  const [showTabEditModal, setShowTabEditModal] = useState(false);
+  const [showTabEditModal, setTabEditModal] = useState(false);
   const [selTab, setSelTab] = useState(null);
 
+  const [showSectionEditModal, setSectionEditModal] = useState(false);
+  const [selSection, setSelSection] = useState(null);
+
   
-  const onModalHide = () => setShowTabEditModal(false);
+  const onModalHide = () => setTabEditModal(false);
   const onModalShow = () => {
-    setShowTabEditModal(true);
+    setTabEditModal(true);
   };
 
   /** Function to delete a tab */
@@ -203,7 +192,7 @@ const ServiceDialogForm = () => {
     switch (actionType) {
       case SD_ACTIONS.tab.edit:
         setSelTab(tab);
-        setShowTabEditModal(true);
+        setTabEditModal(true);
         break;
       case SD_ACTIONS.tab.delete:
         return deleteTab(tab);
@@ -243,7 +232,9 @@ const ServiceDialogForm = () => {
       case SD_ACTIONS.onDragStartSection:
         return onDragStartSection(actionData);
       case SD_ACTIONS.section.edit:
-        return editSection(actionData);
+        setSelSection(actionData.section);
+        setSectionEditModal(true);
+        break;
       case SD_ACTIONS.section.delete:
         return deleteSection(actionData);
       case SD_ACTIONS.field.delete:
@@ -345,6 +336,31 @@ const ServiceDialogForm = () => {
     });
   };
 
+  const updateSectionInfo = (data) => {
+    setData((prevData) => {
+      const updatedFormFields = prevData.formFields.map((tab) => {
+        if (tab.tabId !== selSection.tabId) return tab;
+
+        const updatedSections = tab.sections.map((sec) => {
+          if (sec.sectionId !== selSection.sectionId) return sec;
+          return {
+            ...sec,
+            title: data.section_name,
+            description: data.section_description,
+          };
+        });
+        return {
+          ...tab,
+          sections: updatedSections,
+        };
+      });
+      return {
+        ...prevData,
+        formFields: updatedFormFields,
+      };
+    });
+  };
+
   return (
     <form onSubmit={handleSubmit}>
       <div className="service-dialog-main-wrapper">
@@ -405,15 +421,32 @@ const ServiceDialogForm = () => {
             showModal={showTabEditModal}
             onSave={(e, editedValues) => {
               updateTabInfo(editedValues, selTab.tabId);
-              setShowTabEditModal(false);
+              setTabEditModal(false);
               setSelTab(null);
             }}
             onModalHide={() => {
-              setShowTabEditModal(false);
+              setTabEditModal(false);
               setSelTab(null);
             }}
           />
         )}
+        {showSectionEditModal && selSection && (
+          <EditSectionModal
+            sectionInfo={{ name: selSection.title, description: selSection.description }}
+            usedSectionNames={getTab(selSection.tabId).sections.map((sec) => sec.title) || []}
+            showModal={showSectionEditModal}
+            onSave={(e, editedValues) => {
+              updateSectionInfo(editedValues, selSection.sectionId);
+              setSectionEditModal(false);
+              setSelSection(null);
+            }}
+            onModalHide={() => {
+              setSectionEditModal(false);
+              setSelSection(null);
+            }}
+          />
+        )}
+
       </div>
     </form>
   );
