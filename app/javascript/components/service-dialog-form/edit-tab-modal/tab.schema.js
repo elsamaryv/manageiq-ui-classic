@@ -1,13 +1,26 @@
 import { componentTypes } from '@@ddf';
 
-export const createSchema = () => ({
+const uniqueTabNameValidator = (usedNames, currentTabName) => (value) => {
+  if (!value) return undefined;
+
+  const trimmed = value.trim().toLowerCase();
+
+  const isDuplicate = usedNames
+    .filter((name) => name.toLowerCase() !== currentTabName.toLowerCase())
+    .map((name) => name.toLowerCase())
+    .includes(trimmed);
+
+  return isDuplicate ? __('Tab name must be unique.') : undefined;
+};
+
+export const createSchema = (usedNames, currentTabName) => ({
   fields: [
     {
       component: componentTypes.TEXT_FIELD,
       name: 'tab_name',
       label: 'Tab Name',
       className: 'tab-name',
-      // validate: [{ type: 'customValidatorForNameField' }],
+      validate: [uniqueTabNameValidator(usedNames, currentTabName)],
     },
     {
       component: componentTypes.TEXTAREA,
@@ -17,4 +30,4 @@ export const createSchema = () => ({
       className: 'tab-description',
     },
   ],
-  });
+});
