@@ -1,13 +1,14 @@
 import { componentTypes } from '@@ddf';
+import { uniqueNameValidator } from '../helper';
 
-export const createSchema = () => ({
+export const createSchema = (usedNames, currentSecName) => ({
   fields: [
     {
       component: componentTypes.TEXT_FIELD,
       name: 'section_name',
       label: 'Section Name',
       className: 'section-name',
-      // validate: [{ type: 'customValidatorForNameField' }],
+      validate: [uniqueNameValidator(usedNames, currentSecName)],
     },
     {
       component: componentTypes.TEXTAREA,

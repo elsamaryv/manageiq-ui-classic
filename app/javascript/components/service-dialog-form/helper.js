@@ -470,3 +470,16 @@ export const getCurrentTimeAndPeriod = () => {
   hours = hours % 12 || 12; // Convert 0 hours to 12 in 12-hour format
   return { time: `${hours}:${minutes}`, period: currentPeriod };
 };
+
+export const uniqueNameValidator = (usedNames, currentName) => (value) => {
+  if (!value) return undefined;
+
+  const trimmed = value.trim().toLowerCase();
+
+  const isDuplicate = usedNames
+    .filter((name) => name.toLowerCase() !== currentName.toLowerCase())
+    .map((name) => name.toLowerCase())
+    .includes(trimmed);
+
+  return isDuplicate ? __('Name must be unique.') : undefined;
+};
