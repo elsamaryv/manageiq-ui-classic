@@ -329,6 +329,22 @@ const ServiceDialogForm = () => {
     saveServiceDialog(data);
   };
 
+  const updateTabInfo = (data, tabId) => {
+    setData((prevData) => {
+      const updatedFormFields = prevData.formFields.map((tab) => {
+        if (tab.tabId === tabId) {
+          return { ...tab, name: data.tab_name };
+        }
+        return tab;
+      });
+
+      return {
+        ...prevData,
+        formFields: updatedFormFields,
+      };
+    });
+  };
+
   return (
     <form onSubmit={handleSubmit}>
       <div className="service-dialog-main-wrapper">
@@ -384,10 +400,11 @@ const ServiceDialogForm = () => {
         </div>
         {showTabEditModal && selTab && (
           <EditTabModal
-            tabName={selTab.name}
+            tabInfo={{ name: selTab.name, description: selTab.description }}
+            usedTabNames={data.formFields.map((t) => t.name)}
             showModal={showTabEditModal}
             onSave={(e, editedValues) => {
-              console.log("onSave triggered", editedValues);
+              updateTabInfo(editedValues, selTab.tabId);
               setShowTabEditModal(false);
               setSelTab(null);
             }}
