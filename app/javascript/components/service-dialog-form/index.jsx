@@ -60,19 +60,21 @@ const ServiceDialogForm = () => {
     }
   };
 
-  /** Function which gets executed once when a compnent dragging has started */
+  /** Function which gets executed when a component dragging has started */
   const onDragStartComponent = (event, type) => {
     draggedItem = { componentId: parseInt(event.currentTarget.id), type };
   };
 
+  /** Function which gets executed when a section dragging has started */
   const onDragStartSection = ({ section }) => {
+    // debugger
     if (draggedItem && draggedItem.type === dragItems.FIELD) {
       return;
     }
     draggedItem = { sectionId: section.sectionId, type: dragItems.SECTION };
   };
 
-  /** Function which gets executed once when a dragging has started */
+  /** Function which gets executed when a field dragging has started */
   const onDragStartField = ({ fieldPosition, section: { sectionId } }) => {
     if (draggedItem && draggedItem.type === dragItems.SECTION) {
       return;
