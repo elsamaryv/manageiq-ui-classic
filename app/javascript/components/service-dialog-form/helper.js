@@ -47,13 +47,19 @@ export const dropField = (section, { sectionId, fieldPosition }, dragEnterItem) 
 
 /** Function to drop a section after its been dragged */
 export const dropSection = (tab, { sectionId }, dragEnterItem) => {
-  const draggedSection = tab.sections.find((section) => section.sectionId === sectionId);
-  const otherSections = tab.sections.filter((section) => section.sectionId !== sectionId);
-  const toIndex = otherSections.findIndex((sec) => sec.sectionId === dragEnterItem.section.sectionId);
-  const fromIndex = tab.sections.findIndex((sec) => sec.sectionId === sectionId);
-  const index = (fromIndex > toIndex) ? toIndex : (toIndex + 1);
-  otherSections.splice(index, 0, draggedSection);
-  tab.sections = otherSections;
+  const { sections } = tab;
+
+  const fromIndex = sections.findIndex((sec) => sec.sectionId === sectionId);
+  const toIndex = sections.findIndex((sec) => sec.sectionId === dragEnterItem.section.sectionId);
+
+  // If either index is not found, do nothing
+  if (fromIndex === -1 || toIndex === -1) return;
+
+  // Remove the dragged section
+  const [draggedSection] = sections.splice(fromIndex, 1);
+
+  // Insert at the correct position
+  sections.splice(toIndex, 0, draggedSection);
 };
 
 /** Function to drop a component after its been dragged */
