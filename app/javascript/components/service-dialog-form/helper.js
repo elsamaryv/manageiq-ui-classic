@@ -35,7 +35,6 @@ export const SD_ACTIONS = {
 };
 
 /** Function to drop a field after its been dragged within a section */
-// TODO: The first section cannot be dropped to the last index. need to debug.
 export const dropField = (section, { sectionId, fieldPosition }, dragEnterItem) => {
   if (section.sectionId === sectionId) {
     // makes sure that the dragged field stays in the same section.
@@ -50,7 +49,10 @@ export const dropField = (section, { sectionId, fieldPosition }, dragEnterItem) 
 export const dropSection = (tab, { sectionId }, dragEnterItem) => {
   const draggedSection = tab.sections.find((section) => section.sectionId === sectionId);
   const otherSections = tab.sections.filter((section) => section.sectionId !== sectionId);
-  otherSections.splice(dragEnterItem.sectionId, 0, draggedSection);
+  const toIndex = otherSections.findIndex((sec) => sec.sectionId === dragEnterItem.section.sectionId);
+  const fromIndex = tab.sections.findIndex((sec) => sec.sectionId === sectionId);
+  const index = (fromIndex > toIndex) ? toIndex : (toIndex + 1);
+  otherSections.splice(index, 0, draggedSection);
   tab.sections = otherSections;
 };
 
