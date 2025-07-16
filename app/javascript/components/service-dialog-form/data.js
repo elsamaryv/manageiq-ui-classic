@@ -8,6 +8,7 @@ export const dragItems = {
   COMPONENT: 'component',
   SECTION: 'section',
   FIELD: 'field',
+  TAB: 'tab',
 };
 
 /** Data needed to render the dynamic components on the left hand side of the form. */

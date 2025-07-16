@@ -13,7 +13,7 @@ import DynamicComponentChooser from './dynamic-component-chooser';
 import './style.scss';
 import DynamicSection from './dynamic-section';
 import {
-  selectedTab, SD_ACTIONS, dropField, dropSection, dropComponent,
+  selectedTab, SD_ACTIONS, dropField, dropSection, dropTab, dropComponent,
 } from './helper';
 import EditTabModal from './edit-tab-modal';
 import EditSectionModal from './edit-section-modal';
@@ -21,9 +21,9 @@ import { createSchema as SectionEditSchema } from './edit-section-modal/section.
 
 
 const ServiceDialogForm = () => {
-  let dragEnterItem = useRef(); /** Stores the information of component where the dragged item is being hovered before release. */
-  let draggedItem = useRef(); /** Stores the information of component being dragged. */
-  let hoverItem = useRef(); /** Stores the tab and section position during the drop event. */  
+  const dragEnterItem = useRef(null); /** Stores the information of component where the dragged item is being hovered before release. */
+  const draggedItem = useRef(null); /** Stores the information of component being dragged. */
+  const hoverItem = useRef(null); /** Stores the tab and section position during the drop event. */
 
   const [data, setData] = useState({
     list: dynamicComponents,
@@ -47,65 +47,95 @@ const ServiceDialogForm = () => {
     evaluateSubmitButton();
   }, [data]);
 
+  const onTabAction = (type, event) => tabAction({
+    event, type,
+  });
+
   const onDragEnterSection = ({ section }) => {
-    if (draggedItem.type === dragItems.SECTION) {
-      dragEnterItem = { section };
+    if (draggedItem.current.type === dragItems.SECTION) {
+      dragEnterItem.current = { section };
     }
   };
 
   /** Function which gets executed when a dragged field item is on top of another field item. */
   const onDragEnterField = ({ section, fieldPosition }) => {
-    if (draggedItem.type === dragItems.FIELD) {
-      dragEnterItem = { section, fieldPosition };
+    if (draggedItem.current.type === dragItems.FIELD) {
+      dragEnterItem.current = { section, fieldPosition };
     }
   };
 
   /** Function which gets executed when a component dragging has started */
   const onDragStartComponent = (event, type) => {
-    draggedItem = { componentId: parseInt(event.currentTarget.id), type };
+    draggedItem.current = { componentId: parseInt(event.currentTarget.id), type };
   };
 
   /** Function which gets executed when a section dragging has started */
   const onDragStartSection = ({ section }) => {
     // debugger
-    if (draggedItem && draggedItem.type === dragItems.FIELD) {
+    if (draggedItem.current && draggedItem.current.type && draggedItem.current.type !== dragItems.SECTION) {
       return;
     }
-    draggedItem = { sectionId: section.sectionId, type: dragItems.SECTION };
+    draggedItem.current = { sectionId: section.sectionId, type: dragItems.SECTION };
+  };
+
+  /** Function which gets executed when a tab dragging has started */
+  const onDragStartTab = ({ tab }) => {
+    if (draggedItem.current && draggedItem.current.type && draggedItem.current.type !== dragItems.TAB) {
+      return;
+    }
+    draggedItem.current = { tabId: tab.tabId, type: dragItems.TAB };
+  };
+
+  const onDragEnterTab = ({ tab }) => {
+    debugger
+    if (draggedItem.current && draggedItem.current.type === dragItems.TAB) {
+      dragEnterItem.current = { tab };
+    }
   };
 
   /** Function which gets executed when a field dragging has started */
   const onDragStartField = ({ fieldPosition, section: { sectionId } }) => {
-    if (draggedItem && draggedItem.type === dragItems.SECTION) {
+    if (draggedItem.current && draggedItem.current.type && draggedItem.current.type !== dragItems.FIELD) {
       return;
     }
-    draggedItem = { fieldPosition, sectionId, type: dragItems.FIELD };
+    draggedItem.current = { fieldPosition, sectionId, type: dragItems.FIELD };
+  };
+
+  const resetDragRefs = () => {
+    dragEnterItem.current = null;
+    draggedItem.current = null;
+    hoverItem.current = null;
   };
 
   /** Function which gets executed on dropping an item */
   const onDrop = () => {
-    if (draggedItem && hoverItem) {
-      const tab = selectedTab([...data.formFields], hoverItem.tabPosition);
-      const section = [...tab.sections].find((section) => section.sectionId === hoverItem.sectionPosition);
-      switch (draggedItem.type) {
+    if (draggedItem.current && hoverItem.current) {
+      const formFields = [...data.formFields];
+      const tab = selectedTab(formFields, hoverItem.current.tabPosition);
+      const section = [...tab.sections].find((section) => section.sectionId === hoverItem.current.sectionPosition);
+      switch (draggedItem.current.type) {
         case dragItems.COMPONENT:
-          dropComponent(section, draggedItem);
+          dropComponent(section, draggedItem.current);
           break;
         case dragItems.FIELD:
-          dropField(section, draggedItem, dragEnterItem);
+          dropField(section, draggedItem.current, dragEnterItem.current);
           break;
         case dragItems.SECTION:
-          dropSection(tab, draggedItem, dragEnterItem);
+          dropSection(tab, draggedItem.current, dragEnterItem.current);
+          break;
+        case dragItems.TAB:
+          debugger
+          dropTab(formFields, draggedItem.current, dragEnterItem.current);
           break;
         default:
           break;
       }
       setData({
         ...data,
-        formFields: [...data.formFields],
+        formFields,
       });
-      hoverItem = undefined;
-      draggedItem = undefined;
+
+      resetDragRefs();
     }
   };
 
@@ -115,8 +145,23 @@ const ServiceDialogForm = () => {
     event.preventDefault();
     const tabPosition = parseInt(event.currentTarget.getAttribute('tab'));
     const sectionPosition = parseInt(event.currentTarget.getAttribute('section'));
-    hoverItem = { tabPosition, sectionPosition };
+    hoverItem.current = { tabPosition, sectionPosition };
   };
+
+  //   const onDragOverListener = ({ event }) => {
+  //   event.preventDefault();
+
+  //   const tabAttr = event.currentTarget.getAttribute('tab');
+  //   const sectionAttr = event.currentTarget.getAttribute('section');
+
+  //   const tabPosition = tabAttr ? parseInt(tabAttr) : null;
+  //   const sectionPosition = sectionAttr ? parseInt(sectionAttr) : null;
+
+  //   hoverItem.current = {
+  //     ...(tabPosition !== null ? { tabPosition } : {}),
+  //     ...(sectionPosition !== null ? { sectionPosition } : {}),
+  //   };
+  // };
 
   /** Function to add a tab as the second last item
    * Last item will always be 'Create new tab'.
@@ -191,6 +236,7 @@ const ServiceDialogForm = () => {
 
   /** Function to handle the tab Actions from menu. */
   const tabAction = (actionType, tab) => {
+    debugger
     switch (actionType) {
       case SD_ACTIONS.tab.edit:
         setSelTab(tab);
@@ -243,6 +289,12 @@ const ServiceDialogForm = () => {
         return deleteField(actionData);
       case SD_ACTIONS.field.edit:
         return handlePropertiesEdit(actionData);
+      case SD_ACTIONS.onDragEnterTab:
+        debugger
+        return onDragEnterTab(actionData);
+      case SD_ACTIONS.onDragStartTab:
+        // debugger
+        return onDragStartTab(actionData);
       default:
         return undefined;
     }
@@ -294,24 +346,36 @@ const ServiceDialogForm = () => {
   const renderTabs = () => data.formFields.map((tab, tabPosition) => (
     <Tab
       key={`tab${tabPosition.toString()}`}
+      draggable
+      onDragStart={(event) => onSectionAction({ event, type: SD_ACTIONS.onDragStartTab, tab, tabPosition })}
+      // onDragEnter={(event) => onSectionAction({ event, type: SD_ACTIONS.onDragEnterTab, tab, tabPosition })}
       label={tab.name}
       onClick={() => onTabSelect(tab.tabId)}
     >
-      {tab.tabId !== 'new'
-      && (
-        <section className="dynamic-sections-wrapper">
-          {renderTabName(tab)}
-          {renderSections(tab)}
-          {renderAddSectionButton(tab.tabId)}
-        </section>
-      )}
-
+      {/* <div
+        data-tab={tabPosition}
+        onDragEnter={(event) => onSectionAction({ event, type: SD_ACTIONS.onDragEnterTab, tab, tabPosition })}
+        onDragOver={(event) => onSectionAction({ type: SD_ACTIONS.onDragOverListener, event })}
+      > */}
+        {tab.tabId !== 'new'
+        && (
+          <section className="dynamic-sections-wrapper">
+            {renderTabName(tab)}
+            {renderSections(tab)}
+            {renderAddSectionButton(tab.tabId)}
+          </section>
+        )}
+      {/* </div> */}
     </Tab>
   ));
 
   /** Function to render the tab contents. */
   const renderTabContents = () => (
-    <div className="dynamic-tabs-wrapper">
+    <div
+      className="dynamic-tabs-wrapper"
+      // onDrop={(event) => onSectionAction({ event, type: SD_ACTIONS.onDrop })}
+      // onDragOver={(event) => onSectionAction({ event, type: SD_ACTIONS.onDragOverListener })}
+    >
       <Tabs className="miq_custom_tabs" id="dynamic-tabs">
         {renderTabs()}
       </Tabs>
