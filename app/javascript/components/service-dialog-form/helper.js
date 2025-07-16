@@ -32,6 +32,8 @@ export const SD_ACTIONS = {
   onDragEnterField: 'onDragEnterField',
   onDragStartField: 'onDragStartField',
   onDragStartSection: 'onDragStartSection',
+  onDragEnterTab: 'onDragEnterTab',
+  onDragStartTab: 'onDragStartTab',
 };
 
 /** Function to drop a field after its been dragged within a section */
@@ -60,6 +62,23 @@ export const dropSection = (tab, { sectionId }, dragEnterItem) => {
 
   // Insert at the correct position
   sections.splice(toIndex, 0, draggedSection);
+};
+
+export const dropTab = (formFields, { tabId }, dragEnterItem) => {
+  // const { sections } = tab;
+  debugger
+
+  const fromIndex = formFields.findIndex((tab) => tab.tabId === tabId);
+  const toIndex = formFields.findIndex((tab) => tab.tabId === dragEnterItem.tab.tabId);
+
+  // If either index is not found, do nothing
+  if (fromIndex === -1 || toIndex === -1) return;
+
+  // Remove the dragged tab
+  const [draggedTab] = formFields.splice(fromIndex, 1);
+
+  // Insert at the correct position
+  formFields.splice(toIndex, 0, draggedTab);
 };
 
 /** Function to drop a component after its been dragged */
