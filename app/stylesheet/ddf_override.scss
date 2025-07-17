@@ -527,21 +527,17 @@
   }
 }
 // CSS to adjust the UI for field array items in service dialog form
-
+// ToDo:: with below code, desc and value fields shows up side by side,
+// but the data wont be displayed in the fields; check why
 // .field-array-item {
 //   display: flex;
-//   align-items: center;
-//   gap: 8px;
-//   margin-bottom: 4px;
+//   gap: 1rem;
+//   align-items: flex-end; /* or center */
+//   margin-bottom: 1rem;
 // }
 
-// .field-array-item .bx--form-item {
+// .field-array-item .field-column {
 //   flex: 1;
-//   margin: 0;
 // }
 
-// .field-array-item .bx--btn {
-//   flex-shrink: 0;
-//   padding: 4px 8px;
-// }
 
