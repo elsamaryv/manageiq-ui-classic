@@ -42,21 +42,67 @@ export const fieldArrayComponent = (field) => ({
   RemoveButtonProps: {
     size: 'small',
   },
+  itemDefaultExpanded: true, // ensures fields are always visible
+  noLabel: true, // removes the duplicate label for each item
   fields: [
     {
       component: componentTypes.TEXT_FIELD,
       name: 'description',
-      placeholder: 'Description',
+      // placeholder: 'Description',
+      label: 'Description',
       isRequired: true,
+      className: 'field-column',
     },
     {
       component: componentTypes.TEXT_FIELD,
       name: 'value',
-      placeholder: 'Value',
+      // placeholder: 'Value',
+      label: 'Value',
       isRequired: true,
+      className: 'field-column',
     },
   ],
 });
+
+// ToDo:: with below code, desc and value fields shows up side by side,
+// but the data wont be displayed in the fields; check why
+// export const fieldArrayComponent = (field) => ({
+//   component: componentTypes.FIELD_ARRAY,
+//   name: field.name,
+//   label: field.label,
+//   id: field.name,
+//   AddButtonProps: {
+//     size: 'small',
+//   },
+//   RemoveButtonProps: {
+//     size: 'small',
+//   },
+//   itemDefaultExpanded: true,
+//   noLabel: true,
+//   fields: [
+//     {
+//       component: componentTypes.SUB_FORM, // use sub-form as layout wrapper
+//       // name: `${field.name}-row`,
+//       className: 'field-array-item',
+//       fields: [
+//         {
+//           component: componentTypes.TEXT_FIELD,
+//           name: 'description',
+//           label: 'Description',
+//           isRequired: true,
+//           className: 'field-column',
+//         },
+//         {
+//           component: componentTypes.TEXT_FIELD,
+//           name: 'value',
+//           label: 'Value',
+//           isRequired: true,
+//           className: 'field-column',
+//         },
+//       ],
+//     },
+//   ],
+// });
 
 export const datePickerComponent = (field) => ({
   component: componentTypes.DATE_PICKER,
