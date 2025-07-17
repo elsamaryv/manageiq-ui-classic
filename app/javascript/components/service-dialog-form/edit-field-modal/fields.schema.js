@@ -130,6 +130,26 @@ export const dateTimePickerComponent = (field, initialData, onChange) => ({
   onChange,
 });
 
+
+export const automateEntryPointComponent = (field, initialData, onChange) => {
+  debugger
+  return ({
+    component: 'embedded-automate-entry-point',
+    id: 'provisioning_entry_point_automate',
+    name: 'provisioning_entry_point_automate',
+    label: field.label,
+    field: field.name,
+    selected: '',
+    type: 'provision',
+    // id: field.name,
+    // name: field.name,
+    // label: field.label,
+    // value: field.value,
+    // initialData,
+    // onChange,
+  });
+}
+
 const valueTypes = [
   { label: __('String'), value: 'String' },
   { label: __('Integer'), value: 'Integer' },
@@ -146,7 +166,7 @@ const sortBy = [
 ];
 
 const assignProfiles = [
-  { label: __('Copy of sample'), value: 'Copy of sample' },
+  { label: __('Copy of sample1'), value: 'Copy of sample101' },
   { label: __('default'), value: 'default' },
   { label: __('host default'), value: 'host default' },
   { label: __('host sample'), value: 'host sample' },

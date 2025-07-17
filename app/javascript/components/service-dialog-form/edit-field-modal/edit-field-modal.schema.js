@@ -9,9 +9,11 @@ import {
   fieldArrayComponent,
   datePickerComponent,
   dateTimePickerComponent,
+  automateEntryPointComponent,
 } from './fields.schema';
 
 const fields = (tab, initialData, onChange) => tab.fields.map((item) => {
+  console.log("Item here - ", item);
   switch (item.field) {
     case componentTypes.TEXT_FIELD:
       return textFieldComponent(item);
@@ -27,6 +29,9 @@ const fields = (tab, initialData, onChange) => tab.fields.map((item) => {
       return datePickerComponent(item);
     case 'date-time-picker':
       return dateTimePickerComponent(item, initialData, onChange);
+    case 'embedded-automate-entry-point':
+      return automateEntryPointComponent(item, initialData, onChange);
+      
     default:
       return null;
   }

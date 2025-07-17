@@ -11,7 +11,7 @@ export const dynamicFields = {
   defaultValue: { label: __('Default value'), name: 'value', field: componentTypes.TEXT_FIELD },
   dynamic: { label: __('Dynamic'), name: 'dynamic', field: componentTypes.SWITCH },
   entries: { label: __('Entries'), name: 'items', field: componentTypes.FIELD_ARRAY },
-  entryPoint: { label: __('Entry point'), name: 'entryPoint', field: componentTypes.SELECT },
+  entryPoint: { label: __('Entry point'), name: 'entryPoint', field: 'embedded-automate-entry-point' },
   fieldsToRefresh: { label: __('Fields to refresh'), name: 'fieldsToRefresh', field: componentTypes.SELECT },
   help: { label: __('Help'), name: 'helperText', field: componentTypes.TEXTAREA },
   label: { label: __('Label'), name: 'label', field: componentTypes.TEXT_FIELD },
