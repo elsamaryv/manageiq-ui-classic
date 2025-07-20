@@ -110,7 +110,6 @@ const DynamicTextArea = ({ dynamicFieldData: { section, field, fieldPosition }, 
           labelText={fieldState.label}
           placeholder={fieldState.placeholder}
           required={fieldState.required}
-          visible={fieldState.visible}
           value={fieldState.value}
           readOnly={fieldState.readOnly}
           onChange={(e) => handleFieldUpdate(e, { value: e.target.value })}

@@ -108,7 +108,6 @@ const DynamicTextInput = ({ dynamicFieldData: { section, field, fieldPosition },
           labelText={fieldState.label}
           helperText={fieldState.helperText}
           placeholder={__('Default value')}
-          visible={fieldState.visible}
           value={fieldState.value}
           readOnly={fieldState.readOnly}
           onChange={(e) => handleFieldUpdate(e, { value: e.target.value })}
