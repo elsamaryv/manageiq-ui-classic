@@ -66,7 +66,6 @@ export const dropSection = (tab, { sectionId }, dragEnterItem) => {
 
 export const dropTab = (formFields, { tabId }, dragEnterItem) => {
   // const { sections } = tab;
-  debugger
 
   const fromIndex = formFields.findIndex((tab) => tab.tabId === tabId);
   const toIndex = formFields.findIndex((tab) => tab.tabId === dragEnterItem.tab.tabId);

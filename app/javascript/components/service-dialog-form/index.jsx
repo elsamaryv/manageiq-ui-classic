@@ -71,7 +71,6 @@ const ServiceDialogForm = () => {
 
   /** Function which gets executed when a section dragging has started */
   const onDragStartSection = ({ section }) => {
-    // debugger
     if (draggedItem.current && draggedItem.current.type && draggedItem.current.type !== dragItems.SECTION) {
       return;
     }
@@ -87,7 +86,6 @@ const ServiceDialogForm = () => {
   };
 
   const onDragEnterTab = ({ tab }) => {
-    debugger
     if (draggedItem.current && draggedItem.current.type === dragItems.TAB) {
       dragEnterItem.current = { tab };
     }
@@ -124,7 +122,6 @@ const ServiceDialogForm = () => {
           dropSection(tab, draggedItem.current, dragEnterItem.current);
           break;
         case dragItems.TAB:
-          debugger
           dropTab(formFields, draggedItem.current, dragEnterItem.current);
           break;
         default:
@@ -236,7 +233,6 @@ const ServiceDialogForm = () => {
 
   /** Function to handle the tab Actions from menu. */
   const tabAction = (actionType, tab) => {
-    debugger
     switch (actionType) {
       case SD_ACTIONS.tab.edit:
         setSelTab(tab);
@@ -290,10 +286,8 @@ const ServiceDialogForm = () => {
       case SD_ACTIONS.field.edit:
         return handlePropertiesEdit(actionData);
       case SD_ACTIONS.onDragEnterTab:
-        debugger
         return onDragEnterTab(actionData);
       case SD_ACTIONS.onDragStartTab:
-        // debugger
         return onDragStartTab(actionData);
       default:
         return undefined;

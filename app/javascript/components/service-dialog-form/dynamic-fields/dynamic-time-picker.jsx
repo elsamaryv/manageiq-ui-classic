@@ -144,7 +144,7 @@ const DynamicTimePicker = ({ dynamicFieldData: { section, field, fieldPosition }
   ]);
 
   const dynamicTimePickerOptions = () => ([
-    dynamicFields.entryPoint,
+    dynamicFields.automateEntryPoint,
     dynamicFields.showRefresh,
     dynamicFields.showPastDates,
     dynamicFields.fieldsToRefresh,

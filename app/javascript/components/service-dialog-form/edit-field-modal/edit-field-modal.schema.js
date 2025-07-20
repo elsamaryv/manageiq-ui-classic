@@ -10,10 +10,10 @@ import {
   datePickerComponent,
   dateTimePickerComponent,
   automateEntryPointComponent,
+  workflowEntryPointComponent,
 } from './fields.schema';
 
 const fields = (tab, initialData, onChange) => tab.fields.map((item) => {
-  console.log("Item here - ", item);
   switch (item.field) {
     case componentTypes.TEXT_FIELD:
       return textFieldComponent(item);
@@ -31,7 +31,8 @@ const fields = (tab, initialData, onChange) => tab.fields.map((item) => {
       return dateTimePickerComponent(item, initialData, onChange);
     case 'embedded-automate-entry-point':
       return automateEntryPointComponent(item, initialData, onChange);
-      
+    case 'embedded-workflow-entry-point':
+      return workflowEntryPointComponent(item, initialData, onChange);
     default:
       return null;
   }

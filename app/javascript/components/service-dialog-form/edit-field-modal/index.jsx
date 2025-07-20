@@ -32,14 +32,12 @@ const EditFieldModal = ({
   const onCancel = () => onModalHide();
 
   const handleSubmit = (formValues, e) => {
-    debugger
     const newFormValues = { ...formValues, ...newFieldValues };
     onSave(e, newFormValues);
     // onSave(e, formValues);
   };
 
   const onChange = (data) => {
-    debugger
     if (data != null && data.initialData.label === 'Timepicker') {
       onTimePickerChange(data.value);
       setnewFieldValues({ value: data.value });
