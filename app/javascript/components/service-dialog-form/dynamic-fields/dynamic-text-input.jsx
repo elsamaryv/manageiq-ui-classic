@@ -28,7 +28,6 @@ const DynamicTextInput = ({ dynamicFieldData: { section, field, fieldPosition },
     value: field.value || '',
     dynamic: field.dynamic || false,
     fieldsToRefresh: refreshEnabledFields,
-    // automateEntryPoint: field.automateEntryPoint || '',
   });
 
   const handleFieldUpdate = (event, updatedFields) => {
@@ -59,8 +58,8 @@ const DynamicTextInput = ({ dynamicFieldData: { section, field, fieldPosition },
 
   const ordinaryTextBoxOptions = () => ([
     dynamicFields.defaultValue,
-    dynamicFields.required,
     dynamicFields.protected,
+    dynamicFields.required,
     dynamicFields.readOnly,
     dynamicFields.visible,
     dynamicFields.valueType,
