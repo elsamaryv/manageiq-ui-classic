@@ -98,7 +98,6 @@ const DynamicCheckbox = ({ dynamicFieldData: { section, field, fieldPosition }, 
           name={fieldState.name}
           labelText={fieldState.label}
           required={fieldState.required}
-          visible={fieldState.visible}
           checked={fieldState.checked}
           onChange={(e) => handleFieldUpdate(e, { checked: e })}
         />
