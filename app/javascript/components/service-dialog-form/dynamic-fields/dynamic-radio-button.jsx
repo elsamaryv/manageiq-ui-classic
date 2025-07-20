@@ -81,7 +81,7 @@ const DynamicRadioButton = ({ dynamicFieldData: { section, field, fieldPosition 
   ]);
 
   const dynamicRadioButtonOptions = () => ([
-    dynamicFields.entryPoint,
+    dynamicFields.automateEntryPoint,
     dynamicFields.showRefresh,
     dynamicFields.loadOnInit,
     dynamicFields.required,

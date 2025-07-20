@@ -71,7 +71,7 @@ const DynamicTextArea = ({ dynamicFieldData: { section, field, fieldPosition }, 
   ]);
 
   const dynamicTextAreaOptions = () => ([
-    dynamicFields.entryPoint,
+    dynamicFields.automateEntryPoint,
     dynamicFields.showRefresh,
     dynamicFields.loadOnInit,
     dynamicFields.required,

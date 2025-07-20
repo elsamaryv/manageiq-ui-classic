@@ -130,25 +130,31 @@ export const dateTimePickerComponent = (field, initialData, onChange) => ({
   onChange,
 });
 
-
 export const automateEntryPointComponent = (field, initialData, onChange) => {
   debugger
   return ({
     component: 'embedded-automate-entry-point',
-    id: 'provisioning_entry_point_automate',
-    name: 'provisioning_entry_point_automate',
+    id: field.name,
+    name: field.name,
+    label: field.label,
+    field: field.name,
+    selected: initialData.automateEntryPoint,
+    type: 'provision',
+  });
+};
+
+export const workflowEntryPointComponent = (field, initialData, onChange) => {
+  debugger
+  return ({
+    component: 'embedded-workflow-entry-point',
+    id: 'provisioning_entry_point_workflow',
+    name: 'provisioning_entry_point_workflow',
     label: field.label,
     field: field.name,
     selected: '',
     type: 'provision',
-    // id: field.name,
-    // name: field.name,
-    // label: field.label,
-    // value: field.value,
-    // initialData,
-    // onChange,
   });
-}
+};
 
 const valueTypes = [
   { label: __('String'), value: 'String' },
@@ -163,6 +169,11 @@ const sortOrder = [
 const sortBy = [
   { label: __('Description'), value: 'description' },
   { label: __('Value'), value: 'value' },
+];
+
+const automationType = [
+  { label: __('Embedded Workflow'), value: 'embedded_workflow' },
+  { label: __('Embedded Automate'), value: 'embedded_automate' },
 ];
 
 const assignProfiles = [
@@ -206,6 +217,8 @@ const selectOptions = (field, initialData) => {
       return sortOrder;
     case 'sortBy':
       return sortBy;
+    case 'automationType':
+      return automationType;
     case 'value':
       return initialData.items;
     case 'categories':

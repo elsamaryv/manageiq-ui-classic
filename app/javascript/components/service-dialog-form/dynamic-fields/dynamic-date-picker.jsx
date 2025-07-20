@@ -44,7 +44,7 @@ const DynamicDatePicker = ({ dynamicFieldData: { section, field, fieldPosition }
   ]);
 
   const dynamicDatePickerOptions = () => ([
-    dynamicFields.entryPoint,
+    dynamicFields.automateEntryPoint,
     dynamicFields.showRefresh,
     dynamicFields.showPastDates,
     dynamicFields.fieldsToRefresh,

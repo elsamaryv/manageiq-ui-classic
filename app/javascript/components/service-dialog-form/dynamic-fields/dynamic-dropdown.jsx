@@ -45,6 +45,7 @@ const DynamicDropdown = ({ dynamicFieldData: { section, field, fieldPosition }, 
     fieldsToRefresh: refreshEnabledFields,
     sortBy: field.sortBy || 'description',
     sortOrder: field.sortOrder || 'ascending',
+    automationType: field.automationType || 'embedded_automate',
   });
 
   const handleFieldUpdate = (event, updatedFields) => {
@@ -88,7 +89,9 @@ const DynamicDropdown = ({ dynamicFieldData: { section, field, fieldPosition }, 
   ]);
 
   const dynamicDropdownOptions = () => ([
-    // dynamicFields.entryPoint,
+    dynamicFields.automationType,
+    dynamicFields.automateEntryPoint,
+    dynamicFields.workflowEntryPoint,
     dynamicFields.showRefresh,
     dynamicFields.loadOnInit,
     dynamicFields.required,

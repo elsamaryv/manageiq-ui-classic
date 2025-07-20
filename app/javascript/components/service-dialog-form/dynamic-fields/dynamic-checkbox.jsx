@@ -66,7 +66,7 @@ const DynamicCheckbox = ({ dynamicFieldData: { section, field, fieldPosition }, 
   ]);
 
   const dynamicCheckboxOptions = () => ([
-    dynamicFields.entryPoint,
+    dynamicFields.automateEntryPoint,
     dynamicFields.showRefresh,
     dynamicFields.loadOnInit,
     dynamicFields.required,
