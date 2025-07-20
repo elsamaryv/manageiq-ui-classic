@@ -46,7 +46,7 @@ const EditFieldModal = ({
 
   return (
     <Modal
-      open={showModal}
+      open
       modalHeading={__(`Edit this ${component.title}`)}
       onRequestClose={onModalHide}
       passiveModal // Required to hide the save and cancel buttons on the Modal
