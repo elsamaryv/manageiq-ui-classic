@@ -13,6 +13,8 @@ import {
   workflowEntryPointComponent,
 } from './fields.schema';
 
+// tab - each tab in the edit field modal
+// initialData - all information regarding the underlying component
 const fields = (tab, initialData, onChange) => tab.fields.map((item) => {
   switch (item.field) {
     case componentTypes.TEXT_FIELD:

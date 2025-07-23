@@ -1,13 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import MiqFormRenderer from '@@ddf';
-import {
-  Tabs,
-  Tab,
-  Modal, ModalBody,
-} from 'carbon-components-react';
+// import MiqFormRenderer, { useFormApi } from '@@ddf';
+import { Tabs, Tab, Modal, ModalBody } from 'carbon-components-react';
 import { dynamicComponents } from '../data';
 import { createSchema } from './edit-field-modal.schema';
+import InlineFlashMessage from '../../common/inline-flash-message';
 // import { componentTypes } from '../component-types';
 // import componentMapper from '../../../forms/mappers/componentMapper';
 // import CustomDateTimePicker from '../../date-time-picker';
@@ -18,29 +16,50 @@ const EditFieldModal = ({
 }) => {
   const component = dynamicComponents.find((item) => item.id === componentId);
 
-  const [newFieldValues, setnewFieldValues] = useState();
+  // const [newFieldValues, setnewFieldValues] = useState();
+  const [formValues, setFormValues] = useState(initialData);
+  const [inlineFlashMessage, setInlineFlashMessage] = useState(null);
 
   const handleFieldUpdates = ({ target }) => {
+    if (!target) return;
+
+    const val = target.type === 'checkbox' ? target.checked : target.value;
+
     if (target.name === 'dynamic') {
-      onDynamicSwitchToggle(target.checked);
-    }
-    if (target.name === 'categories') {
-      onCategorySelect(target.value);
+      const isDynamic = val;
+      onDynamicSwitchToggle(isDynamic);
+      if (isDynamic) {
+        setInlineFlashMessage({
+          kind: 'warning',
+          subtitle: 'Entry Point needs to be set for Dynamic elements',
+        });
+      } else {
+        setInlineFlashMessage(null);
+      }
+      // setFormValues((prev) => ({ ...prev, dynamic: isDynamic }));
+    } else if (target.name === 'categories') {
+      onCategorySelect(val);
+    } else {
+      // TODO: doing this wont make the form dirty; so save button is still disabled;
+      // setFormValues((prev) => ({ ...prev, [target.name]: val }));
     }
   };
 
   const onCancel = () => onModalHide();
 
-  const handleSubmit = (formValues, e) => {
-    const newFormValues = { ...formValues, ...newFieldValues };
-    onSave(e, newFormValues);
+  const handleSubmit = (submittedValues, e) => {
+    const finalValues = { ...formValues, ...submittedValues };
+    onSave(e, finalValues);
     // onSave(e, formValues);
   };
 
   const onChange = (data) => {
-    if (data != null && data.initialData.label === 'Timepicker') {
+    if (!data) return;
+
+    if (data.initialData.label === 'Timepicker') {
       onTimePickerChange(data.value);
-      setnewFieldValues({ value: data.value });
+      // setnewFieldValues({ value: data.value });
+      // setFormValues((prev) => ({ ...prev, value: data.value }));
     }
   };
 
@@ -52,11 +71,14 @@ const EditFieldModal = ({
       passiveModal // Required to hide the save and cancel buttons on the Modal
       className="edit-field-modal"
       onChange={handleFieldUpdates}
+      // primaryButtonDisabled={false}
     >
       <ModalBody className="edit-field-modal-body">
+        <InlineFlashMessage message={inlineFlashMessage} />
         <MiqFormRenderer
-          schema={createSchema(fieldConfiguration, initialData, onChange)}
-          initialValues={initialData}
+          schema={createSchema(fieldConfiguration, formValues, onChange)}
+          initialValues={formValues}
+          // initialValues={initialData}
           // componentMapper={mapper}
           onSubmit={handleSubmit}
           onCancel={onCancel}

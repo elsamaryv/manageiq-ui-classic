@@ -20,13 +20,12 @@ const DynamicTextInput = ({ dynamicFieldData: { section, field, fieldPosition },
 
   const [fieldState, setFieldState] = useState({
     type: 'DialogFieldTextBox',
-    // resourceType: 'DialogField',
     position: fieldPosition,
-    label: field.label || __('Text Box'),
-    name: field.name || inputId,
-    visible: field.visible || true,
-    value: field.value || '',
-    dynamic: field.dynamic || false,
+    label: __('Text Box'),
+    name: inputId,
+    visible: true,
+    value: '',
+    dynamic: false,
     fieldsToRefresh: refreshEnabledFields,
   });
 
@@ -53,6 +52,7 @@ const DynamicTextInput = ({ dynamicFieldData: { section, field, fieldPosition },
 
   // To reset tabs in Edit Modal based on 'dynamic' switch
   const resetEditModalTabs = (isDynamic) => {
+    debugger
     setFieldState((prevState) => ({ ...prevState, dynamic: isDynamic }));
   };
 
