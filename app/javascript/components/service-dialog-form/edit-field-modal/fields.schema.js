@@ -8,7 +8,7 @@ export const textFieldComponent = (field) => ({
   maxLength: 128,
   id: field.name,
   name: field.name,
-  ...(field.condition && { condition: field.condition }),
+  ...(field.condition && { condition: field.condition }), // required to setup the validation fields
   ...(field.placeholder && { placeholder: field.placeholder }),
 });
 
@@ -131,7 +131,7 @@ export const dateTimePickerComponent = (field, initialData, onChange) => ({
 });
 
 export const automateEntryPointComponent = (field, initialData, onChange) => {
-  debugger
+  // debugger
   return ({
     component: 'embedded-automate-entry-point',
     id: field.name,
@@ -144,7 +144,7 @@ export const automateEntryPointComponent = (field, initialData, onChange) => {
 };
 
 export const workflowEntryPointComponent = (field, initialData, onChange) => {
-  debugger
+  // debugger
   return ({
     component: 'embedded-workflow-entry-point',
     id: 'provisioning_entry_point_workflow',
