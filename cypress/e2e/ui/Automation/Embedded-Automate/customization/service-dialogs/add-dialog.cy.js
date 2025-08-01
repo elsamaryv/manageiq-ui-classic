@@ -14,6 +14,17 @@ describe('Automation > Embedded Automate > Customization > Service Dialogs', () 
       if ($link.length && $link.is(':visible')) {
         cy.wrap($link).click({ force: true });
       }
+
+      // Checks for a pop up showing server error and close it if visible -- TODO:: need to check if working
+      // const $serverErr = $body.find('#errorModal:visible');
+      // if ($serverErr.length) {
+      //   const $modalContent = $serverErr.find('.error-modal-miq');
+      //   if ($modalContent.length) {
+      //     cy.wrap($modalContent)
+      //       .find('.modal-body .error-icon')
+      //       .click({ force: true });
+      //   }
+      // }
     });
 
     // Select Service Dialogs for configuration
@@ -70,7 +81,7 @@ describe('Automation > Embedded Automate > Customization > Service Dialogs', () 
     });
 
     // Sections
-    it.only('Ensure first tab has a section with 3 action buttons', () => {
+    it('Ensure first tab has a section with 3 action buttons', () => {
       cy.get('.dynamic-tabs-wrapper')
         .find('div[role="tabpanel"]').should('exist')
         .find('.dynamic-sections-wrapper #dynamic-tab-0-section-0')
