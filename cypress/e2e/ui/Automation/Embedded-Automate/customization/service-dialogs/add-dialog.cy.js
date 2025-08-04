@@ -48,7 +48,7 @@ describe('Automation > Embedded Automate > Customization > Service Dialogs', () 
 
     // Tabs
     describe('Tabs', () => {
-      it.only('performs tab lifecycle actions', () => {
+      it('performs tab lifecycle actions', () => {
         cy.get('#dynamic-tabs ul[role="tablist"]')
           .within(() => {
             cy.get('li').should('have.length', 2);
@@ -69,7 +69,10 @@ describe('Automation > Embedded Automate > Customization > Service Dialogs', () 
         cy.clickTab(0);
         cy.openTabMenu(0);
         cy.openEditTabModal();
-        cy.editTabAndSubmit('New Tab', 'T1', 'T1 desc');
+        cy.get('.edit-tab-modal').should('exist');
+        cy.get('.bx--modal-header__heading').should('contain', 'Edit this New Tab');
+        cy.get('button[type="submit"]').should('be.disabled');
+        cy.editTabAndSubmit('T1', 'T1 desc');
         cy.get('#dynamic-tabs ul li').eq(0).find('button').should('have.text', 'T1');
         cy.get('.dynamic-tab-name h2').should('have.text', 'T1');
 
@@ -86,7 +89,7 @@ describe('Automation > Embedded Automate > Customization > Service Dialogs', () 
 
     // Sections
     describe('Sections', () => {
-      it('tests complete lifecycle of a dynamic section in first tab', () => {
+      it.only('tests complete lifecycle of a dynamic section in first tab', () => {
         cy.get('.dynamic-tabs-wrapper')
           .find('div[role="tabpanel"]').should('exist')
           .find('.dynamic-sections-wrapper #dynamic-tab-0-section-0')
@@ -112,47 +115,39 @@ describe('Automation > Embedded Automate > Customization > Service Dialogs', () 
 
         // Collapse a section
         cy.get('#dynamic-tab-0-section-0 .dynamic-section-actions')
-          .find('button[title="Minimize"]').click()
-          .then(() => {
-            cy.get('#dynamic-tab-0-section-0 .dynamic-section-contents').should('not.exist');
-          });
+          .find('button[title="Minimize"]').click();
+        cy.get('#dynamic-tab-0-section-0 .dynamic-section-contents').should('not.exist');
         // Expand again
-        cy.get('button[title="Maximize"]').click()
-          .then(() => {
-            cy.get('#dynamic-tab-0-section-0 .dynamic-section-contents').should('exist');
-          });
+        cy.get('button[title="Maximize"]').click();
+        cy.get('#dynamic-tab-0-section-0 .dynamic-section-contents').should('exist');
 
         // Delete a section
-        cy.deleteSection(0, 0)
-          .then(() => {
-            cy.get('#dynamic-tab-0-section-0').should('not.exist');
-          });
+        cy.deleteSection(0, 0);
+        cy.get('#dynamic-tab-0-section-0').should('not.exist');;
 
         // Add a section
-        cy.addSection()
-          .then(() => {
-            cy.get('.dynamic-tabs-wrapper')
-              .find('.dynamic-sections-wrapper #dynamic-tab-0-section-0')
-              .find('.dynamic-section-title').should('have.text', 'New Section');
-          });
+        cy.addSection();
+        cy.get('.dynamic-tabs-wrapper')
+          .find('.dynamic-sections-wrapper #dynamic-tab-0-section-0')
+          .find('.dynamic-section-title').should('have.text', 'New Section');
 
-        // Section edit form
-        cy.openEditSectionModal(0, 0)
-          .then(() => {
-            cy.submitEditSection('New Section', 'S1', 'S1 desc')
-            cy.get('#dynamic-tab-0-section-0')
-              .find('.dynamic-section-title').should('have.text', 'S1');
-          });
-        cy.openEditSectionModal(0, 0)
-          .then(() => {
-            cy.cancelEditSection('S1 edited')
-              .then(() => {
-                cy.get('#dynamic-tab-0-section-0')
-                  .find('.dynamic-section-title')
-                  .should('not.have.text', 'S1 edited')
-                  .should('have.text', 'S1');
-              });
-          });
+        // Edit section
+        cy.openEditSectionModal(0, 0);
+        cy.get('.bx--modal-header__heading').should('contain', 'Edit this New Section');
+        cy.get('input[name="section_name"]').should('exist');
+        cy.get('textarea[name="section_description"]').should('exist');
+        cy.get('button[type="submit"]').should('be.disabled');
+        cy.editSectionAndSubmit('S1', 'S1 desc');
+        cy.get('#dynamic-tab-0-section-0')
+          .find('.dynamic-section-title').should('have.text', 'S1');
+
+        // Cancel edit
+        cy.openEditSectionModal(0, 0);
+        cy.editSectionAndCancel('S1 edited');
+        cy.get('#dynamic-tab-0-section-0')
+          .find('.dynamic-section-title')
+          .should('not.have.text', 'S1 edited')
+          .should('have.text', 'S1');
 
         // TODO:: Reorder section - drag downwards
         // TODO:: Reorder section - drag upwards
