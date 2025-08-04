@@ -1,5 +1,23 @@
 /* eslint-disable no-undef */
 
+// Login and navigate to add a new service dialog
+Cypress.Commands.add('navigateToAddDialog', () => {
+  cy.login();
+  cy.intercept('POST', '/ops/accordion_select?id=rbac_accord').as('accordion');
+  cy.menu('Automation', 'Embedded Automate', 'Customization');
+
+  cy.closeNotificationsIfVisible();
+  cy.closeErrorPopupIfVisible();
+
+  // Select Service Dialogs for configuration
+  cy.accordion('Service Dialogs');
+  cy.get('#dialogs_accord')
+    .find('.list-group .list-group-item').contains('All Dialogs').click();
+
+  cy.toolbar('Configuration', 'Add a new Dialog');
+});
+
+// Add a tab
 Cypress.Commands.add('addTab', () => {
   cy.get('#dynamic-tabs ul li').last().find('button').contains('Create Tab').click();
 });
