@@ -23,8 +23,8 @@ const TabOptionsMenu = ({ tabId, onTabAction }) => (
     />
     <OverflowMenuItem
       className={`overflow-options markasread-${tabId}`}
-      aria-label={__('Remove tab')}
-      itemText={__('Remove tab')}
+      aria-label={__('Remove Tab')}
+      itemText={__('Remove Tab')}
       onKeyDown={() => onTabAction(SD_ACTIONS.tab.delete)}
       requireTitle
       onClick={() => onTabAction(SD_ACTIONS.tab.delete)}

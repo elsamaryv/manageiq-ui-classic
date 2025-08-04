@@ -6,26 +6,8 @@ describe('Automation > Embedded Automate > Customization > Service Dialogs', () 
     cy.intercept('POST', '/ops/accordion_select?id=rbac_accord').as('accordion');
     cy.menu('Automation', 'Embedded Automate', 'Customization');
 
-    // Look for notification popups and disable them if present
-    cy.get('body').then(($body) => {
-      const $link = $body.find(
-        '.miq-toast-wrapper .row .alert a:contains("Disable notifications")'
-      );
-      if ($link.length && $link.is(':visible')) {
-        cy.wrap($link).click({ force: true });
-      }
-
-      // Checks for a pop up showing server error and close it if visible -- TODO:: need to check if working
-      // const $serverErr = $body.find('#errorModal:visible');
-      // if ($serverErr.length) {
-      //   const $modalContent = $serverErr.find('.error-modal-miq');
-      //   if ($modalContent.length) {
-      //     cy.wrap($modalContent)
-      //       .find('.modal-body .error-icon')
-      //       .click({ force: true });
-      //   }
-      // }
-    });
+    cy.closeNotificationsIfVisible();
+    cy.closeErrorPopupIfVisible();
 
     // Select Service Dialogs for configuration
     cy.accordion('Service Dialogs');
@@ -67,7 +49,7 @@ describe('Automation > Embedded Automate > Customization > Service Dialogs', () 
 
     // Tabs
     describe('Tabs', () => {
-      it('Ensure 2 tabs are seen initially where one indicates - create a new tab', () => {
+      it.only('Ensure 2 tabs are seen initially where one indicates - create a new tab', () => {
         cy.get('#dynamic-tabs')
           .find('ul[role="tablist"]').should('exist')
           .within(() => {
@@ -78,7 +60,67 @@ describe('Automation > Embedded Automate > Customization > Service Dialogs', () 
             cy.get('li').first().find('button').invoke('text').should('eq', 'New Tab');
             // Last li has button with "create"
             cy.get('li').last().find('button').invoke('text').should('eq', 'Create Tab');
+
+            // Add a tab
+            cy.get('li').last().find('button').contains('Create Tab').click()
+              .then(() => {
+                cy.get('li').should('have.length', 3);
+                cy.get('li').eq(1).find('button').should('have.text', 'New Tab 1');
+              });
           });
+
+        // Delete a tab
+        cy.get('.dynamic-tab-name').find('#tab-menu-1').click()
+          .then(() => {
+            cy.get('ul[aria-label="Tab options"]')
+              .find('li').find('button[aria-label="Remove Tab"]').click();
+          });
+        cy.get('#dynamic-tabs ul li').should('have.length', 2);
+
+        // Edit a tab
+        cy.get('#dynamic-tabs ul li').first().click()
+          .then(() => {
+            cy.get('.dynamic-sections-wrapper .dynamic-tab-name #tab-menu-0').click()
+              .then(() => {
+                cy.get('ul[aria-label="Tab options"]')
+                  .find('li').find('button[aria-label="Edit Tab"]').click()
+                  .then(() => {
+                    cy.get('.edit-tab-modal').should('exist')
+                      .within(() => {
+                        cy.get('.bx--modal-header__heading').should('contain', 'Edit this New Tab');
+                        cy.get('input[name="tab_name"]').should('exist');
+                        cy.get('textarea[name="tab_description"]').should('exist');
+                        cy.get('button[type="submit"]').should('be.disabled');
+
+                        // Edit the tab and submit
+                        cy.get('input[name="tab_name"]').clear().type('T1');
+                        cy.get('textarea[name="tab_description"]').clear().type('First tab');
+                        cy.get('button[type="submit"]').click();
+                      });
+                    cy.get('#dynamic-tabs ul li').first()
+                      .find('button').should('have.text', 'T1');
+                    cy.get('.dynamic-tab-name h2').should('have.text', 'T1');
+                  });
+              });
+            // Edit the tab but cancel
+            cy.get('#tab-menu-0').click()
+              .then(() => {
+                cy.get('ul[aria-label="Tab options"]')
+                  .find('li').find('button[aria-label="Edit Tab"]').click()
+                  .then(() => {
+                    cy.get('.edit-tab-modal')
+                      .within(() => {
+                        cy.get('input[name="tab_name"]').clear().type('T1 edited');
+                        cy.get('button').contains('Cancel').click();
+                      });
+                    cy.get('#dynamic-tabs ul li').first()
+                      .find('button').should('not.have.text', 'T1 edited').should('have.text', 'T1');
+                    cy.get('.dynamic-tab-name h2').should('have.text', 'T1');
+                  });
+              });
+          });
+        // Reorder tab - drag downwards
+        // Reorder tab - drag upwards
       });
     });
 
@@ -147,7 +189,7 @@ describe('Automation > Embedded Automate > Customization > Service Dialogs', () 
                 cy.get('textarea[name="section_description"]').should('exist');
                 cy.get('button[type="submit"]').should('be.disabled');
 
-                // Editing the section and submit
+                // Edit the section and submit
                 cy.get('input[name="section_name"]').clear().type('S1');
                 cy.get('textarea[name="section_description"]').clear().type('First section');
                 cy.get('button[type="submit"]').click();
@@ -159,7 +201,7 @@ describe('Automation > Embedded Automate > Customization > Service Dialogs', () 
           .then(() => {
             cy.get('.edit-section-modal')
               .within(() => {
-                // Editing the section but cancel
+                // Edit the section but cancel
                 cy.get('input[name="section_name"]').clear().type('S1 edited');
                 cy.get('button').contains('Cancel').click();
               });
@@ -168,6 +210,9 @@ describe('Automation > Embedded Automate > Customization > Service Dialogs', () 
               .should('not.have.text', 'S1 edited')
               .should('have.text', 'S1');
           });
+
+        // TODO:: Reorder section - drag downwards
+        // TODO:: Reorder section - drag upwards
       });
     });
   });
