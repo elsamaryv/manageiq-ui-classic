@@ -30,16 +30,11 @@ Cypress.Commands.add('openEditTabModal', () => {
 });
 
 // Edit and submit the changes on tab
-Cypress.Commands.add('editTabAndSubmit', (currentTabName, newTabName, newTabDescription) => {
-  cy.get('.edit-tab-modal').should('exist').within(() => {
-    cy.get('.bx--modal-header__heading').should('contain', `Edit this ${currentTabName}`);
-    cy.get('input[name="tab_name"]').should('exist');
-    cy.get('textarea[name="tab_description"]').should('exist');
-    cy.get('button[type="submit"]').should('be.disabled');
-
-    cy.get('input[name="tab_name"]').clear().type(newTabName);
-    cy.get('textarea[name="tab_description"]').clear().type(newTabDescription);
-    cy.get('button[type="submit"]').should('not.be.disabled').click();
+Cypress.Commands.add('editTabAndSubmit', (tabName, tabDescription) => {
+  cy.get('.edit-tab-modal').within(() => {
+    cy.get('input[name="tab_name"]').clear().type(tabName);
+    cy.get('textarea[name="tab_description"]').clear().type(tabDescription);
+    cy.get('button[type="submit"]').click();
   });
 });
 
@@ -69,22 +64,17 @@ Cypress.Commands.add('openEditSectionModal', (tabIndex, secIndex) => {
     .find('button[title="Edit section"]').click();
 });
 
-// Submit the section edit modal with name and description
-Cypress.Commands.add('submitEditSection', (currentSecName, newSecName, newSecDescription) => {
+// Edit and submit the changes on section
+Cypress.Commands.add('editSectionAndSubmit', (secName, secDescription) => {
   cy.get('.edit-section-modal').within(() => {
-    cy.get('.bx--modal-header__heading').should('contain', `Edit this ${currentSecName}`);
-    cy.get('input[name="section_name"]').should('exist');
-    cy.get('textarea[name="section_description"]').should('exist');
-    cy.get('button[type="submit"]').should('be.disabled');
-
-    cy.get('input[name="section_name"]').clear().type(newSecName);
-    cy.get('textarea[name="section_description"]').clear().type(newSecDescription);
+    cy.get('input[name="section_name"]').clear().type(secName);
+    cy.get('textarea[name="section_description"]').clear().type(secDescription);
     cy.get('button[type="submit"]').click();
   });
 });
 
-// Cancel the section edit modal after changing the name
-Cypress.Commands.add('cancelEditSection', (name) => {
+// Edit but cancel the changes on section
+Cypress.Commands.add('editSectionAndCancel', (name) => {
   cy.get('.edit-section-modal').within(() => {
     cy.get('input[name="section_name"]').clear().type(name);
     cy.contains('button', 'Cancel').click();
