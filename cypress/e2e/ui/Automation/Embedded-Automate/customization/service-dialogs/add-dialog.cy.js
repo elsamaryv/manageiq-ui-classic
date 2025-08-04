@@ -2,19 +2,7 @@
 
 describe('Automation > Embedded Automate > Customization > Service Dialogs', () => {
   beforeEach(() => {
-    cy.login();
-    cy.intercept('POST', '/ops/accordion_select?id=rbac_accord').as('accordion');
-    cy.menu('Automation', 'Embedded Automate', 'Customization');
-
-    cy.closeNotificationsIfVisible();
-    cy.closeErrorPopupIfVisible();
-
-    // Select Service Dialogs for configuration
-    cy.accordion('Service Dialogs');
-    cy.get('#dialogs_accord')
-      .find('.list-group .list-group-item').contains('All Dialogs').click();
-
-    cy.toolbar('Configuration', 'Add a new Dialog');
+    cy.navigateToAddDialog();
   });
 
   // General checks on the Service Dialog editor page
@@ -89,7 +77,7 @@ describe('Automation > Embedded Automate > Customization > Service Dialogs', () 
 
     // Sections
     describe('Sections', () => {
-      it('tests complete lifecycle of a dynamic section in first tab', () => {
+      it('performs section lifecycle actions', () => {
         cy.get('.dynamic-tabs-wrapper')
           .find('div[role="tabpanel"]').should('exist')
           .find('.dynamic-sections-wrapper #dynamic-tab-0-section-0')
