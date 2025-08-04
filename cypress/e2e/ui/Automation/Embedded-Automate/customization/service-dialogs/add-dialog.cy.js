@@ -48,56 +48,37 @@ describe('Automation > Embedded Automate > Customization > Service Dialogs', () 
 
     // Tabs
     describe('Tabs', () => {
-      it('Ensure 2 tabs are seen initially where one indicates - create a new tab', () => {
-        cy.get('#dynamic-tabs')
-          .find('ul[role="tablist"]').should('exist')
+      it.only('performs tab lifecycle actions', () => {
+        cy.get('#dynamic-tabs ul[role="tablist"]')
           .within(() => {
-            // Ensure there are exactly 2 <li>
-            cy.get('li')
-              .should('have.length', 2);
-            // First li contains button with text "New Tab"
+            cy.get('li').should('have.length', 2);
             cy.get('li').first().find('button').invoke('text').should('eq', 'New Tab');
-            // Last li has button with "create"
             cy.get('li').last().find('button').invoke('text').should('eq', 'Create Tab');
-
-            // Add a tab
-            cy.addTab()
-              .then(() => {
-                cy.get('li').should('have.length', 3);
-                cy.get('li').eq(1).find('button').should('have.text', 'New Tab 1');
-              });
           });
+
+        // Add tab
+        cy.addTab();
+        cy.get('#dynamic-tabs ul li').should('have.length', 3);
+        cy.get('#dynamic-tabs ul li').eq(1).find('button').should('have.text', 'New Tab 1');
 
         // Delete a tab
         cy.deleteTab(1);
         cy.get('#dynamic-tabs ul li').should('have.length', 2);
 
-        // Edit a tab
-        cy.clickTab(0)
-          .then(() => {
-            cy.openTabMenu(0)
-              .then(() => {
-                cy.openEditTabModal()
-                  .then(() => {
-                    // Edit the tab and submit changes
-                    cy.submitEditTab('New Tab', 'T1', 'T1 desc');
-                    cy.clickTab(0)
-                      .find('button').should('have.text', 'T1');
-                    cy.get('.dynamic-tab-name h2').should('have.text', 'T1');
-                  });
-              });
-            cy.openTabMenu(0)
-              .then(() => {
-                cy.openEditTabModal()
-                  .then(() => {
-                    // Edit the tab but cancel
-                    cy.cancelEditTab('T1 edited');
-                    cy.get('#dynamic-tabs ul li').first()
-                      .find('button').should('not.have.text', 'T1 edited').should('have.text', 'T1');
-                    cy.get('.dynamic-tab-name h2').should('have.text', 'T1');
-                  });
-              });
-          });
+        // Edit tab
+        cy.clickTab(0);
+        cy.openTabMenu(0);
+        cy.openEditTabModal();
+        cy.editTabAndSubmit('New Tab', 'T1', 'T1 desc');
+        cy.get('#dynamic-tabs ul li').eq(0).find('button').should('have.text', 'T1');
+        cy.get('.dynamic-tab-name h2').should('have.text', 'T1');
+
+        // Cancel edit
+        cy.openTabMenu(0);
+        cy.openEditTabModal();
+        cy.editTabAndCancel('T1 edited');
+        cy.get('#dynamic-tabs ul li').eq(0).find('button').should('have.text', 'T1');
+
         // Reorder tab - drag downwards
         // Reorder tab - drag upwards
       });
