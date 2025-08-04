@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 
 Cypress.Commands.add('addTab', () => {
-  cy.get('li').last().find('button').contains('Create Tab').click();
+  cy.get('#dynamic-tabs ul li').last().find('button').contains('Create Tab').click();
 });
 
 // Delete a tab by index
@@ -30,7 +30,7 @@ Cypress.Commands.add('openEditTabModal', () => {
 });
 
 // Edit and submit the changes on tab
-Cypress.Commands.add('submitEditTab', (currentTabName, newTabName, newTabDescription) => {
+Cypress.Commands.add('editTabAndSubmit', (currentTabName, newTabName, newTabDescription) => {
   cy.get('.edit-tab-modal').should('exist').within(() => {
     cy.get('.bx--modal-header__heading').should('contain', `Edit this ${currentTabName}`);
     cy.get('input[name="tab_name"]').should('exist');
@@ -44,7 +44,7 @@ Cypress.Commands.add('submitEditTab', (currentTabName, newTabName, newTabDescrip
 });
 
 // Edit but cancel the changes on tab
-Cypress.Commands.add('cancelEditTab', (tabName) => {
+Cypress.Commands.add('editTabAndCancel', (tabName) => {
   cy.get('.edit-tab-modal').within(() => {
     cy.get('input[name="tab_name"]').clear().type(tabName);
     cy.get('button').contains('Cancel').click();
