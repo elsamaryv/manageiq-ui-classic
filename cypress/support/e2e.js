@@ -41,6 +41,7 @@
 
 // Commands
 import './commands/common.js'
+import './commands/customization/service-dialogs.js'
 import './commands/explorer.js'
 import './commands/gtl.js'
 import './commands/login.js'
