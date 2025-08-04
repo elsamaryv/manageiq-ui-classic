@@ -105,7 +105,7 @@ describe('Automation > Embedded Automate > Customization > Service Dialogs', () 
 
     // Sections
     describe('Sections', () => {
-      it.only('tests complete lifecycle of a dynamic section in first tab', () => {
+      it('tests complete lifecycle of a dynamic section in first tab', () => {
         cy.get('.dynamic-tabs-wrapper')
           .find('div[role="tabpanel"]').should('exist')
           .find('.dynamic-sections-wrapper #dynamic-tab-0-section-0')
