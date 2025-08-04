@@ -40,6 +40,7 @@
 // ***********************************************************
 
 // Commands
+import './commands/common.js'
 import './commands/explorer.js'
 import './commands/gtl.js'
 import './commands/login.js'
