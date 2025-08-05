@@ -28,17 +28,24 @@ const EditFieldModal = ({
     if (target.name === 'dynamic') {
       const isDynamic = val;
       onDynamicSwitchToggle(isDynamic);
+      debugger
       if (isDynamic) {
         setInlineFlashMessage({
           kind: 'warning',
-          subtitle: 'Entry Point needs to be set for Dynamic elements',
+          subtitle: __('Entry Point needs to be set for Dynamic elements'),
         });
       } else {
         setInlineFlashMessage(null);
       }
-      // setFormValues((prev) => ({ ...prev, dynamic: isDynamic }));
     } else if (target.name === 'categories') {
       onCategorySelect(val);
+    } else if (target.name === 'name' || target.name === 'label') {
+      if (!val) {
+        setInlineFlashMessage({
+          kind: 'warning',
+          subtitle: __('Label or Name is missing'),
+        });
+      }
     } else {
       // TODO: doing this wont make the form dirty; so save button is still disabled;
       // setFormValues((prev) => ({ ...prev, [target.name]: val }));
