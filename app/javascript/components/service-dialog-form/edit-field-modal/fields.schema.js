@@ -10,6 +10,14 @@ export const textFieldComponent = (field) => ({
   name: field.name,
   ...(field.condition && { condition: field.condition }), // required to setup the validation fields
   ...(field.placeholder && { placeholder: field.placeholder }),
+  ...(field.name === 'label' && {
+    isRequired: true,
+    validate: [{ type: 'required' }]
+  }),
+  ...(field.name === 'name' && {
+    isRequired: true,
+    validate: [{ type: 'required' }]
+  }),
 });
 
 export const textAreaComponent = (field) => ({
