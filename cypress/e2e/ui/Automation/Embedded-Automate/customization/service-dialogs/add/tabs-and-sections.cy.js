@@ -70,8 +70,8 @@ describe('Automation > Embedded Automate > Customization > Service Dialogs', () 
         cy.editTabAndCancel('T1 edited');
         cy.get('#dynamic-tabs ul li').eq(0).find('button').should('have.text', 'T1');
 
-        // Reorder tab - drag downwards
-        // Reorder tab - drag upwards
+        // TODO::Reorder tab - drag downwards
+        // TODO::Reorder tab - drag upwards
       });
     });
 
