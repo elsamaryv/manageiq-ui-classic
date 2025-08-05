@@ -52,7 +52,6 @@ const DynamicTextInput = ({ dynamicFieldData: { section, field, fieldPosition },
 
   // To reset tabs in Edit Modal based on 'dynamic' switch
   const resetEditModalTabs = (isDynamic) => {
-    debugger
     setFieldState((prevState) => ({ ...prevState, dynamic: isDynamic }));
   };
 
