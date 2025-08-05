@@ -29,6 +29,7 @@ Cypress.Commands.add('dragAndDropComponent', (componentName, targetSectionIndex 
 // Login and navigate to add a new service dialog
 Cypress.Commands.add('navigateToAddDialog', () => {
   cy.login();
+  cy.intercept('POST', '/ops/accordion_select?id=dialogs_accord'); // May not be needed; added to check the server error shown sometimes
   cy.intercept('POST', '/ops/accordion_select?id=rbac_accord').as('accordion');
   cy.menu('Automation', 'Embedded Automate', 'Customization');
 
@@ -150,7 +151,17 @@ Cypress.Commands.add('openFieldEditModal', (tabIndex = 0, sectionIndex = 0, fiel
   // Verify the modal is open
   cy.get('.edit-field-modal')
     .should('exist');
+
+  cy.closeNotificationsIfVisible();
 });
+
+// Close the edit modal
+Cypress.Commands.add('closeFieldEditModal', () => {
+  cy.get('.edit-field-modal button')
+    .contains('Cancel')
+    .click();
+});
+
 
 // Remove a field
 Cypress.Commands.add('removeField', (tabIndex = 0, sectionIndex = 0, fieldIndex = 0) => {

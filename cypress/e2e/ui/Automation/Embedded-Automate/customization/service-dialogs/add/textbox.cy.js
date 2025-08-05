@@ -52,37 +52,31 @@ describe('Automate > Customization > Service Dialogs > Add Dialog > TextBox Test
     cy.get('.edit-field-modal .bx--modal-header__heading')
       .should('contain', 'Edit this Text Box');
     
-    // Close the modal
-    cy.get('.edit-field-modal button')
-      .contains('Cancel')
-      .click();
+    cy.closeFieldEditModal()
   });
 
   it('should have 3 tabs in the edit modal initially', () => {
     cy.openFieldEditModal(0, 0, 0);
     
     // Verify there are 3 tabs in the modal
-    cy.get('.edit-field-modal .bx--tabs')
-      .find('.bx--tabs__nav-item')
+    cy.get('.edit-field-modal .edit-field-modal-body ul[role=tablist]')
+      .find('li')
       .should('have.length', 3);
     
     // Verify the tab names
-    cy.get('.edit-field-modal .bx--tabs .bx--tabs__nav-item')
+    cy.get('.edit-field-modal .edit-field-modal-body ul[role=tablist]')
       .eq(0)
       .should('contain', 'Field Information');
     
-    cy.get('.edit-field-modal .bx--tabs .bx--tabs__nav-item')
+    cy.get('.edit-field-modal .edit-field-modal-body ul[role=tablist] li')
       .eq(1)
       .should('contain', 'Options');
     
-    cy.get('.edit-field-modal .bx--tabs .bx--tabs__nav-item')
+    cy.get('.edit-field-modal .edit-field-modal-body ul[role=tablist] li')
       .eq(2)
       .should('contain', 'Advanced');
     
-    // Close the modal
-    cy.get('.edit-field-modal button')
-      .contains('Cancel')
-      .click();
+    cy.closeFieldEditModal();
   });
 
   it('should add a fourth tab when dynamic option is enabled', () => {
@@ -93,18 +87,15 @@ describe('Automate > Customization > Service Dialogs > Add Dialog > TextBox Test
       .check({ force: true });
     
     // Verify there are now 4 tabs in the modal
-    cy.get('.edit-field-modal .bx--tabs')
-      .find('.bx--tabs__nav-item')
+    cy.get('.edit-field-modal .edit-field-modal-body ul[role=tablist]')
+      .find('li')
       .should('have.length', 4);
     
     // Verify the fourth tab name
-    cy.get('.edit-field-modal .bx--tabs .bx--tabs__nav-item')
+    cy.get('.edit-field-modal .edit-field-modal-body ul[role=tablist] li')
       .eq(3)
       .should('contain', 'Overridable Options');
     
-    // Close the modal
-    cy.get('.edit-field-modal button')
-      .contains('Cancel')
-      .click();
+    cy.closeFieldEditModal();
   });
 });
