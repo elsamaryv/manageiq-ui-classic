@@ -1,5 +1,31 @@
 /* eslint-disable no-undef */
 
+// Drag and drop a component to a section
+Cypress.Commands.add('dragAndDropComponent', (componentName, targetSectionIndex = 0) => {
+  // Find the component in the component list
+  cy.get('.components-list-wrapper .component-item-wrapper')
+    .contains(componentName)
+    .as('componentSource');
+  
+  // Find the target section
+  cy.get('.dynamic-section')
+    .eq(targetSectionIndex)
+    .as('targetSection');
+  
+  // Perform drag and drop operation
+  cy.get('@componentSource')
+    .trigger('dragstart');
+  
+  cy.get('@targetSection')
+    .trigger('dragover')
+    .trigger('drop');
+  
+  // Verify the component was added to the section
+  cy.get('@targetSection')
+    .find('.dynamic-form-field-wrapper')
+    .should('exist');
+});
+
 // Login and navigate to add a new service dialog
 Cypress.Commands.add('navigateToAddDialog', () => {
   cy.login();
@@ -97,4 +123,49 @@ Cypress.Commands.add('editSectionAndCancel', (name) => {
     cy.get('input[name="section_name"]').clear().type(name);
     cy.contains('button', 'Cancel').click();
   });
+});
+
+Cypress.Commands.add('enterDialogNameAndDescription', () => {
+  cy.get('#dialogName').type('Test Dialog');
+  cy.get('#dialogDescription').type('Test Dialog Description');
+});
+
+// Make field action buttons visible and click edit button
+Cypress.Commands.add('openFieldEditModal', (tabIndex = 0, sectionIndex = 0, fieldIndex = 0) => {
+  // Force display of the action buttons by using invoke to set display style
+  cy.get(`#dynamic-tab-${tabIndex}-section-${sectionIndex}`)
+    .find('.dynamic-form-field')
+    .eq(fieldIndex)
+    .find('.dynamic-form-field-actions')
+    .invoke('attr', 'style', 'display: flex !important');
+  
+  // Open the edit modal for the dynamic field
+  cy.get(`#dynamic-tab-${tabIndex}-section-${sectionIndex}`)
+    .find('.dynamic-form-field')
+    .eq(fieldIndex)
+    .find('.dynamic-form-field-actions button')
+    .first()
+    .click({ force: true });
+  
+  // Verify the modal is open
+  cy.get('.edit-field-modal')
+    .should('exist');
+});
+
+// Remove a field
+Cypress.Commands.add('removeField', (tabIndex = 0, sectionIndex = 0, fieldIndex = 0) => {
+  // Force display of the action buttons
+  cy.get(`#dynamic-tab-${tabIndex}-section-${sectionIndex}`)
+    .find('.dynamic-form-field')
+    .eq(fieldIndex)
+    .find('.dynamic-form-field-actions')
+    .invoke('attr', 'style', 'display: flex !important');
+  
+  // Click the remove button with force option
+  cy.get(`#dynamic-tab-${tabIndex}-section-${sectionIndex}`)
+    .find('.dynamic-form-field')
+    .eq(fieldIndex)
+    .find('.dynamic-form-field-actions button')
+    .last()
+    .click({ force: true });
 });
