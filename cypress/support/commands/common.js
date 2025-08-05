@@ -12,13 +12,26 @@ Cypress.Commands.add('closeNotificationsIfVisible', () => {
   });
 });
 
-// Look for a server error pop up and close if visible .. TODO:: check if working
+// Look for a server error pop up and close if visible
 Cypress.Commands.add('closeErrorPopupIfVisible', () => {
   cy.get('body').then(($body) => {
-    const $popup = $body.find('#errorModal:visible .error-modal-miq .modal-body .error-icon');
-    if ($popup.length) {
-      cy.wrap($popup).click({ force: true });
+    // Check if the error modal is visible
+    const $errorModal = $body.find('#errorModal.modal-open');
+    if ($errorModal.length) {
+      // Click the close button in the modal header
+      cy.get('#errorModal .modal-header .close')
+        .click({ force: true });
+      
+      // If that doesn't work, try the close button in the footer
+      cy.get('body').then(($updatedBody) => {
+        const $stillVisible = $updatedBody.find('#errorModal.modal-open');
+        if ($stillVisible.length) {
+          cy.get('#errorModal .modal-footer .btn-primary')
+            .contains('Close')
+            .click({ force: true });
+        }
+      });
     }
-    // else: do nothing
+    // else: no error modal is visible, do nothing
   });
 });
