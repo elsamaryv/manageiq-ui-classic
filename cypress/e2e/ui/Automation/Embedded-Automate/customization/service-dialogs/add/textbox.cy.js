@@ -311,7 +311,7 @@ describe('Automate > Customization > Service Dialogs > Add Dialog > TextBox Test
   });
 
   // Test to verify tab switching preserves field values
-  it.only('should preserve field values when switching between tabs', () => {
+  it('should preserve field values when switching between tabs', () => {
     cy.openFieldEditModal(0, 0, 0);
 
     // Set a value in the Field Information tab
