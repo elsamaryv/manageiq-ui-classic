@@ -28,8 +28,9 @@ const EditFieldModal = ({
     if (target.name === 'dynamic') {
       const isDynamic = val;
       onDynamicSwitchToggle(isDynamic);
-      debugger
-      if (isDynamic) {
+      
+      // Only show warning if dynamic is enabled and no entry point is set
+      if (isDynamic && (!formValues.automateEntryPoint)) {
         setInlineFlashMessage({
           kind: 'warning',
           subtitle: __('Entry Point needs to be set for Dynamic elements'),
@@ -67,6 +68,20 @@ const EditFieldModal = ({
       onTimePickerChange(data.value);
       // setnewFieldValues({ value: data.value });
       // setFormValues((prev) => ({ ...prev, value: data.value }));
+    } else if (data.initialData.label === 'Entry point') {
+      // Update form values to make the form dirty when entry point changes
+      setFormValues((prev) => ({ ...prev, automateEntryPoint: data.value }));
+      
+      // Clear warning message if entry point is selected
+      if (data.value) {
+        setInlineFlashMessage(null);
+      } else if (formValues.dynamic) {
+        // Show warning if entry point is removed and dynamic is enabled
+        setInlineFlashMessage({
+          kind: 'warning',
+          subtitle: __('Entry Point needs to be set for Dynamic elements'),
+        });
+      }
     }
   };
 
