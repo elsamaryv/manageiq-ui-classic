@@ -139,7 +139,6 @@ export const dateTimePickerComponent = (field, initialData, onChange) => ({
 });
 
 export const automateEntryPointComponent = (field, initialData, onChange) => {
-  // debugger
   return ({
     component: 'embedded-automate-entry-point',
     id: field.name,
@@ -148,11 +147,12 @@ export const automateEntryPointComponent = (field, initialData, onChange) => {
     field: field.name,
     selected: initialData.automateEntryPoint,
     type: 'provision',
+    isRequired: true,
+    validate: [{ type: 'required' }]
   });
 };
 
 export const workflowEntryPointComponent = (field, initialData, onChange) => {
-  // debugger
   return ({
     component: 'embedded-workflow-entry-point',
     id: 'provisioning_entry_point_workflow',
@@ -161,6 +161,8 @@ export const workflowEntryPointComponent = (field, initialData, onChange) => {
     field: field.name,
     selected: '',
     type: 'provision',
+    // isRequired: true,
+    // validate: [{ type: 'required' }]
   });
 };
 
