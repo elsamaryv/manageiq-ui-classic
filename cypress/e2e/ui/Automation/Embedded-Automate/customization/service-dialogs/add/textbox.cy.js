@@ -26,14 +26,14 @@ describe('Automate > Customization > Service Dialogs > Add Dialog > TextBox Test
     cy.get('.dynamic-form-field')
       .find('.dynamic-form-field-actions')
       .invoke('attr', 'style', 'display: flex !important');
-    
+
     // Verify the edit button exists
     cy.get('.dynamic-form-field-actions button')
       .first()
       .should('have.attr', 'title', 'Edit field')
       .find('svg')
       .should('exist');
-    
+
     // Verify the remove button exists
     cy.get('.dynamic-form-field-actions button')
       .last()
@@ -44,103 +44,114 @@ describe('Automate > Customization > Service Dialogs > Add Dialog > TextBox Test
 
   it('should open the modal when clicking the edit button', () => {
     cy.openFieldEditModal(0, 0, 0);
-    
+
     // Verify the modal title
     cy.get('.edit-field-modal .bx--modal-header__heading')
       .should('contain', 'Edit this Text Box');
-    
-    cy.closeFieldEditModal()
+
+    cy.closeFieldEditModal();
   });
 
   it('should have 3 tabs in the edit modal initially', () => {
     cy.openFieldEditModal(0, 0, 0);
-    
+
     // Verify there are 3 tabs in the modal
     cy.get('.edit-field-modal .edit-field-modal-body ul[role=tablist]')
       .find('li')
       .should('have.length', 3);
-    
+
     // Verify the tab names
     cy.get('.edit-field-modal .edit-field-modal-body ul[role=tablist]')
       .eq(0)
       .should('contain', 'Field Information');
-    
+
     cy.get('.edit-field-modal .edit-field-modal-body ul[role=tablist] li')
       .eq(1)
       .should('contain', 'Options');
-    
+
     cy.get('.edit-field-modal .edit-field-modal-body ul[role=tablist] li')
       .eq(2)
       .should('contain', 'Advanced');
-    
+
     cy.closeFieldEditModal();
   });
 
   it('should add a fourth tab when dynamic option is enabled', () => {
     cy.openFieldEditModal(0, 0, 0);
-    
+
     // Enable dynamic option
     cy.get('.edit-field-modal input[name="dynamic"]')
       .check({ force: true });
-    
+
     // Verify there are now 4 tabs in the modal
     cy.get('.edit-field-modal .edit-field-modal-body ul[role=tablist]')
       .find('li')
       .should('have.length', 4);
-    
+
     // Verify the fourth tab name
     cy.get('.edit-field-modal .edit-field-modal-body ul[role=tablist] li')
       .eq(3)
       .should('contain', 'Overridable Options');
-    
+
     cy.closeFieldEditModal();
   });
 
-  it('should disable save button when label or name is not entered', () => {
+  it.only('should disable save button when label or name is not entered', () => {
+    const getSubmitButton = () => {
+      return cy.get('.edit-field-modal button[type="submit"]')
+        .scrollIntoView()
+        .should('be.visible');
+    };
+
+    const verifyButtonState = (isDisabled) => {
+      getSubmitButton().should(isDisabled ? 'be.disabled' : 'not.be.disabled');
+    };
+
+    const selectTab = (tabIndex) => {
+      cy.get('.edit-field-modal .edit-field-modal-body ul[role=tablist] li')
+        .eq(tabIndex)
+        .click();
+    };
+
+    // Start test
     cy.openFieldEditModal(0, 0, 0);
-    // Find the submit button and scroll it into view - should be disabled initially
-    cy.get('.edit-field-modal button[type="submit"]')
-      .scrollIntoView()
-      .should('be.visible')
-      .should('be.disabled');
-    // Click on Options tab to make some changes
-    cy.get('.edit-field-modal .edit-field-modal-body ul[role=tablist] li')
-      .eq(1)
-      .click();
+
+    // Initial state - button should be disabled
+    verifyButtonState(true);
+
+    // Navigate to Options tab and make changes
+    selectTab(1);
+
     // Make a change to the default value field to trigger form changes
     cy.get('.edit-field-modal input[name="value"]')
       .clear()
       .type('Test Value');
+
     // Save button should be enabled now because we have modified a field
-    cy.get('.edit-field-modal button[type="submit"]')
-      .scrollIntoView()
-      .should('be.visible')
-      .should('not.be.disabled');
+    verifyButtonState(false);
+
     // Go back to Field Information tab
-    cy.get('.edit-field-modal .edit-field-modal-body ul[role=tablist] li')
-      .eq(0)
-      .click();
+    selectTab(0);
+
     // Clear the label field and verify save button is disabled
     cy.get('.edit-field-modal input[name="label"]')
+      .as('labelField')
       .clear();
-    cy.get('.edit-field-modal button[type="submit"]')
-      .scrollIntoView()
-      .should('be.visible')
-      .should('be.disabled');
+
+    verifyButtonState(true);
+
     // Add label back and verify that save button is enabled
-    cy.get('.edit-field-modal input[name="label"]')
+    cy.get('@labelField')
       .type('Modified Label');
-    cy.get('.edit-field-modal button[type="submit"]')
-      .scrollIntoView()
-      .should('be.visible')
-      .should('not.be.disabled');
+
+    verifyButtonState(false);
+
     // Clear the name field and verify save button is disabled
     cy.get('.edit-field-modal input[name="name"]')
       .clear();
-    cy.get('.edit-field-modal button[type="submit"]')
-      .scrollIntoView()
-      .should('be.visible')
-      .should('be.disabled');
+
+    verifyButtonState(true);
+
     cy.closeFieldEditModal();
   });
 
