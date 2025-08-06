@@ -349,6 +349,48 @@ describe('Automate > Customization > Service Dialogs > Add Dialog > TextBox Test
 
     cy.closeFieldEditModal();
   });
-});
 
-// Made with Bob
+  // Test to verify textbox properties with dynamic off
+  it('should apply and reflect properties with dynamic off', () => {
+    cy.openFieldEditModal(0, 0, 0);
+
+    // Set values in Field Information tab
+    cy.get('.edit-field-modal input[name="label"]')
+      .clear()
+      .type('Custom Static Label');
+
+    cy.get('.edit-field-modal input[name="name"]')
+      .clear()
+      .type('custom_static_name');
+
+    // Switch to Options tab
+    cy.get('.edit-field-modal .edit-field-modal-body ul[role=tablist] li')
+      .eq(1)
+      .click();
+
+    // Set default value
+    cy.get('.edit-field-modal input[name="value"]')
+      .clear()
+      .type('Default Static Value');
+
+    // Enable Required
+    cy.get('.edit-field-modal input[name="required"]')
+      .check({ force: true });
+
+    // Enable Read Only
+    cy.get('.edit-field-modal input[name="readOnly"]')
+      .check({ force: true });
+
+    // Save the changes
+    cy.get('.edit-field-modal button[type="submit"]')
+      .click();
+
+    // Verify the textbox reflects the changes
+    cy.get('.dynamic-form-field .bx--label')
+      .should('contain', 'Custom Static Label');
+
+    cy.get('.dynamic-form-field .bx--text-input')
+      .should('have.value', 'Default Static Value')
+      .should('have.attr', 'readonly');
+  });
+});
