@@ -350,6 +350,41 @@ describe('Automate > Customization > Service Dialogs > Add Dialog > TextBox Test
     cy.closeFieldEditModal();
   });
 
+  // Test to verify validation for required entry point when dynamic is on
+  it('should require entry point when dynamic is on', () => {
+    cy.openFieldEditModal(0, 0, 0);
+
+    // Set values in Field Information tab
+    cy.get('.edit-field-modal input[name="label"]')
+      .clear()
+      .type('Entry Point Test');
+
+    cy.get('.edit-field-modal input[name="name"]')
+      .clear()
+      .type('entry_point_test');
+
+    // Enable dynamic option
+    cy.get('.edit-field-modal input[name="dynamic"]')
+      .check({ force: true });
+
+    // Verify warning message appears
+    cy.get('.edit-field-modal .bx--inline-notification__details')
+      .scrollIntoView()
+      .should('exist')
+      .should('contain', 'Entry Point needs to be set for Dynamic elements');
+
+    // Switch to Options tab
+    cy.get('.edit-field-modal .edit-field-modal-body ul[role=tablist] li')
+      .eq(1)
+      .click();
+
+    // Verify save button is disabled due to missing required entry point
+    cy.get('.edit-field-modal button[type="submit"]')
+      .should('be.disabled');
+
+    cy.closeFieldEditModal();
+  });
+
   // Test to verify textbox properties with dynamic off
   it('should apply and reflect properties with dynamic off', () => {
     cy.openFieldEditModal(0, 0, 0);
