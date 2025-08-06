@@ -96,7 +96,7 @@ describe('Automate > Customization > Service Dialogs > Add Dialog > TextBox Test
     cy.closeFieldEditModal();
   });
 
-  it.only('should disable save button when label or name is not entered', () => {
+  it('should disable save button when label or name is not entered', () => {
     const getSubmitButton = () => {
       return cy.get('.edit-field-modal button[type="submit"]')
         .scrollIntoView()
@@ -247,4 +247,108 @@ describe('Automate > Customization > Service Dialogs > Add Dialog > TextBox Test
       .should('have.attr', 'type', 'checkbox');
     cy.closeFieldEditModal();
   });
+
+  // Test to check fields in Advanced tab when dynamic is off
+  it('should verify fields in Advanced tab when dynamic is off', () => {
+    cy.openFieldEditModal(0, 0, 0);
+    // Click on Advanced tab
+    cy.get('.edit-field-modal .edit-field-modal-body ul[role=tablist] li')
+      .eq(2)
+      .click();
+
+    // Verify Reconfigurable checkbox exists
+    cy.get('.edit-field-modal input[name="reconfigurable"]')
+      .should('exist')
+      .should('have.attr', 'type', 'checkbox');
+
+    cy.closeFieldEditModal();
+  });
+
+  // Test to check fields in Advanced tab when dynamic is on
+  it('should verify fields in Advanced tab when dynamic is on', () => {
+    cy.openFieldEditModal(0, 0, 0);
+    // Enable dynamic option
+    cy.get('.edit-field-modal input[name="dynamic"]')
+      .check({ force: true });
+
+    // Click on Advanced tab
+    cy.get('.edit-field-modal .edit-field-modal-body ul[role=tablist] li')
+      .eq(2)
+      .click();
+
+    // Verify Reconfigurable checkbox exists
+    cy.get('.edit-field-modal input[name="reconfigurable"]')
+      .should('exist')
+      .should('have.attr', 'type', 'checkbox');
+    cy.closeFieldEditModal();
+  });
+
+  // Test to check fields in Overridable Options tab when dynamic is on
+  it('should verify fields in Overridable Options tab when dynamic is on', () => {
+    cy.openFieldEditModal(0, 0, 0);
+    // Enable dynamic option
+    cy.get('.edit-field-modal input[name="dynamic"]')
+      .check({ force: true });
+
+    // Click on Overridable Options tab
+    cy.get('.edit-field-modal .edit-field-modal-body ul[role=tablist] li')
+      .eq(3)
+      .click();
+
+    cy.get('.edit-field-modal input[name="readOnly"]')
+      .should('exist')
+      .should('have.attr', 'type', 'checkbox');
+
+    cy.get('.edit-field-modal input[name="visible"]')
+      .should('exist')
+      .should('have.attr', 'type', 'checkbox');
+
+    // Verify Default Value field exists
+    cy.get('.edit-field-modal input[name="value"]')
+      .should('exist');
+
+    cy.closeFieldEditModal();
+  });
+
+  // Test to verify tab switching preserves field values
+  it.only('should preserve field values when switching between tabs', () => {
+    cy.openFieldEditModal(0, 0, 0);
+
+    // Set a value in the Field Information tab
+    cy.get('.edit-field-modal input[name="label"]')
+      .clear()
+      .type('Custom Label');
+
+    // Switch to Options tab
+    cy.get('.edit-field-modal .edit-field-modal-body ul[role=tablist] li')
+      .eq(1)
+      .click();
+
+    // Set a value in the Options tab
+    cy.get('.edit-field-modal input[name="value"]')
+      .clear()
+      .type('Custom Value');
+
+    // Switch back to Field Information tab
+    cy.get('.edit-field-modal .edit-field-modal-body ul[role=tablist] li')
+      .eq(0)
+      .click();
+
+    // Verify the value is preserved
+    cy.get('.edit-field-modal input[name="label"]')
+      .should('have.value', 'Custom Label');
+
+    // Switch back to Options tab
+    cy.get('.edit-field-modal .edit-field-modal-body ul[role=tablist] li')
+      .eq(1)
+      .click();
+
+    // Verify the value is preserved
+    cy.get('.edit-field-modal input[name="value"]')
+      .should('have.value', 'Custom Value');
+
+    cy.closeFieldEditModal();
+  });
 });
+
+// Made with Bob
