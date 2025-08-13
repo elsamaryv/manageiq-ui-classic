@@ -211,6 +211,7 @@ describe('Automate > Customization > Service Dialogs > Add Dialog > TextBox Test
     cy.get('.edit-field-modal input[name="validation"]')
       .should('exist')
       .should('have.attr', 'type', 'checkbox');
+    // Verify Fields to refresh dropdown exists
     cy.get('.edit-field-modal select[name="fieldsToRefresh"]')
       .should('exist');
     cy.closeFieldEditModal();
@@ -245,6 +246,13 @@ describe('Automate > Customization > Service Dialogs > Add Dialog > TextBox Test
     cy.get('.edit-field-modal input[name="protected"]')
       .should('exist')
       .should('have.attr', 'type', 'checkbox');
+    // Verify Validation switch exists
+    cy.get('.edit-field-modal input[name="validation"]')
+      .should('exist')
+      .should('have.attr', 'type', 'checkbox');
+    // Verify Fields to refresh dropdown exists
+    cy.get('.edit-field-modal select[name="fieldsToRefresh"]')
+      .should('exist');
     cy.closeFieldEditModal();
   });
 
