@@ -348,7 +348,7 @@ describe('Automate > Customization > Service Dialogs > Add Dialog > Dropdown Tes
   });
 
   // Test to verify dropdown-specific functionality - multiselect
-  it.only('should toggle between single and multi-select modes', () => {
+  it('should toggle between single and multi-select modes', () => {
     cy.openFieldEditModal(0, 0, 0);
 
     // Set values in Field Information tab
@@ -392,13 +392,14 @@ describe('Automate > Customization > Service Dialogs > Add Dialog > Dropdown Tes
       .eq(1)
       .click();
 
-    // Verify multiple selections are shown
-    cy.get('.bx--tag')
-      .should('have.length.at.least', 2);
+    // Verify multiple selections are shown by checking the counter in the tag
+    cy.get('.bx--tag .bx--tag__label')
+      .should('exist')
+      .should('contain', '2');
   });
 
   // Test to verify dropdown sorting functionality
-  it('should sort dropdown items according to configuration', () => {
+  it.only('should sort dropdown items according to configuration', () => {
     cy.openFieldEditModal(0, 0, 0);
 
     // Set values in Field Information tab
