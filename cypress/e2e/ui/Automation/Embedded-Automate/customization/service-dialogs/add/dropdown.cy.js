@@ -507,15 +507,6 @@ describe('Automate > Customization > Service Dialogs > Add Dialog > Dropdown Tes
       .should('exist')
       .should('contain', 'Entry Point needs to be set for Dynamic elements');
 
-    // Switch to Options tab
-    cy.get('.edit-field-modal .edit-field-modal-body ul[role=tablist] li')
-      .eq(1)
-      .click();
-
-    // Add a new entry
-    cy.get('.edit-field-modal button[id="add-items"]')
-      .click();
-
     // Verify save button is disabled due to missing required entry point
     cy.get('.edit-field-modal button[type="submit"]')
       .should('be.disabled');
