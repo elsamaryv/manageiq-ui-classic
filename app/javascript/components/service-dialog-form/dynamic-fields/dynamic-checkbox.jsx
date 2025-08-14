@@ -85,7 +85,7 @@ const DynamicCheckbox = ({ dynamicFieldData: { section, field, fieldPosition }, 
       advanced(),
     ];
     if (fieldState.dynamic) {
-      tabs.push(overridableOptions());
+      tabs.push(overridableOptions('checkBox'));
     }
     return tabs;
   };

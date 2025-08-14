@@ -70,13 +70,30 @@ export const advanced = () => ({
   fields: [dynamicFields.reconfigurable],
 });
 
-export const overridableOptions = () => ({
+const defaultValField = (type) => {
+  switch (type) {
+    case 'checkBox':
+      // return dynamicFields.defaultCheckboxValue;
+      return undefined;
+    case 'dropDown':
+      return dynamicFields.defaultDropdownValue;
+    case 'datePicker':
+      return dynamicFields.defaultDatePickerValue;
+    case 'timePicker':
+      return dynamicFields.defaultDateTimePickerValue;
+    default:
+      return dynamicFields.defaultValue;
+  }
+};
+
+
+export const overridableOptions = (type) => ({
   name: fieldTab.overridableOptions,
   fields: [
     dynamicFields.readOnly,
     dynamicFields.visible,
-    dynamicFields.defaultValue,
-  ],
+    defaultValField(type),
+  ].filter(Boolean),
 });
 
 export const overridableOptionsWithSort = () => ({

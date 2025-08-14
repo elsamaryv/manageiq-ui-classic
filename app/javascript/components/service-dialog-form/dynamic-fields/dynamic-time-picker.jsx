@@ -163,7 +163,7 @@ const DynamicTimePicker = ({ dynamicFieldData: { section, field, fieldPosition }
       advanced(),
     ];
     if (fieldState.dynamic) {
-      tabs.push(overridableOptions());
+      tabs.push(overridableOptions('timePicker'));
     }
     return tabs;
   };
