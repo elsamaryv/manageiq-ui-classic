@@ -512,6 +512,10 @@ describe('Automate > Customization > Service Dialogs > Add Dialog > Dropdown Tes
       .eq(1)
       .click();
 
+    // Add a new entry
+    cy.get('.edit-field-modal button[id="add-items"]')
+      .click();
+
     // Verify save button is disabled due to missing required entry point
     cy.get('.edit-field-modal button[type="submit"]')
       .should('be.disabled');
@@ -559,7 +563,7 @@ describe('Automate > Customization > Service Dialogs > Add Dialog > Dropdown Tes
   // });
 
   // Test to verify adding and removing entries
-  it.only('should allow adding and removing dropdown entries', () => {
+  it('should allow adding and removing dropdown entries', () => {
     cy.openFieldEditModal(0, 0, 0);
 
     // Set values in Field Information tab
@@ -581,11 +585,13 @@ describe('Automate > Customization > Service Dialogs > Add Dialog > Dropdown Tes
       .click();
 
     // Fill in the new entry fields
-    cy.get('.edit-field-modal input[name="items[0].description"]')
+    cy.get('.edit-field-modal input[name^="items["][name$="].description"]')
+      .last()
       .clear()
       .type('New Option');
 
-    cy.get('.edit-field-modal input[name="items[0].value"]')
+    cy.get('.edit-field-modal input[name^="items["][name$="].value"]')
+      .last()
       .clear()
       .type('new_option');
 
@@ -593,33 +599,13 @@ describe('Automate > Customization > Service Dialogs > Add Dialog > Dropdown Tes
     cy.get('.edit-field-modal button[type="submit"]')
       .click();
 
-    // cy.wait(1000);
+    // Verify the dropdown is not read-only by default
+    cy.get('.dynamic-form-field .bx--multi-select').click();
 
-    // // Open the dropdown to verify the new entry
-    // cy.get('.dynamic-form-field .bx--multi-select')
-    //   .click();
-
-    cy.get('.dynamic-form-field .bx--multi-select .bx--list-box__field')
-      .click({ force: true });
-
-    
     // // Verify the new entry exists
-    // cy.get('.bx--list-box__menu-item')
-    //   .contains('New Option')
-    //   .should('exist');
-
-    // cy.get('.bx--list-box__field').click();
-
-    // cy.get('#downshift-0-menu .bx--list-box__menu-item')
-    //   .should('exist')
-    //   .then($items => {
-    //     const match = [...$items].some(item => {
-    //       const text = item.innerText.trim();
-    //       const ariaLabel = item.getAttribute('aria-label')?.trim();
-    //       return text === 'New Option' && ariaLabel === 'new_option';
-    //     });
-    //     expect(match, `Item with desc "${'New Option'}" and value "${'new_option'}"`).to.be.true;
-    //   });
+    cy.get('.bx--list-box__menu-item')
+      .contains('New Option')
+      .should('exist');
   });
 });
 
