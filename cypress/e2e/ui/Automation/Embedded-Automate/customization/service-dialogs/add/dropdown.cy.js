@@ -514,45 +514,6 @@ describe('Automate > Customization > Service Dialogs > Add Dialog > Dropdown Tes
     cy.closeFieldEditModal();
   });
 
-  // Test to verify dropdown properties with dynamic off
-  // it('should apply and reflect properties with dynamic off', () => {
-  //   cy.openFieldEditModal(0, 0, 0);
-
-  //   // Set values in Field Information tab
-  //   cy.get('.edit-field-modal input[name="label"]')
-  //     .clear()
-  //     .type('Custom Dropdown Label');
-
-  //   cy.get('.edit-field-modal input[name="name"]')
-  //     .clear()
-  //     .type('custom_dropdown_name');
-
-  //   // Set helper text
-  //   cy.get('.edit-field-modal textarea[name="helperText"]')
-  //     .clear()
-  //     .type('Custom helper text');
-
-  //   // Switch to Options tab
-  //   cy.get('.edit-field-modal .edit-field-modal-body ul[role=tablist] li')
-  //     .eq(1)
-  //     .click();
-
-  //   // Enable Required
-  //   cy.get('.edit-field-modal input[name="required"]')
-  //     .check({ force: true });
-
-  //   // Save the changes
-  //   cy.get('.edit-field-modal button[type="submit"]')
-  //     .click();
-
-  //   // Verify the dropdown reflects the changes
-  //   cy.get('.dynamic-form-field .bx--list-box__label')
-  //     .should('contain', 'Custom Dropdown Label');
-
-  //   cy.get('.dynamic-form-field .bx--form__helper-text')
-  //     .should('contain', 'Custom helper text');
-  // });
-
   // Test to verify adding and removing entries
   it('should allow adding and removing dropdown entries', () => {
     cy.openFieldEditModal(0, 0, 0);
