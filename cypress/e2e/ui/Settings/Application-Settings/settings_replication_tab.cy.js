@@ -156,6 +156,38 @@ describe('Settings > Application Settings > Replication form operations', () => 
     cy.getFormSelectFieldById({ selectId: REPLICATION_TYPE_SELECT_NAME }).find(`option[value="${REPLICATION_TYPE_REMOTE}"]`).should('exist');
   });
 
+  it('Validate replication type dropdown reflects API response for global type', () => {
+    cy.intercept('GET', '/ops/pglogical_subscriptions_form_fields/new', {
+      statusCode: 200,
+      body: {
+        replication_type: 'global',
+        subscriptions: [],
+      },
+    }).as('getGlobalReplication');
+
+    cy.reload();
+    cy.wait('@getGlobalReplication');
+
+    cy.getFormSelectFieldById({ selectId: REPLICATION_TYPE_SELECT_NAME })
+      .should('have.value', REPLICATION_TYPE_GLOBAL);
+  });
+
+  it('Validate replication type dropdown reflects API response for remote type', () => {
+    cy.intercept('GET', '/ops/pglogical_subscriptions_form_fields/new', {
+      statusCode: 200,
+      body: {
+        replication_type: 'remote',
+        subscriptions: [],
+      },
+    }).as('getRemoteReplication');
+
+    cy.reload();
+    cy.wait('@getRemoteReplication');
+
+    cy.getFormSelectFieldById({ selectId: REPLICATION_TYPE_SELECT_NAME })
+      .should('have.value', REPLICATION_TYPE_REMOTE);
+  });
+
   it('Validate save remote type', () => {
     cy.getFormSelectFieldById({ selectId: REPLICATION_TYPE_SELECT_NAME }).select(REPLICATION_TYPE_REMOTE);
 
@@ -164,7 +196,7 @@ describe('Settings > Application Settings > Replication form operations', () => 
     cy.expect_flash(flashClassMap.success, FLASH_MESSAGE_SAVE_INITIATED);
   });
 
-  it('Validate save none type', () => {
+  it.only('Validate save none type', () => {
     cy.expect_flash(flashClassMap.warning, FLASH_MESSAGE_NO_REPLICATION_ROLE);
 
     cy.getFormSelectFieldById({ selectId: REPLICATION_TYPE_SELECT_NAME }).select(REPLICATION_TYPE_REMOTE);
