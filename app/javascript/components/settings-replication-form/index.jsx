@@ -86,15 +86,18 @@ const SettingsReplicationForm = ({ pglogicalReplicationFormId }) => {
   useEffect(() => {
     if (pglogicalReplicationFormId) {
       http.get(`/ops/pglogical_subscriptions_form_fields/${pglogicalReplicationFormId}`).then((response) => {
+        const helperText = response.replication_type === 'none' ? __('No replication role has been set') : null;
         setState({
           subscriptions: response.subscriptions,
           savedSubscriptions: response.subscriptions,
+          replicationType: response.replication_type,
+          savedReplicationType: response.replication_type,
           form: {
             type: 'replication',
             className: 'replication_form',
             action: 'add',
           },
-          replicationHelperText: __('No replication role has been set'),
+          replicationHelperText: helperText,
           helperTextType: 'warning',
           isLoading: false,
         });
