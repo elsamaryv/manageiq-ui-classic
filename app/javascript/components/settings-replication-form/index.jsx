@@ -172,8 +172,7 @@ const SettingsReplicationForm = ({ pglogicalReplicationFormId }) => {
       .filter((sub) => !sub.remove)
       .map((sub) => {
         // Remove newRecord flag using destructuring
-        // eslint-disable-next-line no-unused-vars
-        const { newRecord, ...subscriptionWithoutNewRecordFlag } = sub;
+        const { newRecord: _newRecord, ...subscriptionWithoutNewRecordFlag } = sub;
         return subscriptionWithoutNewRecordFlag;
       });
 
