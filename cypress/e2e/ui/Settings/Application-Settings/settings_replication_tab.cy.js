@@ -64,7 +64,6 @@ const CANCEL_DELETE_BUTTON_TEXT = 'Cancel Delete';
 const DISABLED_ROW_SELECTOR = '.disabled-row';
 
 const CONFIRM_OK_BUTTON_TEXT = 'Ok';
-const CONFIRM_CANCEL_BUTTON_TEXT = 'Cancel';
 
 function navigateToReplicationTab() {
   cy.login();
@@ -75,12 +74,7 @@ function navigateToReplicationTab() {
   cy.tabs({ tabLabel: REPLICATION_TAB });
 }
 
-/**
- * Mock the replication form fields API with custom response
- * @param {string} replicationType - The replication type ('none', 'global', 'remote')
- * @param {Array} subscriptions - Array of subscription objects (default: [])
- * @param {string} aliasName - Custom alias name for the intercept (default: 'getReplicationFormFields')
- */
+// Mock the replication form fields API with custom response
 function mockReplicationFormFieldsApi(replicationType, subscriptions = [], aliasName = 'getReplicationFormFields') {
   cy.intercept('GET', '/ops/pglogical_subscriptions_form_fields/new', {
     statusCode: 200,
@@ -218,7 +212,6 @@ describe('Settings > Application Settings > Replication form', () => {
       cy.reload();
       cy.wait('@getInitialRemoteState');
 
-      // Select none - should show warning about disabling replication
       cy.getFormSelectFieldById({ selectId: REPLICATION_TYPE_SELECT_NAME }).select(REPLICATION_TYPE_NONE);
 
       cy.expect_flash(flashClassMap.warning, FLASH_MESSAGE_REPLICATION_DISABLED);
@@ -240,7 +233,6 @@ describe('Settings > Application Settings > Replication form', () => {
 
       cy.contains('button', RESET_BUTTON_TEXT).click();
 
-      // Verify it reset back to 'none'
       cy.getFormSelectFieldById({ selectId: REPLICATION_TYPE_SELECT_NAME })
         .should('have.value', REPLICATION_TYPE_NONE);
     });
@@ -271,7 +263,6 @@ describe('Settings > Application Settings > Replication form', () => {
         
       cy.get(MODAL_SELECTOR).should('be.visible');
 
-      // Verify cancel button closes the modal
       cy.contains(`${MODAL_SELECTOR} button`, CANCEL_BUTTON_TEXT)
         .should('be.visible')
         .click();
@@ -353,19 +344,6 @@ describe('Settings > Application Settings > Replication form', () => {
         .click();
 
       cy.contains('An updated subscription must point to the same database').should('be.visible');
-
-      // // Firstly, try to cancel the edit operation and verify that the table is still the same
-      // handleConfirmationModal(CONFIRM_EDIT_MODAL_HEADING, CONFIRM_CANCEL_BUTTON_TEXT);
-      // cy.get(SUBSCRIPTIONS_TABLE_SELECTOR)
-      //   .find('tbody tr')
-      //   .should('have.length', 1)
-      //   .within(() => {
-      //     cy.contains(MOCK_SAVED_SUBSCRIPTION.dbname).should('exist');
-      //   });
-      //   // Click update button - should show confirmation modal
-      // cy.contains(MIQ_DATA_TABLE_BUTTON_SELECTOR, UPDATE_BUTTON_TEXT)
-      //   .should('be.visible')
-      //   .click();
       
       // Confirm the edit operation - this will close the confirmation modal and open the edit modal
       handleConfirmationModal(CONFIRM_EDIT_MODAL_HEADING, CONFIRM_OK_BUTTON_TEXT);
