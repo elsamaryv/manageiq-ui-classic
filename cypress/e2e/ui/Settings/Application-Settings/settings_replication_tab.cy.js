@@ -49,7 +49,7 @@ const CONFIRM_EDIT_MODAL_HEADING = 'Confirm Edit';
 
 // Flash message text snippets
 const FLASH_MESSAGE_SAVE_INITIATED = 'save initiated';
-// const FLASH_MESSAGE_NO_REPLICATION_ROLE = 'No replication role has been set';
+const FLASH_MESSAGE_NO_REPLICATION_ROLE = 'No replication role has been set';
 const FLASH_MESSAGE_REPLICATION_DISABLED = 'Replication will be disabled for this region';
 const FLASH_MESSAGE_RESET = 'All changes have been reset';
 const FLASH_MESSAGE_VALIDATION_FAILED = 'Validation failed';
@@ -201,6 +201,8 @@ describe('Settings > Application Settings > Replication form', () => {
 
       cy.reload();
       cy.wait('@getInitialState');
+
+      cy.expect_flash(flashClassMap.warning, FLASH_MESSAGE_NO_REPLICATION_ROLE);
 
       cy.getFormSelectFieldById({ selectId: REPLICATION_TYPE_SELECT_NAME }).select(REPLICATION_TYPE_REMOTE);
 
