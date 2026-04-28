@@ -261,6 +261,40 @@ describe('Settings > Application Settings > Replication form', () => {
         .should('have.length', 1);
     });
 
+    it('Verify Cancel and Reset operations in the subscription modal', () => {
+      cy.getFormSelectFieldById({ selectId: REPLICATION_TYPE_SELECT_NAME })
+        .select(REPLICATION_TYPE_GLOBAL, { force: true });
+      
+      cy.contains('button', ADD_SUBSCRIPTION_BUTTON_TEXT)
+        .should('be.visible')
+        .click();
+        
+      cy.get(MODAL_SELECTOR).should('be.visible');
+
+      // Verify cancel button closes the modal
+      cy.contains(`${MODAL_SELECTOR} button`, CANCEL_BUTTON_TEXT)
+        .should('be.visible')
+        .click();
+
+      cy.get(MODAL_SELECTOR).should('not.be.visible');
+
+      cy.contains('button', ADD_SUBSCRIPTION_BUTTON_TEXT)
+        .should('be.visible')
+        .click();
+        
+      cy.get(MODAL_SELECTOR).should('be.visible');
+      
+      cy.getFormInputFieldByIdAndType({ inputId: DBNAME_INPUT_NAME })
+        .scrollIntoView()
+        .type('test_reset', { force: true });
+
+      cy.contains(`${MODAL_SELECTOR} button`, RESET_BUTTON_TEXT)
+        .should('be.visible')
+        .click();
+      cy.getFormInputFieldByIdAndType({ inputId: DBNAME_INPUT_NAME }).should('have.value', '');
+      cy.expect_flash(flashClassMap.warning, FLASH_MESSAGE_RESET);
+    });
+
     it('Verify subscription validation', () => {
       addSubscription();
 
@@ -478,32 +512,4 @@ describe('Settings > Application Settings > Replication form', () => {
         .should('have.length', 0);
       });
   });
-
-  // describe('Verify Modal Interactions', () => {
-  //   it('Validate reset fields in subscription modal', () => {
-  //     addSubscription();
-
-  //     cy.contains('button', ADD_SUBSCRIPTION_BUTTON_TEXT).click();
-  //     cy.get(MODAL_SELECTOR).should('be.visible');
-
-  //     cy.getFormInputFieldByIdAndType({ inputId: DBNAME_INPUT_NAME }).type('test_reset');
-
-  //     cy.contains(`${MODAL_SELECTOR} button`, RESET_BUTTON_TEXT)
-  //       .should('be.visible')
-  //       .click();
-
-  //     cy.getFormInputFieldByIdAndType({ inputId: DBNAME_INPUT_NAME }).should('have.value', '');
-
-  //     cy.expect_flash(flashClassMap.warning, FLASH_MESSAGE_RESET);
-  //   });
-
-  //   it('Validate modal closes when cancel button clicked', () => {
-  //     cy.getFormSelectFieldById({ selectId: REPLICATION_TYPE_SELECT_NAME }).select(REPLICATION_TYPE_GLOBAL);
-  //     cy.contains('button', ADD_SUBSCRIPTION_BUTTON_TEXT).click();
-  //     cy.get(MODAL_SELECTOR).should('be.visible');
-
-  //     cy.contains(`${MODAL_SELECTOR} button`, CANCEL_BUTTON_TEXT).click();
-  //     cy.get(MODAL_SELECTOR).should('not.be.visible');
-  //   });
-  // });
 });
