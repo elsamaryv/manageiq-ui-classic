@@ -153,6 +153,7 @@ const createSchema = (subscriptions, setState, setModalOpen, replicationType, is
       {
         component: componentTypes.TEXT_FIELD,
         name: 'subscriptions_changed',
+        label: __('Subscriptions Changed'),
         hideField: true,
       },
       {
