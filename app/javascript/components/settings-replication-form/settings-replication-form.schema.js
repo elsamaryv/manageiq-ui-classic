@@ -94,7 +94,7 @@ const createSchema = (subscriptions, setState, setModalOpen, replicationType, is
       skipErrors: [400],
     }).then((response) => {
       if (response.status === 'success') {
-        miqFlash('success', __('Validation successful'));
+        miqFlash('success', response.message);
       } else {
         miqFlash('error', response.message);
       }
