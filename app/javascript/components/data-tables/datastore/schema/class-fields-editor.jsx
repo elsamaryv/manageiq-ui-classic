@@ -192,7 +192,7 @@ export const ClassFieldsEditor = (props) => {
     http.post(`/miq_ae_class/update_fields/${aeClassId}?button=reset`, { skipErrors: [400] })
       .then((response) => {
         if (response.status === 200) {
-          miqRedirectBack(__(response.message), 'success', '/miq_ae_class/explorer');
+          miqRedirectBack(__(response.message), 'warning', '/miq_ae_class/explorer');
         } else {
           miqSparkleOff();
           miqFlash('error', response.error);
