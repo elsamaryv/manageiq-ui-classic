@@ -94,7 +94,6 @@ const SchemaSequenceEditor = ({ classId }) => {
       <SequenceList
         fields={fields}
         onFieldsChange={handleFieldsChange}
-        classId={classId}
       />
       <ButtonSet>
         <Button

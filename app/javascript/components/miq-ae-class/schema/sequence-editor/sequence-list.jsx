@@ -18,7 +18,7 @@ import { Draggable } from '@carbon/react/icons';
  * Uses Carbon DataTable directly to enable drag-and-drop functionality
  */
 const SequenceList = ({
-  fields, onFieldsChange, classId,
+  fields, onFieldsChange,
 }) => {
   const [selectedIndices, setSelectedIndices] = useState([]);
   const [draggedIndices, setDraggedIndices] = useState([]);
@@ -215,7 +215,6 @@ SequenceList.propTypes = {
     priority: PropTypes.number.isRequired,
   })).isRequired,
   onFieldsChange: PropTypes.func.isRequired,
-  classId: PropTypes.string.isRequired,
 };
 
 export default SequenceList;
