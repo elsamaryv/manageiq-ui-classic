@@ -1506,67 +1506,47 @@ class MiqAeClassController < ApplicationController
     end
   end
 
-  # Get variables from user edit form
-  def fields_seq_field_changed
-    assert_privileges('miq_ae_field_seq')
-    return unless load_edit("fields_edit__seq", "replace_cell__explorer")
+  # API endpoint to fetch fields data
+  def fields_seq_data
+    assert_privileges("miq_ae_field_seq")
+    ae_class = MiqAeClass.find(params[:id])
+    fields = ae_class.ae_fields.sort_by(&:priority).map do |field|
+      {
+        id: field.id,
+        name: field.name,
+        display_name: field.display_name,
+        priority: field.priority
+      }
+    end
+    render :json => { :fields => fields }
+  end
 
-    unless handle_up_down_buttons(:fields_list, _('Fields'))
-      render_flash
-      return
+  # API endpoint to save reordered fields
+  def fields_seq_save
+    assert_privileges("miq_ae_field_seq")
+    ae_class = MiqAeClass.find(params[:id])
+    fields_data = params[:fields] || []
+    
+    indexed_ae_fields = ae_class.ae_fields.index_by(&:id)
+    fields_data.each do |field_data|
+      field = indexed_ae_fields[field_data[:id].to_i]
+      field.priority = field_data[:priority] if field
     end
 
-    render :update do |page|
-      page << javascript_prologue
-      page.replace('column_lists', :partial => 'fields_seq_form')
-      @changed = (@edit[:new] != @edit[:current])
-      page << javascript_for_miq_button_visibility(@changed) if @changed
-      page << "miqSparkle(false);"
+    if ae_class.save
+      render :json => { :success => true, :message => _("Class Schema Sequence was saved") }
+    else
+      render :json => { :success => false, :error => ae_class.errors.full_messages.join(", ") }, :status => :unprocessable_entity
     end
   end
 
+
   def fields_seq_edit
     assert_privileges("miq_ae_field_seq")
-    case params[:button]
-    when "cancel"
-      @sb[:action] = session[:edit] = nil # clean out the saved info
-      add_flash(_("Edit of Class Schema Sequence was cancelled by the user"))
-      @in_a_form = false
-      replace_right_cell
-
-    when "save"
-      return unless load_edit("fields_edit__seq", "replace_cell__explorer")
-
-      ae_class = MiqAeClass.find(@edit[:ae_class_id])
-      indexed_ae_fields = ae_class.ae_fields.index_by(&:name)
-      @edit[:new][:fields_list].each_with_index do |f, i|
-        fname = f.split('(').last.split(')').first # leave display name and parenthesis out
-        indexed_ae_fields[fname].try(:priority=, i + 1)
-      end
-
-      unless ae_class.save
-        flash_validation_errors(ae_class)
-        @in_a_form = true
-        @changed = true
-        javascript_flash
-        return
-      end
-
-      AuditEvent.success(build_saved_audit(ae_class, @edit))
-      add_flash(_("Class Schema Sequence was saved"))
-      @sb[:action] = @edit = session[:edit] = nil # clean out the saved info
-      @in_a_form = false
-      replace_right_cell
-
-    when "reset", nil # Reset or first time in
-      id = params[:id] || @edit[:ae_class_id]
-      @in_a_form = true
-      fields_seq_edit_screen(id)
-      if params[:button] == "reset"
-        add_flash(_("All changes have been reset"), :warning)
-      end
-      replace_right_cell
-    end
+    @ae_class = MiqAeClass.find_by(:id => params[:id])
+    @sb[:action] = "miq_ae_field_seq"
+    @right_cell_text = _("Edit of Class Schema Sequence '%{name}'") % {:name => @ae_class.name}
+    replace_right_cell
   end
 
   def priority_form_field_changed
@@ -2544,22 +2524,6 @@ class MiqAeClassController < ApplicationController
     end
   end
 
-  def fields_seq_edit_screen(id)
-    @edit = {}
-    @edit[:new] = {}
-    @edit[:current] = {}
-    @ae_class = MiqAeClass.find_by(:id => id)
-    @edit[:rec_id] = @ae_class.try(:id)
-    @edit[:ae_class_id] = @ae_class.id
-    @edit[:new][:fields] = @ae_class.ae_fields.to_a.deep_clone
-    @edit[:new][:fields_list] = @edit[:new][:fields]
-                                .sort_by { |f| f.priority.to_i }
-                                .collect { |f| f.display_name ? "#{f.display_name} (#{f.name})" : "(#{f.name})" }
-    @edit[:key] = "fields_edit__seq"
-    @edit[:current] = copy_hash(@edit[:new])
-    @right_cell_text = _("Edit of Class Schema Sequence '%{name}'") % {:name => @ae_class.name}
-    session[:edit] = @edit
-  end
 
   def move_selected_fields_up(available_fields, selected_fields, display_name)
     if no_items_selected?(selected_fields)
