@@ -81,14 +81,6 @@ const SequenceList = ({
     setDraggedIndices([]);
   };
 
-  // if (loading) {
-  //   return (
-  //     <div className="sequence-editor-loading">
-  //       <p>{__('Loading fields...')}</p>
-  //     </div>
-  //   );
-  // }
-
   if (fields.length === 0) {
     return (
       <div className="sequence-list">
@@ -254,7 +246,6 @@ SequenceList.propTypes = {
     display_name: PropTypes.string,
     priority: PropTypes.number.isRequired,
   })).isRequired,
-  // loading: PropTypes.bool.isRequired,
   onFieldsChange: PropTypes.func.isRequired,
   classId: PropTypes.string.isRequired,
 };

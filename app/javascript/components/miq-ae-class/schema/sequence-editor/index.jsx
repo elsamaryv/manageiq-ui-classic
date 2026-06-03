@@ -9,7 +9,6 @@ import SequenceList from './sequence-list';
 const SchemaSequenceEditor = ({ classId }) => {
   const [fields, setFields] = useState([]);
   const [originalFields, setOriginalFields] = useState([]);
-  // const [loading, setLoading] = useState(true);
   const [hasChanges, setHasChanges] = useState(false);
   const [saving, setSaving] = useState(false);
 
