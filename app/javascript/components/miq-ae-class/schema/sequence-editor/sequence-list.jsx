@@ -24,38 +24,6 @@ const SequenceList = ({
   const [draggedIndices, setDraggedIndices] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
 
-  // Setup form button handlers
-  useEffect(() => {
-    // Expose save handler to parent form
-    window.miqAeFieldsSeqSave = async() => {
-      try {
-        const updatedFields = fields.map((field, idx) => ({
-          id: field.id,
-          priority: idx + 1,
-        }));
-
-        const response = await fetch(`/miq_ae_class/fields_seq_save?id=${classId}`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content'),
-          },
-          body: JSON.stringify({ fields: updatedFields }),
-        });
-
-        const result = await response.json();
-        return result;
-      } catch (error) {
-        console.error('Error saving field order:', error);
-        return { success: false, error: error.message };
-      }
-    };
-
-    return () => {
-      delete window.miqAeFieldsSeqSave;
-    };
-  }, [fields, classId]);
-
   const handleCheckboxChange = (index) => {
     setErrorMessage('');
     setSelectedIndices((prev) => {
