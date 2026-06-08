@@ -811,6 +811,89 @@ describe MiqAeClassController do
     end
   end
 
+  # describe "#fields_seq_data" do
+  #   it "returns class fields ordered by priority as json" do
+  #     stub_user(:features => :all)
+  #     ns = FactoryBot.create(:miq_ae_namespace)
+  #     cls = FactoryBot.create(:miq_ae_class, :namespace_id => ns.id)
+  #     field1 = FactoryBot.create(:miq_ae_field,
+  #                                 :name         => "name01",
+  #                                 :display_name => "Field 1",
+  #                                 :class_id     => cls.id,
+  #                                 :priority     => 2)
+  #     field2 = FactoryBot.create(:miq_ae_field,
+  #                                 :name         => "name02",
+  #                                 :display_name => "Field 2",
+  #                                 :class_id     => cls.id,
+  #                                 :priority     => 1)
+
+  #     get :fields_seq_data, :params => {:id => cls.id}, :format => :json
+
+  #     expect(response).to have_http_status(:ok)
+  #     expect(response.parsed_body).to eq(
+  #       "fields" => [
+  #         {
+  #           "id"           => field2.id,
+  #           "name"         => "name02",
+  #           "display_name" => "Field 2",
+  #           "priority"     => 1
+  #         },
+  #         {
+  #           "id"           => field1.id,
+  #           "name"         => "name01",
+  #           "display_name" => "Field 1",
+  #           "priority"     => 2
+  #         }
+  #       ]
+  #     )
+  #   end
+  # end
+
+  # describe "#fields_seq_save" do
+  #   it "updates field priorities and returns success json" do
+  #     stub_user(:features => :all)
+  #     ns = FactoryBot.create(:miq_ae_namespace)
+  #     cls = FactoryBot.create(:miq_ae_class, :namespace_id => ns.id)
+  #     field1 = FactoryBot.create(:miq_ae_field, :name => "name01", :class_id => cls.id, :priority => 1)
+  #     field2 = FactoryBot.create(:miq_ae_field, :name => "name02", :class_id => cls.id, :priority => 2)
+  #     field3 = FactoryBot.create(:miq_ae_field, :name => "name03", :class_id => cls.id, :priority => 3)
+
+  #     post :fields_seq_save, :params => {
+  #       :id     => cls.id,
+  #       :fields => [
+  #         {:id => field3.id, :priority => 1},
+  #         {:id => field1.id, :priority => 2},
+  #         {:id => field2.id, :priority => 3}
+  #       ]
+  #     }, :format => :json
+
+  #     expect(response).to have_http_status(:ok)
+  #     expect(response.parsed_body).to include(
+  #       "success" => true,
+  #       "message" => "Class Schema Sequence was saved"
+  #     )
+  #     expect(field1.reload.priority).to eq(2)
+  #     expect(field2.reload.priority).to eq(3)
+  #     expect(field3.reload.priority).to eq(1)
+  #   end
+  # end
+
+  # describe "#fields_seq_edit" do
+  #   it "sets sequence edit state and replaces the right cell" do
+  #     stub_user(:features => :all)
+  #     ns = FactoryBot.create(:miq_ae_namespace)
+  #     cls = FactoryBot.create(:miq_ae_class, :name => "foo_class", :namespace_id => ns.id)
+  #     controller.instance_variable_set(:@sb, {})
+
+  #     expect(controller).to receive(:replace_right_cell)
+  #     post :fields_seq_edit, :params => {:id => cls.id}
+
+  #     expect(assigns(:ae_class)).to eq(cls)
+  #     expect(assigns(:sb)[:action]).to eq("miq_ae_field_seq")
+  #     expect(assigns(:right_cell_text)).to eq("Edit of Class Schema Sequence 'foo_class'")
+  #   end
+  # end
+
   describe "#replace_right_cell" do
     before do
       ns = FactoryBot.create(:miq_ae_namespace)

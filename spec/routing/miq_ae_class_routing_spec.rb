@@ -93,6 +93,18 @@ describe MiqAeClassController do
     end
   end
 
+  describe "#fields_seq_data" do
+    it "routes with GET" do
+      expect(get("/miq_ae_class/fields_seq_data")).to route_to("miq_ae_class#fields_seq_data")
+    end
+  end
+
+  describe "#fields_seq_save" do
+    it "routes with POST" do
+      expect(post("/miq_ae_class/fields_seq_save")).to route_to("miq_ae_class#fields_seq_save")
+    end
+  end
+
   describe "#form_field_changed" do
     it "routes with POST" do
       expect(post("/miq_ae_class/form_field_changed")).to route_to("miq_ae_class#form_field_changed")
