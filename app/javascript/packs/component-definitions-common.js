@@ -60,6 +60,7 @@ import FonticonPickerDdf from '../components/fonticon-picker/font-icon-picker-dd
 import FormButtonsRedux from '../forms/form-buttons-redux';
 import GenericGroupWrapper from '../react/generic_group_wrapper';
 import GenericObjectForm from '../components/generic-objects-form';
+import GitDomainRefreshForm from '../components/git-domain-refresh-form';
 import GroupForm from '../components/button-group';
 import GtlView from '../components/gtl-view';
 import HeatChart from '../components/provider-dashboard-charts/heat-map-chart';
@@ -183,7 +184,6 @@ import WorkflowPayload from '../components/workflows/workflow_payload';
 import WorkflowRepositoryForm from '../components/workflow-repository-form';
 import XmlHolder from '../components/XmlHolder';
 import ZoneForm from '../components/zone-form';
-import GitDomainRefreshForm from '../components/git-domain-refresh-form';
 
 /**
 * Add component definitions to this file.
