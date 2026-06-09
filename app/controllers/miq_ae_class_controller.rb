@@ -312,7 +312,8 @@ class MiqAeClassController < ApplicationController
       presenter.update(:ns_list_div, r[:partial => "domains_priority_form"])
 
     elsif MIQ_AE_COPY_ACTIONS.include?(@sb[:action])
-      presenter.update(:main_div, r[:partial => "copy_objects_form"])
+      presenter.update(:main_div, r[:partial => "copy_objects_form_react"])
+      # presenter.update(:main_div, r[:partial => "copy_objects_form"]) ... To be removed & code cleanup needed in old haml file
 
     else
       if @sb[:action] == "miq_ae_class_edit"
@@ -326,7 +327,7 @@ class MiqAeClassController < ApplicationController
     presenter.replace('flash_msg_div', r[:partial => "layouts/flash_msg"]) if @flash_array
     presenter.scroll_top if @flash_array.present?
 
-    if @in_a_form && !@angular_form
+    if @in_a_form && !@angular_form && !@hide_bottom_bar
       action_url = create_action_url(nodes.first)
       # incase it was hidden for summary screen, and incase there were no records on show_list
       presenter.show(:paging_div, :form_buttons_div)
@@ -340,9 +341,6 @@ class MiqAeClassController < ApplicationController
           :serialize    => @sb[:active_tab] == 'methods',
         }
       ])
-      if @hide_bottom_bar
-        presenter.hide(:paging_div, :form_buttons_div)
-      end
     else
       # incase it was hidden for summary screen, and incase there were no records on show_list
       presenter.hide(:paging_div, :form_buttons_div)
@@ -1714,6 +1712,9 @@ class MiqAeClassController < ApplicationController
       return
     end
 
+    # ToDO:: Include this for instance copy and method copy as well during react conversion
+    @hide_bottom_bar = true if @sb[:action] == "miq_ae_class_copy"
+
     case params[:button]
     when "cancel"     then copy_cancel
     when "copy"       then copy_save
@@ -1859,6 +1860,43 @@ class MiqAeClassController < ApplicationController
     assert_privileges(params[:id].present? ? 'miq_ae_class_edit' : 'miq_ae_class_new')
     @hide_bottom_bar = true
     class_update_create
+  end
+
+  # API endpoint to handle copy operation with form data
+  def copy_objects_save
+    assert_privileges(feature_by_action)
+    return unless load_edit("copy_objects__#{params[:id]}", "replace_cell__explorer")
+
+    copy_objects_get_form_vars
+    build_automate_tree(:automate)
+
+    begin
+      @record = @edit[:typ].find(@edit[:rec_id])
+      domain = MiqAeDomain.find(@edit[:new][:domain])
+      @edit[:new][:new_name] = nil if @edit[:new][:new_name] == @edit[:old_name]
+      
+      options = {
+        :ids                => @edit[:selected_items].keys,
+        :domain             => domain.name,
+        :namespace          => @edit[:new][:namespace],
+        :overwrite_location => @edit[:new][:override_existing],
+        :new_name           => @edit[:new][:new_name],
+        :fqname             => @edit[:fqname]
+      }
+      res = @edit[:typ].copy(options)
+      
+      model = @edit[:selected_items].count > 1 ? :models : :model
+      message = _("Copy selected %{record} was saved") % {:record => ui_lookup(model => @edit[:typ].to_s)}
+      
+      @record = res.kind_of?(Array) ? @edit[:typ].find(res.first) : res
+      self.x_node = "#{TreeBuilder.get_prefix_for_model(@edit[:typ])}-#{@record.id}"
+      @in_a_form = @changed = session[:changed] = false
+      @sb[:action] = @edit = session[:edit] = nil
+      
+      render :json => {:message => message, :redirect_url => '/miq_ae_class/explorer'}
+    rescue StandardError => bang
+      render :json => {:error => bang.message}, :status => :bad_request
+    end
   end
 
   private

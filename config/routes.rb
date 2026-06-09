@@ -1920,6 +1920,7 @@ Rails.application.routes.draw do
         ae_tree_select_toggle
         change_tab
         copy_objects
+        copy_objects_save
         create
         create_instance
         create_method
